@@ -16,7 +16,100 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
+const ADMIN_USER = "crisdomont";
+const ADMIN_PASS = "aflora2026";
+const AUTH_KEY = "aflora-admin-auth";
+
 function AdminPage() {
+  const [authenticated, setAuthenticated] = useState(() => {
+    return localStorage.getItem(AUTH_KEY) === "ok";
+  });
+
+  function handleLogout() {
+    localStorage.removeItem(AUTH_KEY);
+    setAuthenticated(false);
+  }
+
+  if (!authenticated) {
+    return <AdminLogin onLogin={() => setAuthenticated(true)} />;
+  }
+
+  return <AdminContent onLogout={handleLogout} />;
+}
+
+function AdminLogin({ onLogin }: { onLogin: () => void }) {
+  const [loginUser, setLoginUser] = useState("");
+  const [loginPass, setLoginPass] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (loginUser === ADMIN_USER && loginPass === ADMIN_PASS) {
+      localStorage.setItem(AUTH_KEY, "ok");
+      onLogin();
+      toast.success("Bem-vinda ao admin");
+    } else {
+      toast.error("Usuário ou senha inválidos");
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SiteHeader />
+
+      <main className="flex-1 flex items-center justify-center px-6 py-16">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md border border-border bg-card p-10"
+        >
+          <p className="text-xs uppercase tracking-[0.4em] text-accent mb-3">
+            Administração
+          </p>
+
+          <h1 className="font-script text-5xl text-primary mb-2">
+            Ateliê Aflora
+          </h1>
+
+          <p className="text-sm text-muted-foreground italic mb-8">
+            Área protegida do ateliê.
+          </p>
+
+          <div className="space-y-5">
+            <Field label="Usuário">
+              <input
+                required
+                value={loginUser}
+                onChange={(e) => setLoginUser(e.target.value)}
+                className={inputCls}
+              />
+            </Field>
+
+            <Field label="Senha">
+              <input
+                required
+                type="password"
+                value={loginPass}
+                onChange={(e) => setLoginPass(e.target.value)}
+                className={inputCls}
+              />
+            </Field>
+
+            <button
+              type="submit"
+              className="w-full px-6 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-widest hover:bg-primary/90 transition"
+            >
+              entrar
+            </button>
+          </div>
+        </form>
+      </main>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+function AdminContent({ onLogout }: { onLogout: () => void }) {
   const qc = useQueryClient();
 
   const { data: products = [] } = useQuery({
@@ -107,18 +200,31 @@ function AdminPage() {
       <SiteHeader />
 
       <main className="max-w-5xl mx-auto px-6 py-16 w-full flex-1">
-        <div className="mb-10">
-          <p className="text-xs uppercase tracking-[0.4em] text-accent mb-3">
-            Administração
-          </p>
+        <div className="mb-10 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-accent mb-3">
+              Administração
+            </p>
 
-          <h1 className="font-script text-5xl text-primary">
-            Ateliê — bastidores
-          </h1>
+            <h1 className="font-script text-5xl text-primary">
+              Ateliê — bastidores
+            </h1>
 
-          <p className="text-sm text-muted-foreground mt-2 italic">
-            Adicione novas peças. Elas aparecerão imediatamente na vitrine.
-          </p>
+            <p className="text-sm text-muted-foreground mt-2 italic">
+              Adicione novas peças. Elas aparecerão imediatamente na vitrine.
+            </p>
+          </div>
+
+         <button
+  type="button"
+  onClick={() => {
+    onLogout();
+    window.location.href = "/";
+  }}
+  className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+>
+  sair
+</button>
         </div>
 
         <form
@@ -184,7 +290,7 @@ function AdminPage() {
           <Field label="Link do produto na Nuvemshop" className="md:col-span-2">
             <input
               type="url"
-              placeholder="https://... link da página do produto na Nuvemshop"
+              placeholder="https://..."
               value={productUrl}
               onChange={(e) => setProductUrl(e.target.value)}
               className={inputCls}
