@@ -20,8 +20,6 @@ const ADMIN_USER = "crisdomont";
 const ADMIN_PASS = "aflora2026";
 const AUTH_KEY = "aflora-admin-auth";
 
-type Product = Awaited<ReturnType<typeof fetchProducts>>[number];
-
 function AdminPage() {
   const [authenticated, setAuthenticated] = useState(() => {
     return localStorage.getItem(AUTH_KEY) === "ok";
@@ -119,9 +117,6 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
     queryFn: fetchProducts,
   });
 
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
-
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
@@ -131,56 +126,29 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  const isEditing = Boolean(editingId);
-
-  function resetForm() {
-    setEditingId(null);
-    setCurrentImageUrl(null);
-    setName("");
-    setPrice("");
-    setDescription("");
-    setCollection("");
-    setCategory("brinco");
-    setProductUrl("");
-    setFile(null);
-  }
-
-  function startEditing(product: Product) {
-    setEditingId(product.id);
-    setCurrentImageUrl(product.image_url ?? null);
-    setName(product.name ?? "");
-    setPrice(String(product.price ?? ""));
-    setDescription(product.description ?? "");
-    setCollection(product.collection ?? "");
-    setCategory(product.category ?? "brinco");
-    setProductUrl(product.product_url ?? "");
-    setFile(null);
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  async function uploadProductImage() {
-    if (!file) return null;
-
-    setUploading(true);
-
-    const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
-
-    const { error: upErr } = await supabase.storage
-      .from("product-images")
-      .upload(path, file, { contentType: file.type });
-
-    if (upErr) throw upErr;
-
-    const { data } = supabase.storage.from("product-images").getPublicUrl(path);
-
-    return data.publicUrl;
-  }
-
   const createMut = useMutation({
     mutationFn: async () => {
-      const image_url = await uploadProductImage();
+      let image_url: string | null = null;
+
+      if (file) {
+        setUploading(true);
+
+        const ext = file.name.split(".").pop();
+        const path = `${crypto.randomUUID()}.${ext}`;
+
+        const { error: upErr } = await supabase.storage
+          .from("product-images")
+          .upload(path, file, { contentType: file.type });
+
+        if (upErr) throw upErr;
+
+        const { data } = supabase.storage
+          .from("product-images")
+          .getPublicUrl(path);
+
+        image_url = data.publicUrl;
+        setUploading(false);
+      }
 
       const { error } = await supabase.from("products").insert({
         name,
@@ -197,55 +165,21 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
 
     onSuccess: () => {
       toast.success("Peça adicionada ao ateliê");
-      resetForm();
+
+      setName("");
+      setPrice("");
+      setDescription("");
+      setCollection("");
+      setCategory("brinco");
+      setProductUrl("");
+      setFile(null);
+
       qc.invalidateQueries({ queryKey: ["products"] });
     },
 
     onError: (e: Error) => {
+      setUploading(false);
       toast.error("Erro ao salvar: " + e.message);
-    },
-
-    onSettled: () => {
-      setUploading(false);
-    },
-  });
-
-  const editMut = useMutation({
-    mutationFn: async () => {
-      if (!editingId) return;
-
-      const newImageUrl = await uploadProductImage();
-
-      const updateData = {
-        name,
-        price: Number(price),
-        description: description || null,
-        collection: collection || "Geral",
-        category,
-        product_url: productUrl || null,
-        ...(newImageUrl ? { image_url: newImageUrl } : {}),
-      };
-
-      const { error } = await supabase
-        .from("products")
-        .update(updateData)
-        .eq("id", editingId);
-
-      if (error) throw error;
-    },
-
-    onSuccess: () => {
-      toast.success("Peça atualizada");
-      resetForm();
-      qc.invalidateQueries({ queryKey: ["products"] });
-    },
-
-    onError: (e: Error) => {
-      toast.error("Erro ao editar: " + e.message);
-    },
-
-    onSettled: () => {
-      setUploading(false);
     },
   });
 
@@ -259,13 +193,7 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
       toast.success("Peça removida");
       qc.invalidateQueries({ queryKey: ["products"] });
     },
-
-    onError: (e: Error) => {
-      toast.error("Erro ao remover: " + e.message);
-    },
   });
-
-  const formPending = createMut.isPending || editMut.isPending || uploading;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -283,47 +211,26 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
             </h1>
 
             <p className="text-sm text-muted-foreground mt-2 italic">
-              {isEditing
-                ? "Edite a peça selecionada e salve as alterações."
-                : "Adicione novas peças. Elas aparecerão imediatamente na vitrine."}
+              Adicione novas peças. Elas aparecerão imediatamente na vitrine.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              onLogout();
-              window.location.href = "/";
-            }}
-            className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
-          >
-            sair
-          </button>
+         <button
+  type="button"
+  onClick={() => {
+    onLogout();
+    window.location.href = "/";
+  }}
+  className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground"
+>
+  sair
+</button>
         </div>
-
-        {isEditing && (
-          <div className="mb-6 border border-accent/40 bg-accent/10 px-5 py-4 text-sm text-muted-foreground">
-            Você está editando uma peça. Para cadastrar uma nova, clique em
-            <button
-              type="button"
-              onClick={resetForm}
-              className="ml-1 text-primary underline underline-offset-4"
-            >
-              cancelar edição
-            </button>
-            .
-          </div>
-        )}
 
         <form
           onSubmit={(e) => {
             e.preventDefault();
-
-            if (isEditing) {
-              editMut.mutate();
-            } else {
-              createMut.mutate();
-            }
+            createMut.mutate();
           }}
           className="grid md:grid-cols-2 gap-6 bg-card border border-border p-8 mb-16"
         >
@@ -390,13 +297,10 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
             />
           </Field>
 
-          <Field
-            label={isEditing ? "Foto da peça (opcional trocar)" : "Foto da peça"}
-            className="md:col-span-2"
-          >
-            <div className="flex flex-wrap items-center gap-4">
+          <Field label="Foto da peça" className="md:col-span-2">
+            <div className="flex items-center gap-4">
               <label className="cursor-pointer inline-flex items-center px-5 py-3 bg-primary text-primary-foreground text-xs uppercase tracking-widest hover:bg-primary/90 transition">
-                {file ? "trocar foto" : isEditing ? "nova foto" : "escolher foto"}
+                {file ? "trocar foto" : "escolher foto"}
 
                 <input
                   type="file"
@@ -424,15 +328,6 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
                     remover
                   </button>
                 </div>
-              ) : currentImageUrl ? (
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <img
-                    src={currentImageUrl}
-                    alt=""
-                    className="w-12 h-12 object-cover border border-border"
-                  />
-                  <span className="italic">foto atual mantida</span>
-                </div>
               ) : (
                 <span className="text-sm text-muted-foreground italic">
                   nenhuma foto selecionada
@@ -441,33 +336,18 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
             </div>
           </Field>
 
-          <div className="md:col-span-2 flex flex-wrap gap-4">
+          <div className="md:col-span-2">
             <button
               type="submit"
-              disabled={formPending}
+              disabled={createMut.isPending || uploading}
               className="px-7 py-3 bg-primary text-primary-foreground text-sm uppercase tracking-widest hover:bg-primary/90 transition disabled:opacity-50"
             >
               {uploading
                 ? "enviando foto..."
-                : isEditing
-                  ? editMut.isPending
-                    ? "salvando alterações..."
-                    : "salvar alterações"
-                  : createMut.isPending
-                    ? "salvando..."
-                    : "adicionar peça"}
+                : createMut.isPending
+                  ? "salvando..."
+                  : "adicionar peça"}
             </button>
-
-            {isEditing && (
-              <button
-                type="button"
-                onClick={resetForm}
-                disabled={formPending}
-                className="px-7 py-3 border border-border text-sm uppercase tracking-widest text-muted-foreground hover:text-foreground hover:border-foreground transition disabled:opacity-50"
-              >
-                cancelar edição
-              </button>
-            )}
           </div>
         </form>
 
@@ -502,42 +382,20 @@ function AdminContent({ onLogout }: { onLogout: () => void }) {
                   {CATEGORIES.find((c) => c.value === p.category)?.label ??
                     p.category}
                 </p>
-
-                {p.product_url && (
-                  <a
-                    href={p.product_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs text-primary hover:underline"
-                  >
-                    abrir link da venda
-                  </a>
-                )}
               </div>
 
-              <p className="text-sm text-primary whitespace-nowrap">
+              <p className="text-sm text-primary">
                 {formatPrice(Number(p.price))}
               </p>
 
-              <div className="flex items-center gap-4">
-                <button
-                  type="button"
-                  onClick={() => startEditing(p)}
-                  className="text-xs uppercase tracking-widest text-primary hover:underline"
-                >
-                  editar
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (confirm("Remover esta peça?")) deleteMut.mutate(p.id);
-                  }}
-                  className="text-xs uppercase tracking-widest text-destructive hover:underline"
-                >
-                  remover
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  if (confirm("Remover esta peça?")) deleteMut.mutate(p.id);
+                }}
+                className="text-xs uppercase tracking-widest text-destructive hover:underline"
+              >
+                remover
+              </button>
             </div>
           ))}
         </div>
