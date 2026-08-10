@@ -1,0 +1,2383 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+
+
+/* =========================================================
+   AFLORA — CORES
+========================================================= */
+
+:root {
+  --moss-deep: #26351f;
+  --moss: #3a4c31;
+  --moss-soft: #68785c;
+
+  --sand: #e9dfcf;
+  --sand-soft: #f0e8dc;
+
+  --cream: #f5efe5;
+  --off-white: #faf7f1;
+  --warm-white: #fffdf9;
+
+  --champagne: #b9a36d;
+  --champagne-soft: #d8c9a4;
+
+  --ink: #293022;
+  --text-soft: #62675d;
+}
+
+
+/* =========================================================
+   BASE
+========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+
+  color: var(--ink);
+  background: var(--warm-white);
+
+  line-height: 1.7;
+
+  overflow-x: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+
+  line-height: 1.18;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 6vw, 5.4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4.8vw, 3.8rem);
+}
+
+h3 {
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+}
+
+em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+
+  color: var(--moss);
+}
+
+
+/* =========================================================
+   ELEMENTOS GERAIS
+========================================================= */
+
+.kicker {
+  margin-bottom: 1.4rem;
+
+  color: var(--moss-soft);
+
+  font-size: 0.65rem;
+  font-weight: 500;
+
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.text-link {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.55rem;
+
+  padding: 0.2rem 0;
+
+  background: transparent;
+
+  color: var(--moss);
+
+  border-bottom:
+    1px solid var(--champagne);
+
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    gap 0.35s ease,
+    color 0.35s ease;
+}
+
+.text-link:hover {
+  gap: 0.9rem;
+
+  color: var(--moss-deep);
+}
+
+.text-link.light {
+  color: var(--warm-white);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 100;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding:
+    1.25rem
+    clamp(1.4rem, 5vw, 4rem);
+
+  background:
+    rgba(255, 253, 249, 0.28);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-bottom:
+    1px solid rgba(185, 163, 109, 0.12);
+}
+
+
+/* Marca AFLORA */
+
+.wordmark {
+  background: transparent;
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size: 1.95rem;
+  font-weight: 400;
+
+  letter-spacing: 0.24em;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease;
+}
+
+.wordmark:hover {
+  color: var(--moss-soft);
+}
+
+.wordmark span {
+  margin-left: 0.1rem;
+
+  color: var(--champagne);
+}
+
+
+/* Menu */
+
+.site-header nav {
+  display: flex;
+
+  align-items: center;
+
+  gap: 2rem;
+}
+
+.site-header nav button {
+  background: transparent;
+
+  color: var(--moss-deep);
+
+  font-size: 0.7rem;
+  font-weight: 400;
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease;
+}
+
+.site-header nav button:hover {
+  color: var(--champagne);
+}
+
+.nav-store {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  padding-bottom: 0.15rem;
+
+  color: var(--moss) !important;
+
+  border-bottom:
+    1px solid var(--champagne);
+
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+}
+
+.nav-store:hover {
+  color: var(--champagne) !important;
+}
+
+.menu-toggle {
+  display: none;
+
+  background: transparent;
+
+  color: var(--moss-deep);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+
+  min-height: 680px;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  background: var(--sand-soft);
+}
+
+
+/* Vídeo do Hero */
+
+.hero-video {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center center;
+}
+
+
+/* =========================================================
+   SEÇÕES GERAIS
+========================================================= */
+
+section {
+  position: relative;
+
+  padding:
+    clamp(5rem, 10vw, 8rem)
+    clamp(1.5rem, 6vw, 5rem);
+}
+
+.section-light {
+  background: var(--warm-white);
+
+  color: var(--ink);
+}
+
+.section-cream {
+  background: var(--cream);
+
+  color: var(--ink);
+}
+
+.section-sand {
+  background: var(--sand-soft);
+
+  color: var(--ink);
+}
+
+
+/*
+  Alguns componentes ainda possuem a classe section-moss.
+  Mantemos o nome para não quebrar nada, mas o fundo agora
+  segue a nova identidade clara escolhida para a Aflora.
+*/
+
+.section-moss {
+  background: var(--cream);
+
+  color: var(--ink);
+}
+
+.section-moss .kicker {
+  color: var(--moss-soft);
+}
+
+.section-moss em {
+  color: var(--moss);
+}
+
+
+/* =========================================================
+   STORY INTRO — IMAGEM CINEMATOGRÁFICA
+========================================================= */
+
+.story-cinematic {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  min-height: 720px;
+
+  padding:
+    clamp(4rem, 7vw, 6rem)
+    clamp(2rem, 6vw, 6rem);
+
+  overflow: hidden;
+
+  background: var(--sand-soft);
+}
+
+
+/* FOTO */
+
+.story-cinematic-bg {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 72%;
+
+  background-image:
+    url('/assets/images/joias/joias02.jpeg');
+
+  background-size: cover;
+
+  /*
+    Puxa um pouco o enquadramento para a direita.
+    Assim preservamos joias + tronco.
+  */
+
+  background-position: 58% center;
+
+  background-repeat: no-repeat;
+
+  z-index: 0;
+}
+
+
+/* DEGRADÊ ENTRE TEXTO E FOTO */
+
+.story-cinematic-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+
+      var(--sand-soft) 0%,
+      var(--sand-soft) 27%,
+
+      rgba(240, 232, 220, 0.98) 35%,
+      rgba(240, 232, 220, 0.90) 43%,
+      rgba(240, 232, 220, 0.68) 52%,
+      rgba(240, 232, 220, 0.34) 62%,
+      rgba(240, 232, 220, 0.08) 73%,
+      rgba(240, 232, 220, 0) 82%
+    );
+}
+
+
+/* TEXTO */
+
+.story-cinematic-copy {
+  position: relative;
+
+  z-index: 2;
+
+  width: min(45%, 560px);
+
+  padding-right:
+    clamp(1rem, 3vw, 3rem);
+}
+
+
+.story-cinematic-copy h2 {
+  max-width: 540px;
+
+  color: var(--moss-deep);
+
+  font-size:
+    clamp(2.7rem, 4.6vw, 4.8rem);
+
+  line-height: 1.08;
+}
+
+
+.story-cinematic-copy p {
+  max-width: 480px;
+
+  margin:
+    1.6rem 0
+    2rem;
+
+  color: var(--text-soft);
+
+  font-size:
+    clamp(0.92rem, 1.05vw, 1.02rem);
+
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   STORY INTRO — TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .story-cinematic {
+    min-height: 660px;
+  }
+
+  .story-cinematic-bg {
+    width: 78%;
+
+    background-position: 60% center;
+  }
+
+  .story-cinematic-copy {
+    width: 52%;
+  }
+
+  .story-cinematic-overlay {
+    background:
+      linear-gradient(
+        90deg,
+
+        var(--sand-soft) 0%,
+        var(--sand-soft) 25%,
+
+        rgba(240, 232, 220, 0.98) 37%,
+        rgba(240, 232, 220, 0.84) 48%,
+        rgba(240, 232, 220, 0.48) 61%,
+        rgba(240, 232, 220, 0.08) 78%,
+        rgba(240, 232, 220, 0) 90%
+      );
+  }
+}
+
+
+/* =========================================================
+   STORY INTRO — CELULAR
+========================================================= */
+
+@media (max-width: 620px) {
+
+  .story-cinematic {
+    display: block;
+
+    min-height: 760px;
+
+    padding:
+      4.5rem
+      1.4rem
+      3rem;
+  }
+
+
+  .story-cinematic-bg {
+    top: auto;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 58%;
+
+    background-size: cover;
+
+    background-position: center center;
+  }
+
+
+  .story-cinematic-overlay {
+    background:
+      linear-gradient(
+        180deg,
+
+        var(--sand-soft) 0%,
+        var(--sand-soft) 34%,
+
+        rgba(240, 232, 220, 0.96) 43%,
+        rgba(240, 232, 220, 0.78) 52%,
+        rgba(240, 232, 220, 0.36) 66%,
+        rgba(240, 232, 220, 0.05) 82%,
+        rgba(240, 232, 220, 0) 100%
+      );
+  }
+
+
+  .story-cinematic-copy {
+    width: 100%;
+
+    max-width: 500px;
+
+    padding-right: 0;
+  }
+
+
+  .story-cinematic-copy h2 {
+    font-size:
+      clamp(2.2rem, 10vw, 3.3rem);
+  }
+
+
+  .story-cinematic-copy p {
+    max-width: 94%;
+  }
+}
+
+/* =========================================================
+   PLACEHOLDERS
+========================================================= */
+
+.placeholder-visual {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  min-height: 280px;
+
+  overflow: hidden;
+
+  background-color: var(--cream);
+
+  background-size: cover;
+  background-position: center;
+
+  border:
+    1px solid rgba(185, 163, 109, 0.25);
+}
+
+.placeholder-visual span {
+  position: absolute;
+
+  left: 0.8rem;
+  bottom: 0.8rem;
+
+  padding:
+    0.3rem
+    0.65rem;
+
+  background:
+    rgba(58, 76, 49, 0.78);
+
+  color: var(--warm-white);
+
+  font-size: 0.55rem;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.placeholder-orbit {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 60%;
+
+  aspect-ratio: 1;
+
+  border:
+    1px dashed rgba(185, 163, 109, 0.5);
+
+  border-radius: 50%;
+}
+
+.placeholder-drop {
+  width: 50%;
+}
+
+.placeholder-drop img {
+  width: 100%;
+
+  opacity: 0.7;
+}
+
+
+/* =========================================================
+   PEÇAS ÚNICAS
+========================================================= */
+
+.unique {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.05fr)
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap:
+    clamp(3rem, 6vw, 7rem);
+
+  background: var(--off-white);
+}
+
+
+/* FOTO */
+
+.unique-image {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+}
+
+.unique-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center center;
+
+  display: block;
+
+  transition:
+    transform 1.2s ease;
+}
+
+.unique-image:hover img {
+  transform: scale(1.025);
+}
+
+
+/* pequeno véu claro nas bordas */
+
+.unique-image::after {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(250, 247, 241, 0) 72%,
+      rgba(250, 247, 241, 0.15) 88%,
+      rgba(250, 247, 241, 0.48) 100%
+    );
+}
+
+
+/* TEXTO */
+
+.unique-copy {
+  max-width: 620px;
+}
+
+.unique-copy h2 {
+  color: var(--moss-deep);
+
+  font-size:
+    clamp(2.8rem, 4.8vw, 5rem);
+
+  line-height: 1.08;
+}
+
+.unique-copy p {
+  max-width: 560px;
+
+  margin-top: 1.5rem;
+
+  color: var(--text-soft);
+
+  font-size:
+    clamp(0.95rem, 1.1vw, 1.04rem);
+
+  line-height: 1.75;
+}
+
+.unique-copy blockquote {
+  max-width: 560px;
+
+  margin-top: 2rem;
+
+  padding-left: 1.4rem;
+
+  border-left:
+    1px solid var(--champagne);
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size:
+    clamp(1.2rem, 1.9vw, 1.65rem);
+
+  font-style: italic;
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   PEÇAS ÚNICAS — TABLET
+========================================================= */
+
+@media (max-width: 860px) {
+
+  .unique {
+    grid-template-columns: 1fr;
+
+    gap: 2.8rem;
+  }
+
+  .unique-image {
+    aspect-ratio: 4 / 3;
+  }
+
+  .unique-copy {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   PEÇAS ÚNICAS — CELULAR
+========================================================= */
+
+@media (max-width: 540px) {
+
+  .unique {
+    gap: 2rem;
+  }
+
+  .unique-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .unique-copy h2 {
+    font-size:
+      clamp(2.2rem, 10vw, 3.4rem);
+  }
+
+  .unique-copy blockquote {
+    font-size:
+      1.1rem;
+  }
+}
+
+/* =========================================================
+   PROCESSO
+========================================================= */
+
+.process {
+  text-align: center;
+}
+
+.process-intro {
+  max-width: 620px;
+
+  margin:
+    0 auto
+    4rem;
+}
+
+.process-intro p {
+  margin-top: 1rem;
+
+  color: var(--text-soft);
+}
+
+.process-steps {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(250px, 1fr)
+    );
+
+  gap: 1rem;
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  text-align: left;
+}
+
+.process-step {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 1.1rem;
+
+  padding: 1.7rem;
+
+  background: var(--moss);
+
+  color: var(--warm-white);
+}
+
+.process-step span {
+  color: var(--champagne-soft);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size: 2.2rem;
+
+  line-height: 1;
+}
+
+.process-step h3 {
+  margin-bottom: 0.45rem;
+
+  color: var(--warm-white);
+}
+
+.process-step p {
+  color:
+    rgba(255, 253, 249, 0.75);
+
+  font-size: 0.84rem;
+}
+
+.process-stamp {
+  position: relative;
+
+  max-width: 340px;
+
+  margin:
+    4rem auto 0;
+}
+
+.process-stamp img {
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  object-fit: cover;
+
+  border:
+    1px solid rgba(185, 163, 109, 0.25);
+}
+
+.process-stamp span {
+  position: absolute;
+
+  left: 0.8rem;
+  bottom: 0.8rem;
+
+  padding:
+    0.3rem
+    0.65rem;
+
+  background:
+    rgba(58, 76, 49, 0.78);
+
+  color: var(--warm-white);
+
+  font-size: 0.55rem;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.process-end {
+  margin-top: 4rem;
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size:
+    clamp(1.7rem, 3vw, 2.5rem);
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   ATELIER
+========================================================= */
+
+.atelier {
+  text-align: center;
+}
+
+.atelier-header {
+  display: grid;
+
+  grid-template-columns:
+    1.2fr 1fr;
+
+  align-items: end;
+
+  gap: 3rem;
+
+  max-width: 1100px;
+
+  margin:
+    0 auto
+    4rem;
+
+  text-align: left;
+}
+
+.atelier-header p {
+  color: var(--text-soft);
+}
+
+.atelier-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.4fr 1fr;
+
+  grid-template-rows:
+    auto auto;
+
+  gap: 1.2rem;
+
+  max-width: 1100px;
+
+  margin:
+    0 auto
+    3rem;
+}
+
+.atelier-large {
+  grid-row: span 2;
+
+  aspect-ratio: 3 / 4;
+}
+
+.atelier-small {
+  aspect-ratio: 4 / 3;
+}
+
+.atelier .text-link {
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   MEMÓRIAS
+========================================================= */
+
+.memories {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  align-items: center;
+
+  gap:
+    clamp(2rem, 5vw, 5rem);
+
+  min-height: 70vh;
+}
+
+.memory-words {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.3rem;
+}
+
+.memory-word {
+  color: var(--moss-deep);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size:
+    clamp(1.5rem, 3.3vw, 2.5rem);
+
+  font-style: italic;
+}
+
+.memory-copy p {
+  margin-top: 1.5rem;
+
+  color: var(--text-soft);
+}
+
+
+/* =========================================================
+   OBJETOS
+========================================================= */
+
+.objects {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  align-items: center;
+
+  gap:
+    clamp(2.5rem, 6vw, 6rem);
+}
+
+.objects-image {
+  aspect-ratio: 4 / 5;
+}
+
+.objects-copy p {
+  max-width: 440px;
+
+  margin:
+    1.5rem 0
+    2rem;
+
+  color: var(--text-soft);
+}
+
+
+/* =========================================================
+   UNIVERSOS / COLEÇÕES
+========================================================= */
+
+.universes-intro {
+  max-width: 650px;
+
+  margin:
+    0 auto
+    4rem;
+
+  text-align: center;
+}
+
+.universes-intro p {
+  margin-top: 1rem;
+
+  color: var(--text-soft);
+}
+
+.universe-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(290px, 1fr)
+    );
+
+  gap: 1.5rem;
+}
+
+.collection-frame {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  aspect-ratio: 4 / 5;
+
+  padding: 1.8rem;
+
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+
+  color: var(--warm-white);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.22);
+
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.collection-frame:hover {
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 18px 40px
+    rgba(38, 53, 31, 0.10);
+}
+
+.frame-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  color: var(--champagne-soft);
+
+  font-size: 0.56rem;
+
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.floating-piece {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 45%;
+
+  transform:
+    translate(-50%, -55%);
+
+  animation:
+    float-piece
+    7s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.floating-piece img {
+  width: 100%;
+
+  opacity: 0.94;
+
+  filter:
+    drop-shadow(
+      0 14px 25px
+      rgba(0, 0, 0, 0.25)
+    );
+}
+
+.frame-copy h3 {
+  margin-bottom: 0.4rem;
+}
+
+.frame-copy p {
+  margin-bottom: 1rem;
+
+  font-size: 0.83rem;
+
+  opacity: 0.88;
+}
+
+.frame-copy a {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  padding-bottom: 0.15rem;
+
+  color: var(--champagne-soft);
+
+  border-bottom:
+    1px solid var(--champagne-soft);
+
+  font-size: 0.66rem;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   FAIXA DE PEÇAS
+========================================================= */
+
+.pieces-strip {
+  padding:
+    4rem 0;
+
+  overflow: hidden;
+
+  background: var(--off-white);
+
+  color: var(--ink);
+
+  border-top:
+    1px solid rgba(185, 163, 109, 0.15);
+
+  border-bottom:
+    1px solid rgba(185, 163, 109, 0.15);
+}
+
+.pieces-label {
+  padding:
+    0
+    clamp(1.5rem, 6vw, 5rem)
+    2.2rem;
+}
+
+.pieces-label p {
+  color: var(--text-soft);
+
+  font-size: 0.84rem;
+}
+
+.marquee {
+  display: flex;
+
+  gap: 4rem;
+
+  width: max-content;
+
+  animation:
+    marquee
+    50s linear infinite;
+}
+
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+.piece-item {
+  flex: 0 0 auto;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 0.7rem;
+
+  color: var(--moss-deep);
+
+  text-decoration: none;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.piece-item:hover {
+  transform:
+    translateY(-7px);
+}
+
+.piece-item img {
+  width: 120px;
+  height: 150px;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 10px 18px
+      rgba(58, 76, 49, 0.16)
+    );
+}
+
+.piece-item span {
+  text-align: center;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.3s ease;
+}
+
+.piece-item:hover span {
+  opacity: 1;
+}
+
+.piece-item strong {
+  display: block;
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.piece-item small {
+  color: var(--moss-soft);
+
+  font-size: 0.56rem;
+
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CTA FINAL
+========================================================= */
+
+.final-cta {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  align-items: center;
+
+  gap:
+    clamp(2rem, 6vw, 5rem);
+
+  background: var(--sand-soft);
+
+  color: var(--ink);
+}
+
+.final-object {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  max-width: 380px;
+
+  margin: 0 auto;
+
+  aspect-ratio: 1;
+}
+
+.final-object img {
+  max-width: 60%;
+}
+
+.final-object span {
+  position: absolute;
+
+  bottom: 0;
+
+  color: var(--moss-soft);
+
+  font-size: 0.55rem;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.final-cta p {
+  max-width: 440px;
+
+  margin:
+    1.4rem 0
+    2.2rem;
+
+  color: var(--text-soft);
+}
+
+.final-actions {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 1.5rem;
+}
+
+.button-light {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.5rem;
+
+  padding:
+    0.85rem
+    1.6rem;
+
+  background: var(--moss);
+
+  color: var(--warm-white);
+
+  border:
+    1px solid var(--moss);
+
+  font-size: 0.68rem;
+  font-weight: 500;
+
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+
+.button-light:hover {
+  background: var(--moss-deep);
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  display: grid;
+
+  grid-template-columns:
+    1.5fr 1fr 1fr 1fr;
+
+  gap: 3rem;
+
+  padding:
+    4.5rem
+    clamp(1.5rem, 6vw, 5rem)
+    2rem;
+
+  background: var(--cream);
+
+  color: var(--ink);
+
+  border-top:
+    1px solid rgba(185, 163, 109, 0.2);
+}
+
+.footer .wordmark {
+  margin-bottom: 1rem;
+
+  font-size: 1.8rem;
+}
+
+.footer p {
+  color: var(--text-soft);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-style: italic;
+
+  font-size: 1rem;
+}
+
+.footer div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.7rem;
+}
+
+.footer a,
+.footer button {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  width: fit-content;
+
+  padding: 0;
+
+  background: none;
+
+  color: var(--text-soft);
+
+  font-size: 0.76rem;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease;
+}
+
+.footer a:hover,
+.footer button:hover {
+  color: var(--moss);
+}
+
+.footer-label {
+  margin-bottom: 0.4rem;
+
+  color: var(--moss-soft) !important;
+
+  font-size: 0.56rem;
+  font-weight: 500;
+
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.footer-bottom {
+  grid-column:
+    1 / -1;
+
+  margin-top: 1.8rem;
+
+  padding-top: 1.4rem;
+
+  border-top:
+    1px solid rgba(185, 163, 109, 0.18);
+
+  color:
+    rgba(41, 48, 34, 0.45);
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.08em;
+}
+
+
+/* =========================================================
+   PLAYER DE MÚSICA — AFLORA
+========================================================= */
+
+.music-player {
+  position: fixed;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 90;
+
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  max-width: 420px;
+  padding: 0.55rem 0.72rem;
+
+  background: rgba(255, 253, 249, 0.94);
+  color: var(--moss-deep);
+
+  border: 1px solid rgba(185, 163, 109, 0.28);
+  border-radius: 40px;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow: 0 8px 25px rgba(58, 76, 49, 0.10);
+}
+
+.music-player-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--moss);
+  color: var(--warm-white);
+}
+
+.music-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.music-info span {
+  color: var(--moss-deep);
+  font-family: 'Playfair Display', serif;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-info small {
+  margin-top: 0.1rem;
+  color: var(--text-soft);
+  font-size: 0.48rem;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+.music-controls {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.08rem;
+}
+
+.music-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--moss);
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.music-controls button:hover {
+  background: rgba(58, 76, 49, 0.08);
+  transform: translateY(-1px);
+}
+
+.music-controls .music-play {
+  width: 31px;
+  height: 31px;
+  background: var(--moss);
+  color: var(--warm-white);
+}
+
+.music-controls .music-play:hover {
+  background: var(--moss-deep);
+  color: var(--warm-white);
+}
+
+/* =========================================================
+   PLAYER — CELULAR
+   No celular mostramos apenas ícone + controles.
+========================================================= */
+
+@media (max-width: 540px) {
+  .music-player {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+    max-width: none;
+    padding: 0.42rem 0.5rem;
+    gap: 0.35rem;
+    border-radius: 32px;
+  }
+
+  .music-player-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .music-info {
+    display: none;
+  }
+
+  .music-controls {
+    gap: 0;
+  }
+
+  .music-controls button {
+    width: 26px;
+    height: 26px;
+  }
+
+  .music-controls .music-play {
+    width: 29px;
+    height: 29px;
+  }
+}
+
+/* =========================================================
+   HISTÓRIA
+========================================================= */
+
+.inner-page .site-header {
+  background:
+    rgba(255, 253, 249, 0.94);
+}
+
+.page-intro {
+  max-width: 760px;
+
+  margin: 0 auto;
+
+  padding-top: 11rem;
+  padding-bottom: 5.5rem;
+
+  text-align: center;
+}
+
+.page-intro p {
+  margin-top: 1.4rem;
+
+  color: var(--text-soft);
+}
+
+.editorial-pair,
+.editorial-wide {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  align-items: center;
+
+  gap:
+    clamp(2rem, 5vw, 5rem);
+}
+
+.editorial-pair .placeholder-visual {
+  aspect-ratio:
+    4 / 5;
+}
+
+.editorial-wide {
+  background:
+    var(--sand-soft);
+}
+
+.editorial-wide .placeholder-visual {
+  aspect-ratio:
+    16 / 10;
+}
+
+.editorial-pair p,
+.editorial-wide p {
+  margin-top: 1.4rem;
+
+  color: var(--text-soft);
+}
+
+.history-closing {
+  text-align: center;
+}
+
+.history-seal {
+  width: 180px;
+
+  aspect-ratio: 1;
+
+  margin:
+    0 auto
+    3rem;
+}
+
+.history-seal img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  border:
+    1px solid rgba(185, 163, 109, 0.35);
+}
+
+.history-closing h2 {
+  margin:
+    1rem 0;
+}
+
+.history-closing p {
+  max-width: 540px;
+
+  margin: 0 auto;
+
+  color: var(--text-soft);
+}
+
+
+/* =========================================================
+   PÁGINA COLEÇÕES
+========================================================= */
+
+.collections-intro {
+  max-width: 640px;
+
+  margin: 0 auto;
+
+  padding-top: 11rem;
+  padding-bottom: 4rem;
+
+  text-align: center;
+}
+
+.collections-intro p {
+  margin-top: 1.4rem;
+
+  color: var(--text-soft);
+}
+
+.collection-explorer {
+  padding-top: 3rem;
+}
+
+.universe-tabs {
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 0.7rem;
+
+  margin-bottom: 3rem;
+}
+
+.universe-tabs button {
+  padding:
+    0.55rem
+    1.3rem;
+
+  background: transparent;
+
+  color: var(--moss);
+
+  border:
+    1px solid rgba(58, 76, 49, 0.28);
+
+  border-radius: 30px;
+
+  font-size: 0.66rem;
+
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.universe-tabs button:hover {
+  border-color:
+    var(--moss);
+}
+
+.universe-tabs button.active {
+  background:
+    var(--moss);
+
+  color:
+    var(--warm-white);
+
+  border-color:
+    var(--moss);
+}
+
+.explorer-feature {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-end;
+
+  min-height: 360px;
+
+  padding: 3rem;
+
+  margin-bottom: 2rem;
+
+  background-size: cover;
+  background-position: center;
+
+  color: var(--warm-white);
+}
+
+.explorer-feature p {
+  max-width: 420px;
+
+  margin-top: 0.8rem;
+
+  color:
+    rgba(255, 253, 249, 0.86);
+}
+
+.explorer-index {
+  color: var(--champagne-soft);
+
+  font-size: 0.65rem;
+
+  letter-spacing: 0.24em;
+}
+
+.collection-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.collection-row {
+  display: flex;
+
+  align-items: center;
+
+  gap: 2rem;
+
+  padding:
+    1.6rem
+    2rem;
+
+  background:
+    var(--warm-white);
+
+  color:
+    var(--ink);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.22);
+
+  text-decoration: none;
+
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.collection-row:hover {
+  border-color:
+    var(--champagne);
+
+  transform:
+    translateX(5px);
+}
+
+.collection-row span {
+  flex:
+    0 0 200px;
+}
+
+.collection-row small {
+  display: block;
+
+  margin-bottom: 0.2rem;
+
+  color: var(--moss-soft);
+
+  font-size: 0.55rem;
+
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.collection-row strong {
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+.collection-row p {
+  flex: 1;
+
+  color: var(--text-soft);
+
+  font-size: 0.86rem;
+}
+
+.collection-row svg {
+  color: var(--moss);
+}
+
+.empty-collection {
+  padding:
+    4rem 2rem;
+
+  color:
+    var(--text-soft);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  font-size: 1.2rem;
+  font-style: italic;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes marquee {
+  from {
+    transform:
+      translateX(0);
+  }
+
+  to {
+    transform:
+      translateX(-50%);
+  }
+}
+
+@keyframes float-piece {
+  0%,
+  100% {
+    transform:
+      translate(-50%, -55%)
+      translateY(0)
+      rotate(-1deg);
+  }
+
+  50% {
+    transform:
+      translate(-50%, -55%)
+      translateY(-9px)
+      rotate(1deg);
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 860px) {
+
+  .story,
+  .unique,
+  .objects,
+  .final-cta,
+  .editorial-pair,
+  .editorial-wide {
+    grid-template-columns: 1fr;
+  }
+
+
+  .atelier-header {
+    grid-template-columns: 1fr;
+  }
+
+
+  .atelier-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .atelier-large {
+    grid-row: auto;
+
+    aspect-ratio:
+      4 / 3;
+  }
+
+
+  .memories {
+    grid-template-columns:
+      1fr;
+
+    min-height: auto;
+  }
+
+
+  .footer {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+
+  .footer-brand {
+    grid-column:
+      1 / -1;
+  }
+
+
+  /* MENU MOBILE */
+
+  .site-header {
+    padding:
+      1.05rem
+      1.25rem;
+  }
+
+
+  .wordmark {
+    font-size: 1.6rem;
+  }
+
+
+  .site-header nav {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 72%;
+
+    max-width: 320px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 1.8rem;
+
+    padding:
+      3rem
+      2rem;
+
+    background:
+      rgba(250, 247, 241, 0.98);
+
+    backdrop-filter:
+      blur(18px);
+
+    -webkit-backdrop-filter:
+      blur(18px);
+
+    box-shadow:
+      -20px 0 50px
+      rgba(58, 76, 49, 0.08);
+
+    transform:
+      translateX(100%);
+
+    transition:
+      transform 0.45s ease;
+  }
+
+
+  .site-header nav.nav-open {
+    transform:
+      translateX(0);
+  }
+
+
+  .menu-toggle {
+    display: flex;
+
+    z-index: 101;
+  }
+
+
+  .explorer-feature {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 1.5rem;
+  }
+
+
+  .collection-row {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 1rem;
+  }
+
+
+  .collection-row span {
+    flex: none;
+  }
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 540px) {
+
+  section {
+    padding:
+      4.2rem
+      1.2rem;
+  }
+
+
+    /* =======================================================
+   HERO MOBILE
+
+   Mostra aproximadamente os 3/4 centrais
+   do vídeo original 4:3.
+
+   O Hero fica praticamente quadrado,
+   sem faixas vazias e sem cortar o logo.
+======================================================= */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+  height: auto;
+
+  aspect-ratio: 1 / 1;
+
+  min-height: 0;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  background: var(--sand-soft);
+}
+
+.hero-video {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  /*
+    133.33% significa:
+    mostramos aproximadamente 75% da largura
+    original do vídeo.
+  */
+  width: 133.333%;
+  height: auto;
+
+  max-width: none;
+
+  transform: translate(-50%, -50%);
+
+  object-fit: initial;
+
+  z-index: 0;
+}
+  /* Footer */
+
+  .footer {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  /* Processo */
+
+  .process-step {
+    flex-direction: column;
+
+    gap: 0.7rem;
+  }
+}
+
+
+
+
+/* =========================================================
+   REDUÇÃO DE MOVIMENTO
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+
+
+  .marquee {
+    animation: none;
+  }
+}
