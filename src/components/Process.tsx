@@ -1,42 +1,48 @@
 import { SectionKicker } from './SectionKicker';
 
-const STAMP = '/assets/images/packaging/afl01.JPG';
+const STAMP_VIDEO =
+  '/assets/images/packaging/selo01_quadrado_site.mp4';
 
 const processSteps = [
   [
     '01',
-    'A escolha',
+    'Escolha',
     'Flores, folhas, cores e elementos naturais são escolhidos individualmente.',
   ],
   [
     '02',
-    'O tempo',
+    'Tempo',
     'Os elementos passam pelos processos necessários de preparação e preservação.',
   ],
   [
     '03',
-    'A composição',
+    'Composição',
     'Cada elemento é posicionado manualmente. Não existe produção em série da composição.',
   ],
   [
     '04',
-    'A resina',
+    'Resina',
     'A natureza é preservada dentro da transparência. Luz, profundidade e detalhes passam a fazer parte da peça.',
   ],
   [
     '05',
-    'O acabamento',
+    'Acabamento',
     'Lixamento, polimento, montagem e revisão são feitos artesanalmente.',
   ],
   [
     '06',
-    'O cuidado',
+    'Cuidado',
     'A peça é limpa, conferida e preparada individualmente.',
   ],
   [
     '07',
-    'A embalagem',
+    'Embalagem',
     'O toque final que prepara a peça para chegar a uma nova história.',
+  ],
+  [
+    '08',
+    'Exclusiva',
+    'Cada peça Aflora é única e carrega sua própria composição. Uma criação singular, feita para pertencer somente a quem a escolheu.',
   ],
 ];
 
@@ -79,14 +85,19 @@ export function Process() {
       </div>
 
       <div className="process-stamp">
-        <img
-          src={STAMP}
-          alt="Placeholder da embalagem e sinete Aflora"
-        />
-
-        <span>
-          Sinete e embalagem · placeholder
-        </span>
+        <video
+          className="process-stamp-video"
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="metadata"
+        >
+          <source
+            src={STAMP_VIDEO}
+            type="video/mp4"
+          />
+        </video>
       </div>
 
       <div className="process-end">

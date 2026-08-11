@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import { SectionKicker } from './SectionKicker';
 import { navigateTo } from '../utils/navigation';
 
-const LOGO = '/assets/images/logo/afl03.jpg';
+const LOGO = '/assets/images/joias/joias03.png';
 
 export function FinalCTA() {
   return (

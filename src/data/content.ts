@@ -36,36 +36,138 @@ export type PlaylistTrack = {
 };
 
 export const imageUrls = {
-  wildflower: 'https://images.pexels.com/photos/38597855/pexels-photo-38597855.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1800',
-  buttercups: 'https://images.pexels.com/photos/539719/pexels-photo-539719.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1800',
-  calendula: 'https://images.pexels.com/photos/65950/calendula-medicinal-plant-nature-65950.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1800',
-  wildflowerDetail: 'https://images.pexels.com/photos/33731645/pexels-photo-33731645.jpeg?auto=compress&cs=tinysrgb&h=1200&w=1800',
+  terra: '/assets/images/universe/terra.png',
+  agua: '/assets/images/universe/agua.png',
+  ar: '/assets/images/universe/ar.png',
+  fogo: '/assets/images/universe/fogo.png',
 };
 
 export const universes: Universe[] = [
-  { id: 'mar', name: 'Mar', description: 'Liberdade, sal e transparência.', mood: 'Para quem carrega o horizonte consigo.', image: imageUrls.buttercups, accent: '#c5b486' },
-  { id: 'ceu', name: 'Céu', description: 'Luz, infinito e delicadeza.', mood: 'Leve como aquilo que ainda está por vir.', image: imageUrls.wildflowerDetail, accent: '#ddd2b8' },
-  { id: 'rio', name: 'Rio', description: 'Movimento, pedra e verde.', mood: 'A beleza de seguir encontrando caminhos.', image: imageUrls.wildflower, accent: '#a9b19a' },
-  { id: 'mistica', name: 'Mística', description: 'Símbolos, energia e profundidade.', mood: 'Para sentir antes de entender.', image: imageUrls.calendula, accent: '#8e8062' },
-  { id: 'esporte', name: 'Esporte', description: 'Paixões, histórias e presença.', mood: 'O que vibra em você também pode florescer.', image: imageUrls.buttercups, accent: '#c17d50' },
-  { id: 'classica', name: 'Clássica', description: 'Sobriedade, tempo e permanência.', mood: 'A delicadeza de uma escolha que atravessa o tempo.', image: imageUrls.wildflower, accent: '#ded4c2' },
+  {
+    id: 'terra',
+    name: 'Terra',
+    description: 'Raízes, presença e permanência.',
+    mood: 'Para quem encontra força naquilo que permanece.',
+    image: imageUrls.terra,
+    accent: '#6f7352',
+  },
+  {
+    id: 'agua',
+    name: 'Água',
+    description: 'Fluidez, profundidade e renovação.',
+    mood: 'Para quem muda sem deixar de reconhecer a própria essência.',
+    image: imageUrls.agua,
+    accent: '#557c83',
+  },
+  {
+    id: 'ar',
+    name: 'Ar',
+    description: 'Leveza, movimento e horizonte.',
+    mood: 'Para quem sente liberdade antes mesmo de escolher o caminho.',
+    image: imageUrls.ar,
+    accent: '#aebbc2',
+  },
+  {
+    id: 'fogo',
+    name: 'Fogo',
+    description: 'Intensidade, calor e transformação.',
+    mood: 'Para quem carrega uma presença que não passa despercebida.',
+    image: imageUrls.fogo,
+    accent: '#a65b35',
+  },
 ];
 
 export const collections: Collection[] = [
-  { id: 'mediterraneo', universo: 'mar', nome: 'Mediterrâneo', descricao: 'Azuis que guardam o calor do sol.', imagemFundo: imageUrls.buttercups, imagemPeca: '/assets/images/logo/afl03.jpg', urlNuvemshop: '#', ativa: true },
-  { id: 'aurora', universo: 'ceu', nome: 'Aurora', descricao: 'Primeira luz sobre a matéria.', imagemFundo: imageUrls.wildflowerDetail, imagemPeca: '/assets/images/logo/afl03.jpg', urlNuvemshop: '#', ativa: true },
-  { id: 'margem', universo: 'rio', nome: 'Margem', descricao: 'Onde a terra encontra o movimento.', imagemFundo: imageUrls.wildflower, imagemPeca: '/assets/images/logo/afl03.jpg', urlNuvemshop: '#', ativa: true },
-  { id: 'constelacao', universo: 'mistica', nome: 'Constelação', descricao: 'Pequenos sinais para iluminar o caminho.', imagemFundo: imageUrls.calendula, imagemPeca: '/assets/images/logo/afl03.jpg', urlNuvemshop: '#', ativa: true },
+  {
+    id: 'raizes',
+    universo: 'terra',
+    nome: 'Raízes',
+    descricao: 'Matéria, memória e a força silenciosa do que sustenta.',
+    imagemFundo: imageUrls.terra,
+    imagemPeca: imageUrls.terra,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
+  {
+    id: 'rio',
+    universo: 'agua',
+    nome: 'Rio',
+    descricao: 'Movimento, pedra e caminhos que nunca deixam de seguir.',
+    imagemFundo: imageUrls.agua,
+    imagemPeca: imageUrls.agua,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
+  {
+    id: 'aurora',
+    universo: 'ar',
+    nome: 'Aurora',
+    descricao: 'Primeira luz, horizonte e a delicadeza de um novo começo.',
+    imagemFundo: imageUrls.ar,
+    imagemPeca: imageUrls.ar,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
+  {
+    id: 'brasa',
+    universo: 'fogo',
+    nome: 'Brasa',
+    descricao: 'Calor contido, intensidade e transformação.',
+    imagemFundo: imageUrls.fogo,
+    imagemPeca: imageUrls.fogo,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
 ];
 
 export const pecasDisponiveis: AvailablePiece[] = [
-  { id: 'gota-01', nome: 'Gota Solar', colecao: 'Aurora', imagem: '/assets/images/logo/afl03.jpg', url: '#', ativa: true },
-  { id: 'gota-02', nome: 'Margem', colecao: 'Margem', imagem: '/assets/images/logo/afl03.jpg', url: '#', ativa: true },
-  { id: 'gota-03', nome: 'Maré Baixa', colecao: 'Mediterrâneo', imagem: '/assets/images/logo/afl03.jpg', url: '#', ativa: true },
-  { id: 'gota-04', nome: 'Pequena Luz', colecao: 'Constelação', imagem: '/assets/images/logo/afl03.jpg', url: '#', ativa: true },
+  {
+    id: 'terra-01',
+    nome: 'Raiz',
+    colecao: 'Raízes',
+    imagem: imageUrls.terra,
+    url: '#',
+    ativa: true,
+  },
+  {
+    id: 'agua-01',
+    nome: 'Correnteza',
+    colecao: 'Rio',
+    imagem: imageUrls.agua,
+    url: '#',
+    ativa: true,
+  },
+  {
+    id: 'ar-01',
+    nome: 'Primeira Luz',
+    colecao: 'Aurora',
+    imagem: imageUrls.ar,
+    url: '#',
+    ativa: true,
+  },
+  {
+    id: 'fogo-01',
+    nome: 'Brasa',
+    colecao: 'Brasa',
+    imagem: imageUrls.fogo,
+    url: '#',
+    ativa: true,
+  },
 ];
 
 export const playlist: PlaylistTrack[] = [
-  { id: 'faixa-01', titulo: 'Entre folhas', arquivo: '/audio/entre-folhas.mp3', artista: 'Aflora', ativa: false },
-  { id: 'faixa-02', titulo: 'Luz de dentro', arquivo: '/audio/luz-de-dentro.mp3', artista: 'Aflora', ativa: false },
+  {
+    id: 'faixa-01',
+    titulo: 'Entre folhas',
+    arquivo: '/audio/entre-folhas.mp3',
+    artista: 'Aflora',
+    ativa: false,
+  },
+  {
+    id: 'faixa-02',
+    titulo: 'Luz de dentro',
+    arquivo: '/audio/luz-de-dentro.mp3',
+    artista: 'Aflora',
+    ativa: false,
+  },
 ];

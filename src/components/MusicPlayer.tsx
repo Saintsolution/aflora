@@ -17,6 +17,27 @@ const tracks = [
     title: 'Sensibilidade Rara',
     src: '/assets/music/Sensibilidade Rara.mp3',
   },
+
+{
+    title: 'Aflora Alecrim',
+    src: '/assets/music/Aflora Alecrim.mp3',
+  },
+
+  {
+    title: 'Aflora Obrigada, Senhor.',
+    src: '/assets/music/Aflora Obrigada, Senhor..mp3',
+  },
+
+  {
+    title: 'Aflora Sol Reflete',
+    src: '/assets/music/Aflora Sol Reflete.mp3',
+  },
+
+  {
+    title: 'Chuva do Vento',
+    src: '/assets/music/Chuva do Vento.mp3',
+  },
+
 ];
 
 export function MusicPlayer() {

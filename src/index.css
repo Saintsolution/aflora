@@ -821,6 +821,11 @@ section {
 
 @media (max-width: 860px) {
 
+  .process-steps {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
   .unique {
     grid-template-columns: 1fr;
 
@@ -888,10 +893,7 @@ section {
   display: grid;
 
   grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(250px, 1fr)
-    );
+    repeat(4, minmax(0, 1fr));
 
   gap: 1rem;
 
@@ -944,42 +946,34 @@ section {
 .process-stamp {
   position: relative;
 
-  max-width: 340px;
+  width: min(100%, 360px);
+  aspect-ratio: 1 / 1;
 
   margin:
     4rem auto 0;
-}
 
-.process-stamp img {
-  width: 100%;
+  overflow: hidden;
 
-  aspect-ratio: 1;
-
-  object-fit: cover;
+  background: var(--sand-soft);
 
   border:
-    1px solid rgba(185, 163, 109, 0.25);
+    1px solid rgba(185, 163, 109, 0.22);
+
+  box-shadow:
+    0 16px 36px
+    rgba(58, 76, 49, 0.08);
 }
 
-.process-stamp span {
-  position: absolute;
+.process-stamp-video {
+  width: 100%;
+  height: 100%;
 
-  left: 0.8rem;
-  bottom: 0.8rem;
+  display: block;
 
-  padding:
-    0.3rem
-    0.65rem;
+  object-fit: cover;
+  object-position: center center;
 
-  background:
-    rgba(58, 76, 49, 0.78);
-
-  color: var(--warm-white);
-
-  font-size: 0.55rem;
-
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  border: 0;
 }
 
 .process-end {
@@ -1163,13 +1157,11 @@ section {
   display: grid;
 
   grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(290px, 1fr)
-    );
+    repeat(4, minmax(0, 1fr));
 
   gap: 1.5rem;
 }
+
 
 .collection-frame {
   position: relative;
@@ -1443,7 +1435,7 @@ section {
 }
 
 .final-object img {
-  max-width: 60%;
+  max-width: 150%;
 }
 
 .final-object span {
@@ -2287,56 +2279,78 @@ section {
       1.2rem;
   }
 
+  /* =======================================================
+     HERO MOBILE
 
-    /* =======================================================
-   HERO MOBILE
+     Mostra aproximadamente os 3/4 centrais
+     do vídeo original 4:3.
 
-   Mostra aproximadamente os 3/4 centrais
-   do vídeo original 4:3.
+     O Hero fica praticamente quadrado,
+     sem faixas vazias e sem cortar o logo.
+  ======================================================= */
 
-   O Hero fica praticamente quadrado,
-   sem faixas vazias e sem cortar o logo.
-======================================================= */
+  .hero {
+    position: relative;
 
-.hero {
-  position: relative;
+    width: 100%;
+    height: auto;
 
-  width: 100%;
-  height: auto;
+    aspect-ratio: 1 / 1;
 
-  aspect-ratio: 1 / 1;
+    min-height: 0;
 
-  min-height: 0;
+    padding: 0;
 
-  padding: 0;
+    overflow: hidden;
 
-  overflow: hidden;
+    background: var(--sand-soft);
+  }
 
-  background: var(--sand-soft);
-}
+  .hero-video {
+    position: absolute;
 
-.hero-video {
-  position: absolute;
+    top: 50%;
+    left: 50%;
 
-  top: 50%;
-  left: 50%;
+    width: 133.333%;
+    height: auto;
 
-  /*
-    133.33% significa:
-    mostramos aproximadamente 75% da largura
-    original do vídeo.
-  */
-  width: 133.333%;
-  height: auto;
+    max-width: none;
 
-  max-width: none;
+    transform: translate(-50%, -50%);
 
-  transform: translate(-50%, -50%);
+    object-fit: initial;
 
-  object-fit: initial;
+    z-index: 0;
+  }
 
-  z-index: 0;
-}
+  /* Universos — 2 por linha no celular */
+
+  .universe-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 0.8rem;
+  }
+
+  .collection-frame {
+    aspect-ratio: 4 / 5;
+    padding: 1rem;
+  }
+
+  .collection-frame h3 {
+    font-size: 1.25rem;
+  }
+
+  .frame-copy p {
+    font-size: 0.72rem;
+  }
+
+  .frame-top {
+    font-size: 0.48rem;
+    letter-spacing: 0.14em;
+  }
+
   /* Footer */
 
   .footer {
@@ -2344,18 +2358,13 @@ section {
       1fr;
   }
 
-
   /* Processo */
 
   .process-step {
     flex-direction: column;
-
     gap: 0.7rem;
   }
 }
-
-
-
 
 /* =========================================================
    REDUÇÃO DE MOVIMENTO

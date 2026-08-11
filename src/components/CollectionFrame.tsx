@@ -5,8 +5,6 @@ import {
   type Universe,
 } from '../data/content';
 
-const LOGO = '/assets/images/logo/afl03.jpg';
-
 type CollectionFrameProps = {
   universe: Universe;
   collection?: Collection;
@@ -35,13 +33,6 @@ export function CollectionFrame({
         <span>
           0{universes.indexOf(universe) + 1}
         </span>
-      </div>
-
-      <div className="floating-piece">
-        <img
-          src={collection?.imagemPeca || LOGO}
-          alt="Placeholder de joia Aflora"
-        />
       </div>
 
       <div className="frame-copy">
