@@ -821,11 +821,6 @@ section {
 
 @media (max-width: 860px) {
 
-  .process-steps {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-  }
-
   .unique {
     grid-template-columns: 1fr;
 
@@ -989,6 +984,68 @@ section {
     clamp(1.7rem, 3vw, 2.5rem);
 
   line-height: 1.45;
+}
+
+
+/* =========================================================
+   PROCESSO — TABLET
+   Duas caixas por linha
+========================================================= */
+
+@media (max-width: 860px) {
+  .process .process-steps {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   PROCESSO — CELULAR
+   Uma caixa por linha
+========================================================= */
+
+@media (max-width: 540px) {
+  .process .process-intro {
+    margin-bottom: 2.5rem;
+  }
+
+  .process .process-steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+
+    width: 100%;
+  }
+
+  .process .process-step {
+    width: 100%;
+    min-width: 0;
+
+    flex-direction: row;
+
+    gap: 0.9rem;
+
+    padding:
+      1.1rem
+      1.2rem;
+  }
+
+  .process .process-step span {
+    flex: 0 0 auto;
+
+    font-size: 1.8rem;
+  }
+
+  .process .process-step h3 {
+    margin-bottom: 0.25rem;
+
+    font-size: 1.45rem;
+  }
+
+  .process .process-step p {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
 }
 
 
@@ -1279,7 +1336,10 @@ section {
 
 
 /* =========================================================
-   FAIXA DE PEÇAS
+   CARROSSEL DE JOIAS — FAIXA DE PEÇAS
+
+   Tamanho das imagens: .piece-item img
+   Distância entre as peças: .marquee
 ========================================================= */
 
 .pieces-strip {
@@ -1315,7 +1375,7 @@ section {
 .marquee {
   display: flex;
 
-  gap: 4rem;
+  gap: 2rem;
 
   width: max-content;
 
@@ -1353,8 +1413,8 @@ section {
 }
 
 .piece-item img {
-  width: 120px;
-  height: 150px;
+  width: 190px;
+  height: 230px;
 
   object-fit: contain;
 
@@ -1407,7 +1467,8 @@ section {
   display: grid;
 
   grid-template-columns:
-    1fr 1fr;
+    minmax(0, 0.9fr)
+    minmax(0, 1.1fr);
 
   align-items: center;
 
@@ -1417,6 +1478,8 @@ section {
   background: var(--sand-soft);
 
   color: var(--ink);
+
+  overflow: hidden;
 }
 
 .final-object {
@@ -1427,21 +1490,41 @@ section {
   align-items: center;
   justify-content: center;
 
-  max-width: 380px;
+  width: min(100%, 420px);
+  min-width: 0;
 
   margin: 0 auto;
 
   aspect-ratio: 1;
+
+  overflow: hidden;
+
+  background: var(--warm-white);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.2);
 }
 
 .final-object img {
-  max-width: 150%;
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  max-width: 100%;
+
+  object-fit: contain;
+  object-position: center;
 }
 
 .final-object span {
   position: absolute;
 
-  bottom: 0;
+  bottom: 1rem;
+  left: 50%;
+
+  transform:
+    translateX(-50%);
 
   color: var(--moss-soft);
 
@@ -1449,6 +1532,8 @@ section {
 
   letter-spacing: 0.18em;
   text-transform: uppercase;
+
+  white-space: nowrap;
 }
 
 .final-cta p {
@@ -1511,6 +1596,78 @@ section {
     translateY(-2px);
 }
 
+
+/* =========================================================
+   CTA FINAL — TABLET
+========================================================= */
+
+@media (max-width: 860px) {
+  .final-cta {
+    grid-template-columns: 1fr;
+
+    gap: 3rem;
+
+    text-align: center;
+  }
+
+  .final-object {
+    width: min(100%, 380px);
+  }
+
+  .final-cta p {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .final-actions {
+    justify-content: center;
+  }
+}
+
+
+/* =========================================================
+   CTA FINAL — CELULAR
+========================================================= */
+
+@media (max-width: 540px) {
+  .final-cta {
+    gap: 2.2rem;
+
+    padding-right: 1.2rem;
+    padding-left: 1.2rem;
+  }
+
+  .final-object {
+    width: min(88vw, 330px);
+  }
+
+  .final-object img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .final-object span {
+    bottom: 0.75rem;
+
+    font-size: 0.48rem;
+    letter-spacing: 0.14em;
+  }
+
+  .final-cta p {
+    margin-top: 1.1rem;
+    margin-bottom: 1.7rem;
+
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .final-actions {
+    gap: 0.9rem;
+  }
+}
 
 /* =========================================================
    FOOTER
@@ -1870,7 +2027,7 @@ section {
 
 
 /* =========================================================
-   PÁGINA COLEÇÕES
+   PÁGINA COLEÇÕES — ABERTURA E LETTERING
 ========================================================= */
 
 .collections-intro {
@@ -1884,10 +2041,40 @@ section {
   text-align: center;
 }
 
+.collections-intro h1,
+.collections-intro h2 {
+  color: var(--moss-deep);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size:
+    clamp(3.8rem, 8vw, 6.8rem);
+
+  font-weight: 300;
+
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+.collections-intro h1 em,
+.collections-intro h2 em {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
 .collections-intro p {
+  max-width: 520px;
+
   margin-top: 1.4rem;
+  margin-right: auto;
+  margin-left: auto;
 
   color: var(--text-soft);
+
+  font-size: 0.95rem;
+  line-height: 1.8;
 }
 
 .collection-explorer {
@@ -1949,6 +2136,8 @@ section {
     var(--moss);
 }
 
+/* Destaque visual da coleção selecionada */
+
 .explorer-feature {
   display: flex;
 
@@ -1967,6 +2156,35 @@ section {
   color: var(--warm-white);
 }
 
+.explorer-feature h2,
+.explorer-feature h3 {
+  max-width: 620px;
+
+  color: var(--warm-white);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size:
+    clamp(3.4rem, 7vw, 6rem);
+
+  font-weight: 300;
+
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+
+  text-shadow:
+    0 3px 22px rgba(20, 27, 16, 0.34);
+}
+
+.explorer-feature h2 em,
+.explorer-feature h3 em {
+  color: var(--champagne-soft);
+  font-family: inherit;
+  font-weight: inherit;
+}
+
 .explorer-feature p {
   max-width: 420px;
 
@@ -1974,6 +2192,12 @@ section {
 
   color:
     rgba(255, 253, 249, 0.86);
+
+  font-size: 0.9rem;
+  line-height: 1.7;
+
+  text-shadow:
+    0 2px 14px rgba(20, 27, 16, 0.32);
 }
 
 .explorer-index {
@@ -2047,11 +2271,13 @@ section {
 
 .collection-row strong {
   font-family:
-    'Playfair Display',
+    'Cormorant Garamond',
     serif;
 
-  font-size: 1.4rem;
-  font-weight: 400;
+  font-size: 1.75rem;
+  font-weight: 500;
+
+  line-height: 1.15;
 }
 
 .collection-row p {
@@ -2064,6 +2290,270 @@ section {
 
 .collection-row svg {
   color: var(--moss);
+}
+
+
+/* =========================================================
+   PÁGINA COLEÇÕES — GRID DE PEÇAS
+
+   As peças cadastradas no Admin aparecem aqui.
+   Cada card leva diretamente ao produto na Nuvemshop.
+========================================================= */
+
+.collection-products {
+  margin-top: 3.5rem;
+
+  padding-top: 3rem;
+
+  border-top:
+    1px solid rgba(185, 163, 109, 0.24);
+
+  scroll-margin-top: 6.5rem;
+}
+
+.collection-products-header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 2rem;
+
+  margin-bottom: 2rem;
+}
+
+.collection-products-header .kicker {
+  margin-bottom: 0;
+}
+
+.collection-products-header p {
+  max-width: 560px;
+
+  color: var(--text-soft);
+
+  font-size: 0.9rem;
+  line-height: 1.7;
+
+  text-align: right;
+}
+
+.collection-products-carousel {
+  width: 100%;
+
+  overflow: hidden;
+
+  padding:
+    0.4rem
+    0
+    2rem;
+}
+
+.collection-products-track {
+  --collection-products-gap:
+    clamp(1rem, 2vw, 1.8rem);
+
+  display: flex;
+
+  width: max-content;
+
+  will-change: transform;
+
+  animation:
+    collection-products-marquee
+    32s linear infinite;
+}
+
+.collection-products-track:hover,
+.collection-products-track:focus-within {
+  animation-play-state: paused;
+}
+
+.collection-products-track.is-static {
+  animation: none;
+}
+
+.collection-products-group {
+  flex: none;
+
+  display: flex;
+
+  gap:
+    var(--collection-products-gap);
+
+  padding-right:
+    var(--collection-products-gap);
+}
+
+.collection-product-card {
+  min-width: 0;
+
+  flex:
+    0 0
+    clamp(220px, 20vw, 300px);
+
+  width:
+    clamp(220px, 20vw, 300px);
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background: var(--warm-white);
+
+  color: var(--ink);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.22);
+
+  text-decoration: none;
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.collection-product-card:hover {
+  transform:
+    translateY(-5px);
+
+  border-color: var(--champagne);
+
+  box-shadow:
+    0 18px 36px rgba(58, 76, 49, 0.1);
+}
+
+.collection-product-image {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: var(--cream);
+}
+
+.collection-product-image img {
+  width: 100%;
+  height: 100%;
+
+  max-width: none;
+
+  object-fit: cover;
+  object-position: center;
+
+  transition:
+    transform 0.55s ease;
+}
+
+.collection-product-card:hover
+  .collection-product-image img {
+  transform:
+    scale(1.035);
+}
+
+.collection-product-card > div:last-child {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  padding:
+    1.05rem
+    1.1rem
+    1.2rem;
+}
+
+.collection-product-card small {
+  margin-bottom: 0.35rem;
+
+  color: var(--moss-soft);
+
+  font-size: 0.52rem;
+  font-weight: 500;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.collection-product-card h3 {
+  margin-bottom: 0.6rem;
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size:
+    clamp(1.35rem, 2vw, 1.75rem);
+
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.collection-product-card p {
+  display: -webkit-box;
+
+  margin-bottom: 0.9rem;
+
+  overflow: hidden;
+
+  color: var(--text-soft);
+
+  font-size: 0.76rem;
+  line-height: 1.55;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.collection-product-card strong {
+  display: block;
+
+  margin-top: auto;
+  margin-bottom: 0.85rem;
+
+  color: var(--moss-deep);
+
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.collection-product-card span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.4rem;
+
+  color: var(--moss);
+
+  border-bottom:
+    1px solid var(--champagne);
+
+  font-size: 0.58rem;
+  font-weight: 500;
+
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@keyframes collection-products-marquee {
+  from {
+    transform:
+      translateX(0);
+  }
+
+  to {
+    transform:
+      translateX(-50%);
+  }
 }
 
 .empty-collection {
@@ -2121,6 +2611,16 @@ section {
 /* =========================================================
    TABLET
 ========================================================= */
+
+@media (max-width: 1150px) {
+  .collection-product-card {
+    flex-basis:
+      clamp(210px, 28vw, 280px);
+
+    width:
+      clamp(210px, 28vw, 280px);
+  }
+}
 
 @media (max-width: 860px) {
 
@@ -2264,6 +2764,38 @@ section {
   .collection-row span {
     flex: none;
   }
+
+
+  /* Coleções — carrossel de peças */
+
+  .collection-products {
+    margin-top: 3rem;
+  }
+
+
+  .collection-products-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 0.8rem;
+  }
+
+
+  .collection-products-header p {
+    max-width: 620px;
+
+    text-align: left;
+  }
+
+
+  .collection-product-card {
+    flex-basis:
+      clamp(200px, 40vw, 260px);
+
+    width:
+      clamp(200px, 40vw, 260px);
+  }
 }
 
 
@@ -2351,6 +2883,166 @@ section {
     letter-spacing: 0.14em;
   }
 
+  /* =======================================================
+     CARROSSEL DE JOIAS — CELULAR
+  ======================================================= */
+
+  .pieces-strip {
+    padding: 3rem 0;
+  }
+
+  .pieces-label {
+    padding:
+      0
+      1.2rem
+      1.6rem;
+  }
+
+  .marquee {
+    gap: 1.2rem;
+  }
+
+  .piece-item img {
+    width: 155px;
+    height: 190px;
+  }
+
+  /* =======================================================
+     PÁGINA COLEÇÕES — LETTERING NO CELULAR
+  ======================================================= */
+
+  .collections-intro {
+    padding-top: 8.5rem;
+    padding-bottom: 2.8rem;
+  }
+
+  .collections-intro h1,
+  .collections-intro h2 {
+    font-size: clamp(3.2rem, 16vw, 4.5rem);
+    line-height: 0.9;
+  }
+
+  .collections-intro p {
+    margin-top: 1.1rem;
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .collection-explorer {
+    padding-top: 2rem;
+  }
+
+  .universe-tabs {
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .universe-tabs button {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+  }
+
+  .explorer-feature {
+    min-height: 430px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+    background-position: center;
+  }
+
+  .explorer-feature h2,
+  .explorer-feature h3 {
+    font-size: clamp(3rem, 15vw, 4.2rem);
+    line-height: 0.88;
+  }
+
+  .explorer-feature p {
+    max-width: 100%;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .collection-row {
+    padding: 1.25rem;
+  }
+
+  .collection-row strong {
+    font-size: 1.55rem;
+  }
+
+  /* =======================================================
+     COLEÇÕES — CARROSSEL INFINITO NO CELULAR
+     Aproximadamente duas imagens menores visíveis
+  ======================================================= */
+
+  .collection-products {
+    margin-top: 2.2rem;
+
+    padding-top: 2rem;
+
+    scroll-margin-top: 5.5rem;
+  }
+
+  .collection-products-header {
+    margin-bottom: 1.4rem;
+  }
+
+  .collection-products-header p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .collection-products-carousel {
+    padding-bottom: 1.2rem;
+  }
+
+  .collection-products-track {
+    --collection-products-gap: 0.75rem;
+
+    animation-duration: 24s;
+  }
+
+  .collection-product-card {
+    flex-basis:
+      clamp(145px, 42vw, 190px);
+
+    width:
+      clamp(145px, 42vw, 190px);
+  }
+
+  .collection-product-card > div:last-child {
+    padding:
+      0.8rem
+      0.75rem
+      0.9rem;
+  }
+
+  .collection-product-card small {
+    font-size: 0.45rem;
+    letter-spacing: 0.12em;
+  }
+
+  .collection-product-card h3 {
+    margin-bottom: 0.45rem;
+
+    font-size: 1.2rem;
+  }
+
+  .collection-product-card p {
+    display: none;
+  }
+
+  .collection-product-card strong {
+    margin-bottom: 0.65rem;
+
+    font-size: 0.76rem;
+  }
+
+  .collection-product-card span {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
   /* Footer */
 
   .footer {
@@ -2358,12 +3050,6 @@ section {
       1fr;
   }
 
-  /* Processo */
-
-  .process-step {
-    flex-direction: column;
-    gap: 0.7rem;
-  }
 }
 
 /* =========================================================
@@ -2388,5 +3074,17 @@ section {
 
   .marquee {
     animation: none;
+  }
+
+
+  .collection-products-carousel {
+    overflow-x: auto;
+  }
+
+
+  .collection-products-track {
+    animation: none;
+
+    transform: none;
   }
 }

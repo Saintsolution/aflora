@@ -1,6 +1,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -74,6 +75,10 @@ export function Colecoes() {
 
   const [error, setError] =
     useState(false);
+
+
+  const productsSectionRef =
+    useRef<HTMLDivElement | null>(null);
 
 
   useEffect(() => {
@@ -212,6 +217,49 @@ export function Colecoes() {
       current.id,
       selectedCollection,
     ]);
+
+
+  /*
+    Quando a URL já chega com uma coleção
+    selecionada — por exemplo, ao clicar em
+    uma peça do carrossel da Home — a página
+    abre a coleção e leva a visitante direto
+    ao carrossel de peças.
+
+    O mesmo acontece quando uma coleção é
+    escolhida nesta página.
+  */
+  useEffect(() => {
+    if (
+      loading ||
+      !selectedCollection
+    ) {
+      return;
+    }
+
+
+    const frame =
+      window.requestAnimationFrame(
+        () => {
+          productsSectionRef.current
+            ?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+        }
+      );
+
+
+    return () => {
+      window.cancelAnimationFrame(
+        frame
+      );
+    };
+  }, [
+    loading,
+    selectedCollection,
+    currentPieces.length,
+  ]);
 
 
   function selectUniverse(
@@ -467,7 +515,10 @@ export function Colecoes() {
 
 
           {selectedCollection && (
-            <div className="collection-products">
+            <div
+              className="collection-products"
+              ref={productsSectionRef}
+            >
               <div className="collection-products-header">
                 <SectionKicker>
                   {
@@ -487,84 +538,115 @@ export function Colecoes() {
 
 
               {currentPieces.length ? (
-                <div className="collection-products-grid">
-                  {currentPieces.map(
-                    (piece) => (
-                      <a
-                        className="collection-product-card"
+                <div className="collection-products-carousel">
+                  <div
+                    className={`collection-products-track ${
+                      currentPieces.length > 1
+                        ? ''
+                        : 'is-static'
+                    }`}
+                  >
+                    {(currentPieces.length > 1
+                      ? [0, 1]
+                      : [0]
+                    ).map((copyIndex) => (
+                      <div
+                        className="collection-products-group"
 
-                        key={
-                          piece.id
+                        key={copyIndex}
+
+                        aria-hidden={
+                          copyIndex === 1
+                            ? true
+                            : undefined
                         }
-
-                        href={
-                          piece.product_url ||
-                          '#'
-                        }
-
-                        target="_blank"
-
-                        rel="noopener noreferrer"
                       >
-                        <div className="collection-product-image">
-                          {piece.image_url && (
-                            <img
-                              src={
-                                piece.image_url
+                        {currentPieces.map(
+                          (piece) => (
+                            <a
+                              className="collection-product-card"
+
+                              key={`${piece.id}-${copyIndex}`}
+
+                              href={
+                                piece.product_url ||
+                                '#'
                               }
 
-                              alt={
-                                piece.name
+                              target="_blank"
+
+                              rel="noopener noreferrer"
+
+                              tabIndex={
+                                copyIndex === 1
+                                  ? -1
+                                  : undefined
                               }
-                            />
-                          )}
-                        </div>
+                            >
+                              <div className="collection-product-image">
+                                {piece.image_url && (
+                                  <img
+                                    src={
+                                      piece.image_url
+                                    }
+
+                                    alt={
+                                      copyIndex === 1
+                                        ? ''
+                                        : piece.name
+                                    }
+                                  />
+                                )}
+                              </div>
 
 
-                        <div>
-                          <small>
-                            {
-                              piece.collection
-                            }
-                          </small>
+                              <div>
+                                <small>
+                                  {
+                                    piece.collection
+                                  }
+                                </small>
 
 
-                          <h3>
-                            {
-                              piece.name
-                            }
-                          </h3>
+                                <h3>
+                                  {
+                                    piece.name
+                                  }
+                                </h3>
 
 
-                          {piece.description && (
-                            <p>
-                              {
-                                piece.description
-                              }
-                            </p>
-                          )}
+                                {piece.description && (
+                                  <p>
+                                    {
+                                      piece.description
+                                    }
+                                  </p>
+                                )}
 
 
-                          <strong>
-                            {formatPrice(
-                              Number(
-                                piece.price
-                              )
-                            )}
-                          </strong>
+                                <strong>
+                                  {formatPrice(
+                                    Number(
+                                      piece.price
+                                    )
+                                  )}
+                                </strong>
 
 
-                          <span>
-                            Ver peça
+                                <span>
+                                  Ver peça
 
-                            <ExternalLink
-                              size={13}
-                            />
-                          </span>
-                        </div>
-                      </a>
-                    )
-                  )}
+                                  <ExternalLink
+                                    size={13}
+                                  />
+                                </span>
+                              </div>
+                            </a>
+                          )
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="empty-collection">
