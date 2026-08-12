@@ -12,7 +12,6 @@ type CollectionFrameProps = {
 
 export function CollectionFrame({
   universe,
-  collection,
 }: CollectionFrameProps) {
   return (
     <article
@@ -40,7 +39,7 @@ export function CollectionFrame({
 
         <p>{universe.description}</p>
 
-        <a href={collection?.urlNuvemshop || '#'}>
+        <a href={`/colecoes?universo=${universe.id}`}>
           Descobrir este universo
           <ArrowRight size={14} />
         </a>

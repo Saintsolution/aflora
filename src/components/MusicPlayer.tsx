@@ -18,14 +18,19 @@ const tracks = [
     src: '/assets/music/Sensibilidade Rara.mp3',
   },
 
+  {
+    title: 'Terra Sagrada',
+    src: '/assets/music/Terra Sagrada.mp3',
+  },
+
 {
     title: 'Aflora Alecrim',
     src: '/assets/music/Aflora Alecrim.mp3',
   },
 
   {
-    title: 'Aflora Obrigada, Senhor.',
-    src: '/assets/music/Aflora Obrigada, Senhor..mp3',
+    title: 'Aflora Obrigada, Senhor',
+    src: '/assets/music/Aflora Obrigada Senhor.mp3',
   },
 
   {

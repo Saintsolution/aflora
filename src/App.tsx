@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Home } from './pages/Home';
 import { Historia } from './pages/Historia';
 import { Colecoes } from './pages/Colecoes';
+import { Admin } from './pages/Admin';
 
 export default function App() {
   const [path, setPath] = useState(
@@ -33,6 +34,10 @@ export default function App() {
 
   if (path === '/colecoes') {
     return <Colecoes />;
+  }
+
+  if (path === '/admin') {
+    return <Admin />;
   }
 
   return <Home />;

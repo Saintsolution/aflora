@@ -21,9 +21,22 @@ export type Collection = {
 export type AvailablePiece = {
   id: string;
   nome: string;
-  colecao: string;
+
+  universo:
+    | 'terra'
+    | 'agua'
+    | 'ar'
+    | 'fogo';
+
+  colecaoId: string;
+  colecaoNome: string;
+
+  descricao: string;
+  preco: number;
+
   imagem: string;
-  url: string;
+  urlNuvemshop: string;
+
   ativa: boolean;
 };
 
@@ -124,50 +137,53 @@ export const pecasDisponiveis: AvailablePiece[] = [
   {
     id: 'terra-01',
     nome: 'Raiz',
-    colecao: 'Raízes',
+    universo: 'terra',
+    colecaoId: 'raizes',
+    colecaoNome: 'Raízes',
+    descricao:
+      'Matéria vegetal preservada em uma composição de tons terrosos.',
+    preco: 189,
     imagem: imageUrls.terra,
-    url: '#',
+    urlNuvemshop: '#',
     ativa: true,
   },
   {
     id: 'agua-01',
     nome: 'Correnteza',
-    colecao: 'Rio',
+    universo: 'agua',
+    colecaoId: 'rio',
+    colecaoNome: 'Rio',
+    descricao:
+      'Pedras azuis e matéria vegetal em uma composição inspirada no movimento da água.',
+    preco: 189,
     imagem: imageUrls.agua,
-    url: '#',
+    urlNuvemshop: '#',
     ativa: true,
   },
   {
     id: 'ar-01',
     nome: 'Primeira Luz',
-    colecao: 'Aurora',
+    universo: 'ar',
+    colecaoId: 'aurora',
+    colecaoNome: 'Aurora',
+    descricao:
+      'Transparência e leveza em uma peça inspirada na primeira luz do dia.',
+    preco: 189,
     imagem: imageUrls.ar,
-    url: '#',
+    urlNuvemshop: '#',
     ativa: true,
   },
   {
     id: 'fogo-01',
     nome: 'Brasa',
-    colecao: 'Brasa',
+    universo: 'fogo',
+    colecaoId: 'brasa',
+    colecaoNome: 'Brasa',
+    descricao:
+      'Flores em tons quentes reunidas em uma composição de presença e intensidade.',
+    preco: 189,
     imagem: imageUrls.fogo,
-    url: '#',
+    urlNuvemshop: '#',
     ativa: true,
-  },
-];
-
-export const playlist: PlaylistTrack[] = [
-  {
-    id: 'faixa-01',
-    titulo: 'Entre folhas',
-    arquivo: '/audio/entre-folhas.mp3',
-    artista: 'Aflora',
-    ativa: false,
-  },
-  {
-    id: 'faixa-02',
-    titulo: 'Luz de dentro',
-    arquivo: '/audio/luz-de-dentro.mp3',
-    artista: 'Aflora',
-    ativa: false,
   },
 ];
