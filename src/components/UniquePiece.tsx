@@ -22,10 +22,15 @@ export function UniquePiece() {
         </h2>
 
         <p>
-          Cada flor é diferente. Cada composição é feita à mão.
-          A posição dos elementos, a transparência e as pequenas
-          características naturais fazem com que cada criação
-          seja única.
+          A natureza nunca cria duas folhas exatamente iguais.
+          <br />
+          Nem duas flores.
+          <br />
+          Nem duas pedras.
+          <br />
+          Nem dois momentos.
+          <br />
+          Escolha a peça que irá preservar o seu.
         </p>
 
         <blockquote>

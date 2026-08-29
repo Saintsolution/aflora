@@ -32,15 +32,15 @@ export function Historia() {
         </section>
 
         <section className="editorial-pair section-light">
-          <PlaceholderVisual
-            image={imageUrls.wildflower}
-            label="Jardim e matéria · placeholder"
-          />
+  <PlaceholderVisual
+    image={imageUrls.terra}
+    label="Jardim e matéria · placeholder"
+  />
 
-          <div>
-            <SectionKicker>
-              01 · O começo
-            </SectionKicker>
+  <div>
+    <SectionKicker>
+      01 · O começo
+    </SectionKicker>
 
             <h2>
               Antes da peça, existe um olhar.

@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import { SectionKicker } from './SectionKicker';
 import { navigateTo } from '../utils/navigation';
 
-const LOGO = '/assets/images/joias/joias03.png';
+const LOGO = '/assets/images/joias/joias05.png';
 
 export function FinalCTA() {
   return (
@@ -24,14 +24,11 @@ export function FinalCTA() {
       </div>
 
       <div>
-        <SectionKicker>
-          Um encontro
-        </SectionKicker>
 
         <h2>
-          Talvez a sua Aflora
+          A sua Aflora
           <br />
-          <em>já esteja esperando por você.</em>
+          <em>está esperando por você.</em>
         </h2>
 
         <p>
@@ -49,12 +46,13 @@ export function FinalCTA() {
           </button>
 
           <a
-            href="#"
-            className="text-link light"
-          >
-            Visite a loja
-            <ArrowRight size={15} />
-          </a>
+  href="#"
+  className="text-link"
+  style={{ color: '#d2b8a6' }}
+>
+  Visite a loja
+  <ArrowRight size={15} />
+</a>
         </div>
       </div>
     </section>

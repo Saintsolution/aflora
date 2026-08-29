@@ -28,7 +28,7 @@ export function CollectionFrame({
       }}
     >
       <div className="frame-top">
-        <span>Universo</span>
+        <span>elemento</span>
         <span>
           0{universes.indexOf(universe) + 1}
         </span>
@@ -39,8 +39,8 @@ export function CollectionFrame({
 
         <p>{universe.description}</p>
 
-        <a href={`/colecoes?universo=${universe.id}`}>
-          Descobrir este universo
+        <a href={`/colecoes?elemento=${universe.id}`}>
+          Coleções
           <ArrowRight size={14} />
         </a>
       </div>

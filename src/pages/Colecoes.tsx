@@ -41,7 +41,7 @@ function getQueryParam(name: string) {
 
 export function Colecoes() {
   const initialUniverse =
-    getQueryParam('universo');
+    getQueryParam('elemento');
 
   const initialCollection =
     getQueryParam('colecao');
@@ -165,7 +165,7 @@ export function Colecoes() {
         const staticCollection =
           staticCollections.find(
             (item) =>
-              item.universo === current.id &&
+              item.elemento === current.id &&
               item.nome
                 .toLowerCase()
                 .trim() ===
@@ -180,7 +180,7 @@ export function Colecoes() {
 
           description:
             staticCollection?.descricao ||
-            `Uma coleção do universo ${current.name}.`,
+            `Uma coleção do elemento ${current.name}.`,
         };
       });
     }, [
@@ -276,7 +276,7 @@ export function Colecoes() {
 
 
     url.searchParams.set(
-      'universo',
+      'elemento',
       id
     );
 
@@ -307,7 +307,7 @@ export function Colecoes() {
 
 
     url.searchParams.set(
-      'universo',
+      'elemento',
       current.id
     );
 
@@ -339,7 +339,7 @@ export function Colecoes() {
 
 
           <h1>
-            Universos
+            Elementos
             <br />
 
             <em>
@@ -350,7 +350,7 @@ export function Colecoes() {
 
           <p>
             Escolha um caminho.
-            Cada universo abriga
+            Cada elemento abriga
             coleções que nascem
             de uma mesma atmosfera.
           </p>
@@ -407,7 +407,7 @@ export function Colecoes() {
           >
             <div>
               <SectionKicker>
-                Universo selecionado
+                elemento selecionado
               </SectionKicker>
 
 
@@ -506,7 +506,7 @@ export function Colecoes() {
               ) : (
                 <div className="empty-collection">
                   Novas coleções deste
-                  universo estão florescendo.
+                  elemento estão florescendo.
                 </div>
               )}
             </div>
@@ -528,7 +528,7 @@ export function Colecoes() {
 
                 <p>
                   Peças únicas deste
-                  universo. Clique para
+                  elemento. Clique para
                   conhecer todos os detalhes
                   e disponibilidade na
                   Nuvemshop.

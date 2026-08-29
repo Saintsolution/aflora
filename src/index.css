@@ -6,9 +6,13 @@
 ========================================================= */
 
 :root {
-  --moss-deep: #26351f;
-  --moss: #3a4c31;
-  --moss-soft: #68785c;
+  --moss-deep: #5a3f32;
+  --moss: #755747;
+  --moss-soft: #9a7f6d;
+
+  --coffee-deep: #5a3f32;
+  --coffee: #755747;
+  --coffee-soft: #9a7f6d;
 
   --sand: #e9dfcf;
   --sand-soft: #f0e8dc;
@@ -20,8 +24,8 @@
   --champagne: #b9a36d;
   --champagne-soft: #d8c9a4;
 
-  --ink: #293022;
-  --text-soft: #62675d;
+  --ink: var(--coffee-deep);
+  --text-soft: var(--coffee-soft);
 }
 
 
@@ -92,7 +96,7 @@ h3 {
 
 em {
   font-family: 'Playfair Display', serif;
-  font-style: italic;
+  font-style: normal;
 
   color: var(--moss);
 }
@@ -653,7 +657,7 @@ section {
     0.65rem;
 
   background:
-    rgba(58, 76, 49, 0.78);
+    rgba(47, 33, 27, 0.82);
 
   color: var(--warm-white);
 
@@ -809,7 +813,7 @@ section {
   font-size:
     clamp(1.2rem, 1.9vw, 1.65rem);
 
-  font-style: italic;
+  font-style: normal;
 
   line-height: 1.45;
 }
@@ -908,7 +912,7 @@ section {
 
   padding: 1.7rem;
 
-  background: var(--moss);
+  background: var(--coffee-deep);
 
   color: var(--warm-white);
 }
@@ -1047,8 +1051,6 @@ section {
     line-height: 1.55;
   }
 }
-
-
 /* =========================================================
    ATELIER
 ========================================================= */
@@ -1149,7 +1151,7 @@ section {
   font-size:
     clamp(1.5rem, 3.3vw, 2.5rem);
 
-  font-style: italic;
+  font-style: normal;
 }
 
 .memory-copy p {
@@ -1191,7 +1193,7 @@ section {
 
 
 /* =========================================================
-   UNIVERSOS / COLEÇÕES
+   Elementos / COLEÇÕES
 ========================================================= */
 
 .universes-intro {
@@ -1707,7 +1709,7 @@ section {
     'Playfair Display',
     serif;
 
-  font-style: italic;
+  font-style: normal;
 
   font-size: 1rem;
 }
@@ -2569,7 +2571,7 @@ section {
     serif;
 
   font-size: 1.2rem;
-  font-style: italic;
+  font-style: normal;
 
   text-align: center;
 }
@@ -2857,7 +2859,7 @@ section {
     z-index: 0;
   }
 
-  /* Universos — 2 por linha no celular */
+  /* Elementos — 2 por linha no celular */
 
   .universe-grid {
     grid-template-columns:

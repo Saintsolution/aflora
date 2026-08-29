@@ -333,7 +333,7 @@ export function Admin() {
             </label>
 
             <label>
-              <span style={labelStyle}>Universo</span>
+              <span style={labelStyle}>elemento</span>
               <select
                 value={universe}
                 onChange={(event) => setUniverse(event.target.value)}
@@ -658,7 +658,7 @@ export function Admin() {
                         letterSpacing: '.12em',
                       }}
                     >
-                      {product.universe || 'sem universo'}
+                      {product.universe || 'sem elemento'}
                       {' · '}
                       {product.collection}
                     </small>

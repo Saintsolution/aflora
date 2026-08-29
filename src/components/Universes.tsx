@@ -17,15 +17,13 @@ export function Universes({
       className={`universes section-sand ${
         compact ? 'universes-compact' : ''
       }`}
-      id="universos"
+      id="Elementos"
     >
       <div className="universes-intro">
-        <SectionKicker>
-          Universos Aflora
-        </SectionKicker>
+        
 
         <h2>
-          Encontre o universo
+          Encontre o elemento
           <br />
           <em>que fala de você.</em>
         </h2>
@@ -42,7 +40,7 @@ export function Universes({
             key={universe.id}
             universe={universe}
             collection={collections.find(
-              (item) => item.universo === universe.id
+              (item) => item.elemento === universe.id
             )}
           />
         ))}

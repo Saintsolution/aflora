@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import { SectionKicker } from './SectionKicker';
+
 import { navigateTo } from '../utils/navigation';
 
 export function StoryIntro() {
@@ -19,11 +19,7 @@ export function StoryIntro() {
       />
 
       <div className="story-cinematic-copy">
-        <SectionKicker>
-          A origem
-        </SectionKicker>
-
-        <h2>
+        <h2 className="story-cinematic-title">
           Toda Aflora começa na natureza.
         </h2>
 
@@ -35,6 +31,7 @@ export function StoryIntro() {
 
         <button
           className="text-link"
+          type="button"
           onClick={() => navigateTo('/historia')}
         >
           Conheça nossa história

@@ -59,16 +59,16 @@ export function AvailablePieces() {
   function getPieceLink(piece: Product) {
     /*
       Produtos novos:
-      se já tiverem universo, vão para a página
-      de coleções do universo.
+      se já tiverem elemento, vão para a página
+      de coleções do elemento.
 
       Produtos antigos:
-      ainda não têm universo, então usamos
+      ainda não têm elemento, então usamos
       o link da Nuvemshop como fallback.
     */
 
     if (piece.universe) {
-      return `/colecoes?universo=${piece.universe}`;
+      return `/colecoes?elemento=${piece.universe}`;
     }
 
     return piece.product_url || '#';
@@ -82,7 +82,7 @@ export function AvailablePieces() {
       >
         <div className="pieces-label">
           <SectionKicker>
-            Peças vivendo agora
+            Natureza em Movimento
           </SectionKicker>
 
           <p>
@@ -101,7 +101,7 @@ export function AvailablePieces() {
       >
         <div className="pieces-label">
           <SectionKicker>
-            Peças vivendo agora
+            Natureza em Movimento
           </SectionKicker>
 
           <p>
@@ -123,11 +123,11 @@ export function AvailablePieces() {
     >
       <div className="pieces-label">
         <SectionKicker>
-          Peças vivendo agora
+          Natureza em Movimento
         </SectionKicker>
 
         <p>
-          Pequenas presenças, disponíveis por um tempo.
+          Peças disponíveis por um tempo.
         </p>
       </div>
 

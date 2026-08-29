@@ -9,7 +9,7 @@ export type Universe = {
 
 export type Collection = {
   id: string;
-  universo: string;
+  elemento: string;
   nome: string;
   descricao: string;
   imagemFundo: string;
@@ -20,23 +20,21 @@ export type Collection = {
 
 export type AvailablePiece = {
   id: string;
+
   nome: string;
 
-  universo:
-    | 'terra'
+  elemento:
     | 'agua'
-    | 'ar'
-    | 'fogo';
+    | 'terra'
+    | 'fogo'
+    | 'ar';
 
   colecaoId: string;
   colecaoNome: string;
-
   descricao: string;
   preco: number;
-
   imagem: string;
   urlNuvemshop: string;
-
   ativa: boolean;
 };
 
@@ -49,85 +47,103 @@ export type PlaylistTrack = {
 };
 
 export const imageUrls = {
-  terra: '/assets/images/universe/terra.png',
   agua: '/assets/images/universe/agua.png',
-  ar: '/assets/images/universe/ar.png',
+  terra: '/assets/images/universe/terra.png',
   fogo: '/assets/images/universe/fogo.png',
+  ar: '/assets/images/universe/ar.png',
 };
 
 export const universes: Universe[] = [
   {
-    id: 'terra',
-    name: 'Terra',
-    description: 'Raízes, presença e permanência.',
-    mood: 'Para quem encontra força naquilo que permanece.',
-    image: imageUrls.terra,
-    accent: '#6f7352',
-  },
-  {
     id: 'agua',
     name: 'Água',
-    description: 'Fluidez, profundidade e renovação.',
-    mood: 'Para quem muda sem deixar de reconhecer a própria essência.',
+    description:
+      'Fluidez, profundidade e renovação.',
+    mood:
+      'Para quem muda sem deixar de reconhecer a própria essência.',
     image: imageUrls.agua,
     accent: '#557c83',
   },
+
   {
-    id: 'ar',
-    name: 'Ar',
-    description: 'Leveza, movimento e horizonte.',
-    mood: 'Para quem sente liberdade antes mesmo de escolher o caminho.',
-    image: imageUrls.ar,
-    accent: '#aebbc2',
+    id: 'terra',
+    name: 'Terra',
+    description:
+      'Raízes, presença e permanência.',
+    mood:
+      'Para quem encontra força naquilo que permanece.',
+    image: imageUrls.terra,
+    accent: '#6f7352',
   },
+
   {
     id: 'fogo',
     name: 'Fogo',
-    description: 'Intensidade, calor e transformação.',
-    mood: 'Para quem carrega uma presença que não passa despercebida.',
+    description:
+      'Intensidade, calor e transformação.',
+    mood:
+      'Para quem carrega uma presença que não passa despercebida.',
     image: imageUrls.fogo,
     accent: '#a65b35',
+  },
+
+  {
+    id: 'ar',
+    name: 'Ar',
+    description:
+      'Leveza, movimento e horizonte.',
+    mood:
+      'Para quem sente liberdade antes mesmo de escolher o caminho.',
+    image: imageUrls.ar,
+    accent: '#aebbc2',
   },
 ];
 
 export const collections: Collection[] = [
   {
-    id: 'raizes',
-    universo: 'terra',
-    nome: 'Raízes',
-    descricao: 'Matéria, memória e a força silenciosa do que sustenta.',
-    imagemFundo: imageUrls.terra,
-    imagemPeca: imageUrls.terra,
-    urlNuvemshop: '#',
-    ativa: true,
-  },
-  {
     id: 'rio',
-    universo: 'agua',
+    elemento: 'agua',
     nome: 'Rio',
-    descricao: 'Movimento, pedra e caminhos que nunca deixam de seguir.',
+    descricao:
+      'Movimento, pedra e caminhos que nunca deixam de seguir.',
     imagemFundo: imageUrls.agua,
     imagemPeca: imageUrls.agua,
     urlNuvemshop: '#',
     ativa: true,
   },
+
   {
-    id: 'aurora',
-    universo: 'ar',
-    nome: 'Aurora',
-    descricao: 'Primeira luz, horizonte e a delicadeza de um novo começo.',
-    imagemFundo: imageUrls.ar,
-    imagemPeca: imageUrls.ar,
+    id: 'raizes',
+    elemento: 'terra',
+    nome: 'Raízes',
+    descricao:
+      'Matéria, memória e a força silenciosa do que sustenta.',
+    imagemFundo: imageUrls.terra,
+    imagemPeca: imageUrls.terra,
     urlNuvemshop: '#',
     ativa: true,
   },
+
   {
     id: 'brasa',
-    universo: 'fogo',
+    elemento: 'fogo',
     nome: 'Brasa',
-    descricao: 'Calor contido, intensidade e transformação.',
+    descricao:
+      'Calor contido, intensidade e transformação.',
     imagemFundo: imageUrls.fogo,
     imagemPeca: imageUrls.fogo,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
+
+  {
+    id: 'aurora',
+    elemento: 'ar',
+    nome: 'Aurora',
+    descricao:
+      'Primeira luz, horizonte e a delicadeza de um novo começo.',
+    imagemFundo: imageUrls.ar,
+    imagemPeca: imageUrls.ar,
     urlNuvemshop: '#',
     ativa: true,
   },
@@ -135,22 +151,9 @@ export const collections: Collection[] = [
 
 export const pecasDisponiveis: AvailablePiece[] = [
   {
-    id: 'terra-01',
-    nome: 'Raiz',
-    universo: 'terra',
-    colecaoId: 'raizes',
-    colecaoNome: 'Raízes',
-    descricao:
-      'Matéria vegetal preservada em uma composição de tons terrosos.',
-    preco: 189,
-    imagem: imageUrls.terra,
-    urlNuvemshop: '#',
-    ativa: true,
-  },
-  {
     id: 'agua-01',
     nome: 'Correnteza',
-    universo: 'agua',
+    elemento: 'agua',
     colecaoId: 'rio',
     colecaoNome: 'Rio',
     descricao:
@@ -160,29 +163,45 @@ export const pecasDisponiveis: AvailablePiece[] = [
     urlNuvemshop: '#',
     ativa: true,
   },
+
   {
-    id: 'ar-01',
-    nome: 'Primeira Luz',
-    universo: 'ar',
-    colecaoId: 'aurora',
-    colecaoNome: 'Aurora',
+    id: 'terra-01',
+    nome: 'Raiz',
+    elemento: 'terra',
+    colecaoId: 'raizes',
+    colecaoNome: 'Raízes',
     descricao:
-      'Transparência e leveza em uma peça inspirada na primeira luz do dia.',
+      'Matéria vegetal preservada em uma composição de tons terrosos.',
     preco: 189,
-    imagem: imageUrls.ar,
+    imagem: imageUrls.terra,
     urlNuvemshop: '#',
     ativa: true,
   },
+
   {
     id: 'fogo-01',
     nome: 'Brasa',
-    universo: 'fogo',
+    elemento: 'fogo',
     colecaoId: 'brasa',
     colecaoNome: 'Brasa',
     descricao:
       'Flores em tons quentes reunidas em uma composição de presença e intensidade.',
     preco: 189,
     imagem: imageUrls.fogo,
+    urlNuvemshop: '#',
+    ativa: true,
+  },
+
+  {
+    id: 'ar-01',
+    nome: 'Primeira Luz',
+    elemento: 'ar',
+    colecaoId: 'aurora',
+    colecaoNome: 'Aurora',
+    descricao:
+      'Transparência e leveza em uma peça inspirada na primeira luz do dia.',
+    preco: 189,
+    imagem: imageUrls.ar,
     urlNuvemshop: '#',
     ativa: true,
   },
