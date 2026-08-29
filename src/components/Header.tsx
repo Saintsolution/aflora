@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import {
+  ArrowRight,
+  Menu,
+  X,
+} from 'lucide-react';
+
 import { navigateTo } from '../utils/navigation';
 
 export function Header() {
@@ -21,8 +26,9 @@ export function Header() {
     <header className="site-header">
       <button
         className="wordmark"
+        type="button"
         onClick={() => handleNavigate('/')}
-        aria-label="Voltar para início"
+        aria-label="Voltar para o início"
       >
         AFLORA<span>•</span>
       </button>
@@ -34,26 +40,32 @@ export function Header() {
         {nav.map(([label, target]) => (
           <button
             key={label}
+            type="button"
             onClick={() => handleNavigate(target)}
           >
             {label}
           </button>
         ))}
 
-        <a
+        <button
           className="nav-store"
-          href="#loja"
-          onClick={() => setOpen(false)}
+          type="button"
+          onClick={() => handleNavigate('#loja')}
         >
           Loja
           <ArrowRight size={14} />
-        </a>
+        </button>
       </nav>
 
       <button
         className="menu-toggle"
-        aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-        onClick={() => setOpen(!open)}
+        type="button"
+        aria-label={
+          open
+            ? 'Fechar menu'
+            : 'Abrir menu'
+        }
+        onClick={() => setOpen((current) => !current)}
       >
         {open ? <X /> : <Menu />}
       </button>

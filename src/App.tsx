@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { Historia } from './pages/Historia';
 import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
+import { MusicPlayer } from './components/MusicPlayer';
 
 export default function App() {
   const [path, setPath] = useState(
@@ -28,17 +29,23 @@ export default function App() {
     };
   }, []);
 
+  let page;
+
   if (path === '/historia') {
-    return <Historia />;
+    page = <Historia />;
+  } else if (path === '/colecoes') {
+    page = <Colecoes />;
+  } else if (path === '/admin') {
+    page = <Admin />;
+  } else {
+    page = <Home />;
   }
 
-  if (path === '/colecoes') {
-    return <Colecoes />;
-  }
+  return (
+    <>
+      {page}
 
-  if (path === '/admin') {
-    return <Admin />;
-  }
-
-  return <Home />;
+      {path !== '/admin' && <MusicPlayer />}
+    </>
+  );
 }

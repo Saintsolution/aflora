@@ -12,7 +12,6 @@ import {
 
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
-import { MusicPlayer } from '../components/MusicPlayer';
 import { SectionKicker } from '../components/SectionKicker';
 
 import {
@@ -662,7 +661,7 @@ export function Colecoes() {
 
       <Footer />
 
-      <MusicPlayer />
+    
     </div>
   );
 }

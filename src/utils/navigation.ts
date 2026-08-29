@@ -1,7 +1,9 @@
 export function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({
-    behavior: 'smooth',
-  });
+  document
+    .getElementById(id)
+    ?.scrollIntoView({
+      behavior: 'smooth',
+    });
 }
 
 export function navigateTo(target: string) {
@@ -10,6 +12,13 @@ export function navigateTo(target: string) {
     return;
   }
 
-  window.history.pushState({}, '', target);
-  window.dispatchEvent(new PopStateEvent('popstate'));
+  window.history.pushState(
+    {},
+    '',
+    target
+  );
+
+  window.dispatchEvent(
+    new PopStateEvent('popstate')
+  );
 }

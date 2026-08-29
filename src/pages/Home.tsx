@@ -7,7 +7,6 @@ import { AvailablePieces } from '../components/AvailablePieces';
 import { Process } from '../components/Process';
 import { FinalCTA } from '../components/FinalCTA';
 import { Footer } from '../components/Footer';
-import { MusicPlayer } from '../components/MusicPlayer';
 
 export function Home() {
   return (
@@ -25,8 +24,6 @@ export function Home() {
       </main>
 
       <Footer />
-
-      <MusicPlayer />
     </>
   );
 }

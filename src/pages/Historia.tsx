@@ -1,6 +1,5 @@
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
-import { MusicPlayer } from '../components/MusicPlayer';
 import { SectionKicker } from '../components/SectionKicker';
 import { PlaceholderVisual } from '../components/PlaceholderVisual';
 
@@ -105,7 +104,6 @@ export function Historia() {
       </main>
 
       <Footer />
-      <MusicPlayer />
     </div>
   );
 }
