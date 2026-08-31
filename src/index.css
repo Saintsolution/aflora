@@ -3128,3 +3128,246 @@ section {
     transform: none;
   }
 }
+/* =========================================================
+   BOAS-VINDAS — PLAYLIST AFLORA
+========================================================= */
+
+.playlist-trigger {
+  position: fixed;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 90;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  padding:
+    0.78rem
+    1.05rem;
+
+  background: var(--warm-white);
+  color: var(--moss-deep);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.38);
+  border-radius: 40px;
+
+  box-shadow:
+    0 8px 25px
+    rgba(90, 63, 50, 0.14);
+
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.playlist-trigger:hover {
+  color: var(--champagne);
+
+  box-shadow:
+    0 12px 30px
+    rgba(90, 63, 50, 0.2);
+
+  transform:
+    translateY(-2px);
+}
+
+.playlist-welcome {
+  position: fixed;
+  left: 1.2rem;
+  bottom: 5.5rem;
+  z-index: 1100;
+
+  width: min(
+    calc(100vw - 2.4rem),
+    390px
+  );
+
+  padding:
+    2rem
+    2rem
+    1.8rem;
+
+  background: var(--cream);
+  color: var(--ink);
+
+  border:
+    1px solid rgba(185, 163, 109, 0.42);
+  border-radius: 2px;
+
+  box-shadow:
+    0 18px 60px
+    rgba(90, 63, 50, 0.23);
+
+  animation:
+    playlist-welcome-in
+    0.4s
+    ease
+    both;
+}
+
+.playlist-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  background: transparent;
+  color: var(--moss-deep);
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.playlist-close:hover {
+  color: var(--champagne);
+
+  transform:
+    rotate(90deg);
+}
+
+.playlist-kicker {
+  display: block;
+
+  margin-bottom: 0.75rem;
+
+  color: var(--champagne);
+
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.playlist-welcome h2 {
+  max-width: 290px;
+
+  margin-bottom: 1.25rem;
+
+  color: var(--moss-deep);
+
+  font-size: clamp(
+    1.6rem,
+    3.5vw,
+    2.2rem
+  );
+
+  line-height: 1.1;
+}
+
+.playlist-welcome p {
+  margin-bottom: 1rem;
+
+  color: var(--text-soft);
+
+  font-size: 0.8rem;
+  line-height: 1.72;
+}
+
+.playlist-welcome .playlist-signature {
+  margin-bottom: 1.5rem;
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Playfair Display',
+    serif;
+
+  line-height: 1.55;
+}
+
+.playlist-start {
+  width: 100%;
+
+  padding:
+    0.92rem
+    1rem;
+
+  background: var(--moss-deep);
+  color: var(--warm-white);
+
+  border:
+    1px solid var(--moss-deep);
+
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.playlist-start:hover {
+  background: var(--champagne);
+  color: var(--coffee-deep);
+
+  transform:
+    translateY(-2px);
+}
+
+@keyframes playlist-welcome-in {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+@media (max-width: 540px) {
+  .playlist-trigger {
+    left: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .playlist-welcome {
+    left: 0.75rem;
+    bottom: 4.9rem;
+
+    width: calc(100vw - 1.5rem);
+    max-height: calc(100dvh - 7rem);
+
+    padding:
+      1.6rem
+      1.4rem
+      1.4rem;
+
+    overflow-y: auto;
+  }
+
+  .playlist-welcome h2 {
+    max-width: 260px;
+  }
+}

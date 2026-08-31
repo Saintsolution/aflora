@@ -4,8 +4,7 @@ import { Home } from './pages/Home';
 import { Historia } from './pages/Historia';
 import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
-import { MusicPlayer } from './components/MusicPlayer';
-
+import { PlaylistWelcome } from './components/PlaylistWelcome';
 export default function App() {
   const [path, setPath] = useState(
     window.location.pathname
@@ -45,7 +44,7 @@ export default function App() {
     <>
       {page}
 
-      {path !== '/admin' && <MusicPlayer />}
+      {path !== '/admin' && <PlaylistWelcome />}
     </>
   );
 }
