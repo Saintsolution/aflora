@@ -3371,3 +3371,195 @@ section {
     max-width: 260px;
   }
 }
+
+/* =========================================================
+   COLEÇÕES — CAPAS COM PEÇAS REAIS
+========================================================= */
+
+.collection-list {
+  gap: 1.35rem;
+}
+
+.collection-row {
+  display: grid;
+  grid-template-columns: minmax(210px, 32%) 1fr auto;
+
+  width: 100%;
+  min-height: 235px;
+  padding: 0;
+
+  overflow: hidden;
+
+  background: var(--warm-white);
+  border: 1px solid rgba(185, 163, 109, 0.28);
+
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.collection-row:hover {
+  border-color: var(--champagne);
+
+  box-shadow:
+    0 16px 32px
+    rgba(90, 63, 50, 0.12);
+
+  transform: translateY(-4px);
+}
+
+.collection-row.active {
+  border-color: var(--champagne);
+
+  box-shadow:
+    0 16px 34px
+    rgba(90, 63, 50, 0.16);
+}
+
+.collection-row-image {
+  position: relative;
+
+  min-height: 235px;
+
+  overflow: hidden;
+  background: var(--sand);
+}
+
+.collection-row-image::after {
+  position: absolute;
+  inset: 0;
+
+  content: '';
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(90, 63, 50, 0.14),
+      rgba(90, 63, 50, 0.02)
+    );
+}
+
+.collection-row-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter:
+    saturate(0.9)
+    contrast(0.98);
+
+  transition:
+    transform 0.6s ease,
+    filter 0.6s ease;
+}
+
+.collection-row:hover
+.collection-row-image img {
+  filter:
+    saturate(1)
+    contrast(1);
+
+  transform: scale(1.045);
+}
+
+.collection-row-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding:
+    2rem
+    clamp(1.5rem, 4vw, 4rem);
+}
+
+.collection-row-copy small {
+  display: block;
+
+  margin-bottom: 0.45rem;
+
+  color: var(--moss-soft);
+
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.collection-row-copy strong {
+  display: block;
+
+  margin-bottom: 0.9rem;
+
+  color: var(--moss-deep);
+
+  font-family:
+    'Cormorant Garamond',
+    serif;
+
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 500;
+  line-height: 0.95;
+}
+
+.collection-row-copy p {
+  max-width: 470px;
+  margin: 0;
+
+  color: var(--text-soft);
+
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.collection-row-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 68px;
+
+  color: var(--moss);
+}
+
+.collection-row-arrow svg {
+  transition: transform 0.3s ease;
+}
+
+.collection-row:hover
+.collection-row-arrow svg {
+  transform: translateX(5px);
+}
+
+@media (max-width: 680px) {
+  .collection-row {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-row-image {
+    min-height: 220px;
+    height: 220px;
+  }
+
+  .collection-row-copy {
+    padding: 1.5rem 1.35rem 1.7rem;
+  }
+
+  .collection-row-arrow {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    width: 58px;
+    height: 58px;
+
+    background: rgba(255, 253, 249, 0.88);
+  }
+}

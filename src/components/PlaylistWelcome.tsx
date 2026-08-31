@@ -49,7 +49,7 @@ export function PlaylistWelcome() {
           </span>
 
           <h2>
-            Sua experiência começa aqui.
+            Sejam bem-vindos!
           </h2>
 
           <p>

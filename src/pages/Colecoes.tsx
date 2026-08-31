@@ -25,7 +25,6 @@ import {
   type Product,
 } from '../lib/products';
 
-
 function getQueryParam(name: string) {
   if (typeof window === 'undefined') {
     return '';
@@ -38,14 +37,12 @@ function getQueryParam(name: string) {
   );
 }
 
-
 export function Colecoes() {
   const initialUniverse =
     getQueryParam('elemento');
 
   const initialCollection =
     getQueryParam('colecao');
-
 
   const [selected, setSelected] =
     useState(
@@ -57,14 +54,12 @@ export function Colecoes() {
         : universes[0]?.id || 'terra'
     );
 
-
   const [
     selectedCollection,
     setSelectedCollection,
   ] = useState(
     initialCollection
   );
-
 
   const [products, setProducts] =
     useState<Product[]>([]);
@@ -75,20 +70,38 @@ export function Colecoes() {
   const [error, setError] =
     useState(false);
 
-
   const productsSectionRef =
     useRef<HTMLDivElement | null>(null);
 
+  const shouldScrollToProductsRef =
+    useRef(Boolean(initialCollection));
+
+  useEffect(() => {
+    const previousScrollRestoration =
+      window.history.scrollRestoration;
+
+    window.history.scrollRestoration =
+      'manual';
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    });
+
+    return () => {
+      window.history.scrollRestoration =
+        previousScrollRestoration;
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
-
 
     async function loadProducts() {
       try {
         const data =
           await fetchProducts();
-
 
         if (mounted) {
           setProducts(data);
@@ -100,7 +113,6 @@ export function Colecoes() {
           err
         );
 
-
         if (mounted) {
           setError(true);
         }
@@ -111,15 +123,12 @@ export function Colecoes() {
       }
     }
 
-
     loadProducts();
-
 
     return () => {
       mounted = false;
     };
   }, []);
-
 
   const current =
     universes.find(
@@ -127,15 +136,6 @@ export function Colecoes() {
         universe.id === selected
     ) || universes[0];
 
-
-  /*
-    Coleções agora vêm das peças
-    cadastradas no Supabase.
-
-    Isso significa que você pode criar
-    novas coleções pelo Admin sem tocar
-    neste arquivo.
-  */
   const currentCollections =
     useMemo(() => {
       const names = products
@@ -150,18 +150,27 @@ export function Colecoes() {
             product.collection.trim()
         );
 
-
       return Array.from(
         new Set(names)
       ).map((name) => {
-        /*
-          Se a coleção também existir no
-          content.ts, aproveitamos a descrição
-          artística que já tínhamos.
+        const collectionProducts = products
+          .filter(
+            (product) =>
+              product.active !== false &&
+              product.universe === current.id &&
+              product.collection
+                .toLowerCase()
+                .trim() ===
+                name
+                  .toLowerCase()
+                  .trim()
+          )
+          .sort(
+            (first, second) =>
+              Number(first.sort_order ?? 0) -
+              Number(second.sort_order ?? 0)
+          );
 
-          Se for uma coleção nova criada
-          pelo Admin, usamos um texto neutro.
-        */
         const staticCollection =
           staticCollections.find(
             (item) =>
@@ -174,6 +183,10 @@ export function Colecoes() {
                   .trim()
           );
 
+        const coverPiece =
+          collectionProducts.find(
+            (product) => product.image_url
+          );
 
         return {
           name,
@@ -181,24 +194,26 @@ export function Colecoes() {
           description:
             staticCollection?.descricao ||
             `Uma coleção do elemento ${current.name}.`,
+
+          image:
+            coverPiece?.image_url ||
+            staticCollection?.imagemPeca ||
+            staticCollection?.imagemFundo ||
+            current.image,
         };
       });
     }, [
       products,
       current.id,
       current.name,
+      current.image,
     ]);
 
-
-  /*
-    Peças da coleção selecionada
-  */
   const currentPieces =
     useMemo(() => {
       if (!selectedCollection) {
         return [];
       }
-
 
       return products.filter(
         (product) =>
@@ -217,29 +232,21 @@ export function Colecoes() {
       selectedCollection,
     ]);
 
-
-  /*
-    Quando a URL já chega com uma coleção
-    selecionada — por exemplo, ao clicar em
-    uma peça do carrossel da Home — a página
-    abre a coleção e leva a visitante direto
-    ao carrossel de peças.
-
-    O mesmo acontece quando uma coleção é
-    escolhida nesta página.
-  */
   useEffect(() => {
     if (
       loading ||
-      !selectedCollection
+      !selectedCollection ||
+      !shouldScrollToProductsRef.current
     ) {
       return;
     }
 
-
     const frame =
       window.requestAnimationFrame(
         () => {
+          shouldScrollToProductsRef.current =
+            false;
+
           productsSectionRef.current
             ?.scrollIntoView({
               behavior: 'smooth',
@@ -247,7 +254,6 @@ export function Colecoes() {
             });
         }
       );
-
 
     return () => {
       window.cancelAnimationFrame(
@@ -260,31 +266,28 @@ export function Colecoes() {
     currentPieces.length,
   ]);
 
-
   function selectUniverse(
     id: string
   ) {
+    shouldScrollToProductsRef.current =
+      false;
+
     setSelected(id);
-
     setSelectedCollection('');
-
 
     const url =
       new URL(
         window.location.href
       );
-
 
     url.searchParams.set(
       'elemento',
       id
     );
 
-
     url.searchParams.delete(
       'colecao'
     );
-
 
     window.history.replaceState(
       {},
@@ -293,30 +296,28 @@ export function Colecoes() {
     );
   }
 
-
   function selectCollection(
     name: string
   ) {
-    setSelectedCollection(name);
+    shouldScrollToProductsRef.current =
+      true;
 
+    setSelectedCollection(name);
 
     const url =
       new URL(
         window.location.href
       );
 
-
     url.searchParams.set(
       'elemento',
       current.id
     );
 
-
     url.searchParams.set(
       'colecao',
       name
     );
-
 
     window.history.replaceState(
       {},
@@ -325,18 +326,15 @@ export function Colecoes() {
     );
   }
 
-
   return (
     <div className="inner-page">
       <Header />
-
 
       <main>
         <section className="collections-intro section-cream">
           <SectionKicker>
             Explorar por sensação
           </SectionKicker>
-
 
           <h1>
             Elementos
@@ -347,7 +345,6 @@ export function Colecoes() {
             </em>
           </h1>
 
-
           <p>
             Escolha um caminho.
             Cada elemento abriga
@@ -355,7 +352,6 @@ export function Colecoes() {
             de uma mesma atmosfera.
           </p>
         </section>
-
 
         <section className="collection-explorer section-sand">
           <div
@@ -366,18 +362,13 @@ export function Colecoes() {
               (universe) => (
                 <button
                   type="button"
-
                   className={
                     selected ===
                     universe.id
                       ? 'active'
                       : ''
                   }
-
-                  key={
-                    universe.id
-                  }
-
+                  key={universe.id}
                   onClick={() =>
                     selectUniverse(
                       universe.id
@@ -390,10 +381,8 @@ export function Colecoes() {
             )}
           </div>
 
-
           <div
             className="explorer-feature"
-
             style={{
               backgroundImage: `
                 linear-gradient(
@@ -410,17 +399,14 @@ export function Colecoes() {
                 elemento selecionado
               </SectionKicker>
 
-
               <h2>
                 {current.name}
               </h2>
-
 
               <p>
                 {current.mood}
               </p>
             </div>
-
 
             <span className="explorer-index">
               0
@@ -441,7 +427,6 @@ export function Colecoes() {
             </span>
           </div>
 
-
           {loading ? (
             <div className="empty-collection">
               Carregando coleções...
@@ -458,48 +443,49 @@ export function Colecoes() {
                   (collection) => (
                     <button
                       type="button"
-
                       className={`collection-row ${
                         selectedCollection ===
                         collection.name
                           ? 'active'
                           : ''
                       }`}
-
-                      key={
-                        collection.name
-                      }
-
+                      key={collection.name}
                       onClick={() =>
                         selectCollection(
                           collection.name
                         )
                       }
                     >
-                      <span>
+                      <div
+                        className="collection-row-image"
+                        aria-hidden="true"
+                      >
+                        <img
+                          src={collection.image}
+                          alt=""
+                        />
+                      </div>
+
+                      <div className="collection-row-copy">
                         <small>
                           Coleção
                         </small>
 
-
                         <strong>
-                          {
-                            collection.name
-                          }
+                          {collection.name}
                         </strong>
-                      </span>
 
+                        <p>
+                          {collection.description}
+                        </p>
+                      </div>
 
-                      <p>
-                        {
-                          collection.description
-                        }
-                      </p>
-
-
-                      <ArrowRight
-                        size={18}
-                      />
+                      <div
+                        className="collection-row-arrow"
+                        aria-hidden="true"
+                      >
+                        <ArrowRight size={19} />
+                      </div>
                     </button>
                   )
                 )
@@ -512,7 +498,6 @@ export function Colecoes() {
             </div>
           )}
 
-
           {selectedCollection && (
             <div
               className="collection-products"
@@ -520,11 +505,8 @@ export function Colecoes() {
             >
               <div className="collection-products-header">
                 <SectionKicker>
-                  {
-                    selectedCollection
-                  }
+                  {selectedCollection}
                 </SectionKicker>
-
 
                 <p>
                   Peças únicas deste
@@ -534,7 +516,6 @@ export function Colecoes() {
                   Nuvemshop.
                 </p>
               </div>
-
 
               {currentPieces.length ? (
                 <div className="collection-products-carousel">
@@ -551,9 +532,7 @@ export function Colecoes() {
                     ).map((copyIndex) => (
                       <div
                         className="collection-products-group"
-
                         key={copyIndex}
-
                         aria-hidden={
                           copyIndex === 1
                             ? true
@@ -564,18 +543,13 @@ export function Colecoes() {
                           (piece) => (
                             <a
                               className="collection-product-card"
-
                               key={`${piece.id}-${copyIndex}`}
-
                               href={
                                 piece.product_url ||
                                 '#'
                               }
-
                               target="_blank"
-
                               rel="noopener noreferrer"
-
                               tabIndex={
                                 copyIndex === 1
                                   ? -1
@@ -588,7 +562,6 @@ export function Colecoes() {
                                     src={
                                       piece.image_url
                                     }
-
                                     alt={
                                       copyIndex === 1
                                         ? ''
@@ -598,30 +571,20 @@ export function Colecoes() {
                                 )}
                               </div>
 
-
                               <div>
                                 <small>
-                                  {
-                                    piece.collection
-                                  }
+                                  {piece.collection}
                                 </small>
 
-
                                 <h3>
-                                  {
-                                    piece.name
-                                  }
+                                  {piece.name}
                                 </h3>
-
 
                                 {piece.description && (
                                   <p>
-                                    {
-                                      piece.description
-                                    }
+                                    {piece.description}
                                   </p>
                                 )}
-
 
                                 <strong>
                                   {formatPrice(
@@ -630,7 +593,6 @@ export function Colecoes() {
                                     )
                                   )}
                                 </strong>
-
 
                                 <span>
                                   Ver peça
@@ -658,10 +620,7 @@ export function Colecoes() {
         </section>
       </main>
 
-
       <Footer />
-
-    
     </div>
   );
 }
