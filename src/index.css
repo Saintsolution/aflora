@@ -2675,76 +2675,113 @@ section {
   }
 
 
-  /* MENU MOBILE */
+/* =========================================================
+   MENU MOBILE — CORRIGIDO
+========================================================= */
 
-  .site-header {
-    padding:
-      1.05rem
-      1.25rem;
-  }
+.site-header {
+  height: 78px;
 
+  padding:
+    1.05rem
+    1.25rem;
 
-  .wordmark {
-    font-size: 1.6rem;
-  }
+  z-index: 1000;
+}
 
+.wordmark {
+  font-size: 1.6rem;
+}
 
-  .site-header nav {
-    position: fixed;
+.site-header nav {
+  position: fixed;
 
-    top: 0;
-    right: 0;
-    bottom: 0;
+  top: 78px;
+  right: 0;
 
-    width: 72%;
+  z-index: 999;
 
-    max-width: 320px;
+  width: 72%;
+  max-width: 320px;
+  height: calc(100dvh - 78px);
 
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 
-    flex-direction: column;
+  gap: 1.8rem;
 
-    justify-content: center;
+  padding:
+    2rem
+    2rem
+    2.5rem;
 
-    gap: 1.8rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-    padding:
-      3rem
-      2rem;
+  background: #faf7f1;
+  color: var(--moss-deep);
 
-    background:
-      rgba(250, 247, 241, 0.98);
+  box-shadow:
+    -20px 0 50px
+    rgba(58, 76, 49, 0.12);
 
-    backdrop-filter:
-      blur(18px);
+  transform: translateX(100%);
+  transition: transform 0.45s ease;
+}
 
-    -webkit-backdrop-filter:
-      blur(18px);
+.site-header nav.nav-open {
+  transform: translateX(0);
+}
 
-    box-shadow:
-      -20px 0 50px
-      rgba(58, 76, 49, 0.08);
+.site-header nav button,
+.site-header nav a,
+.site-header nav .nav-store {
+  display: flex;
+  align-items: center;
 
-    transform:
-      translateX(100%);
+  width: 100%;
+  min-height: 44px;
 
-    transition:
-      transform 0.45s ease;
-  }
+  padding:
+    0.4rem
+    0;
 
+  background: transparent;
+  color: var(--moss-deep) !important;
 
-  .site-header nav.nav-open {
-    transform:
-      translateX(0);
-  }
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: left;
+  text-decoration: none;
 
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 
-  .menu-toggle {
-    display: flex;
+.site-header nav button:hover,
+.site-header nav a:hover {
+  color: var(--champagne) !important;
+}
 
-    z-index: 101;
-  }
+.menu-toggle {
+  position: relative;
 
+  z-index: 1001;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  background: transparent;
+  color: var(--moss-deep);
+}
 
   .explorer-feature {
     flex-direction: column;
