@@ -1,11 +1,12 @@
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { SectionKicker } from '../components/SectionKicker';
-import { PlaceholderVisual } from '../components/PlaceholderVisual';
 
-import { imageUrls } from '../data/content';
-
-const STAMP = '/assets/images/packaging/afl01.JPG';
+const HISTORY_IMAGES = {
+  beginning: '/assets/images/history/hist01.png',
+  making: '/assets/images/history/hist04.png',
+  closing: '/assets/images/history/hist03.png',
+};
 
 export function Historia() {
   return (
@@ -32,15 +33,17 @@ export function Historia() {
         </section>
 
         <section className="editorial-pair section-light">
-  <PlaceholderVisual
-    image={imageUrls.terra}
-    label="Jardim e matéria · placeholder"
-  />
+          <div className="history-image">
+            <img
+              src={HISTORY_IMAGES.beginning}
+              alt="Elementos naturais que inspiram a criação Aflora"
+            />
+          </div>
 
-  <div>
-    <SectionKicker>
-      01 · O começo
-    </SectionKicker>
+          <div>
+            <SectionKicker>
+              O começo
+            </SectionKicker>
 
             <h2>
               Antes da peça, existe um olhar.
@@ -59,7 +62,7 @@ export function Historia() {
         <section className="editorial-wide section-moss">
           <div>
             <SectionKicker>
-              02 · O fazer
+              O fazer
             </SectionKicker>
 
             <h2>
@@ -74,16 +77,19 @@ export function Historia() {
             </p>
           </div>
 
-          <PlaceholderVisual
-            label="Atelier Aflora · fotografia em breve"
-          />
+          <div className="history-image">
+            <img
+              src={HISTORY_IMAGES.making}
+              alt="Processo artesanal de criação no Ateliê Aflora"
+            />
+          </div>
         </section>
 
         <section className="history-closing section-sand">
-          <div className="history-seal">
+          <div className="history-image">
             <img
-              src={STAMP}
-              alt="Sinete físico Aflora"
+              src={HISTORY_IMAGES.closing}
+              alt="Marca do Ateliê Aflora"
             />
           </div>
 

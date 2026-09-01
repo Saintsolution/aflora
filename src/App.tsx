@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 import { Home } from './pages/Home';
 import { Historia } from './pages/Historia';
 import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
 import { PlaylistWelcome } from './components/PlaylistWelcome';
+
 export default function App() {
   const [path, setPath] = useState(
-    window.location.pathname
+    `${window.location.pathname}${window.location.search}`
   );
 
   useEffect(() => {
     const handlePopState = () => {
-      setPath(window.location.pathname);
+      setPath(
+        `${window.location.pathname}${window.location.search}`
+      );
     };
 
     window.addEventListener(
@@ -28,13 +34,16 @@ export default function App() {
     };
   }, []);
 
+  const pathname =
+    path.split('?')[0];
+
   let page;
 
-  if (path === '/historia') {
+  if (pathname === '/historia') {
     page = <Historia />;
-  } else if (path === '/colecoes') {
-    page = <Colecoes />;
-  } else if (path === '/admin') {
+  } else if (pathname === '/colecoes') {
+    page = <Colecoes key={path} />;
+  } else if (pathname === '/admin') {
     page = <Admin />;
   } else {
     page = <Home />;
@@ -44,7 +53,9 @@ export default function App() {
     <>
       {page}
 
-      {path !== '/admin' && <PlaylistWelcome />}
+      {pathname !== '/admin' && (
+        <PlaylistWelcome />
+      )}
     </>
   );
 }
