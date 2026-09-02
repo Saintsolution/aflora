@@ -34,6 +34,20 @@ const tracks = [
     src: '/assets/music/Aflora Obrigada Senhor.mp3',
   },
   {
+    title: 'Me Transformo em Rosa',
+    src: '/assets/music/Me.mp3',
+  },
+
+  {
+    title: 'Passarinhada',
+    src: '/assets/music/Passarinhada.mp3',
+  },
+
+  {
+    title: 'Terra Germinada',
+    src: '/assets/music/Terra Germinada.mp3',
+  },
+  {
     title: 'Aflora Sol Reflete',
     src: '/assets/music/Aflora Sol Reflete.mp3',
   },
