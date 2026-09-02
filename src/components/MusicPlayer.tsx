@@ -35,7 +35,7 @@ const tracks = [
   },
   {
     title: 'Me Transformo em Rosa',
-    src: '/assets/music/Me.mp3',
+    src: '/assets/music/Me Transformo em Rosa.mp3',
   },
 
   {

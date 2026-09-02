@@ -1911,8 +1911,23 @@ section {
   }
 
   .music-info {
-    display: none;
-  }
+  display: block;
+  flex: 1;
+  min-width: 0;
+  max-width: 118px;
+}
+
+.music-info span {
+  display: block;
+  font-size: 0.66rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-info small {
+  display: none;
+}
 
   .music-controls {
     gap: 0;
