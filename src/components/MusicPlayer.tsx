@@ -30,6 +30,10 @@ const tracks = [
     src: '/assets/music/Aflora Alecrim.mp3',
   },
   {
+    title: 'Fita de Cetim',
+    src: '/assets/music/Fita de cetim.mp3',
+  },
+  {
     title: 'Aflora Obrigada, Senhor',
     src: '/assets/music/Aflora Obrigada Senhor.mp3',
   },

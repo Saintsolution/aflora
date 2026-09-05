@@ -8,6 +8,8 @@ import { Historia } from './pages/Historia';
 import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
 import { PlaylistWelcome } from './components/PlaylistWelcome';
+import { Caderno } from './pages/Caderno';
+
 
 export default function App() {
   const [path, setPath] = useState(
@@ -37,10 +39,12 @@ export default function App() {
   const pathname =
     path.split('?')[0];
 
-  let page;
+    let page;
 
   if (pathname === '/historia') {
     page = <Historia />;
+  } else if (pathname === '/caderno') {
+    page = <Caderno />;
   } else if (pathname === '/colecoes') {
     page = <Colecoes key={path} />;
   } else if (pathname === '/admin') {

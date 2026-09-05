@@ -12,7 +12,7 @@ export function Header() {
 
   const nav = [
     ['História', '/historia'],
-    ['Atelier', '#atelier'],
+    ['Caderno', '/caderno'],
     ['Coleções', '/colecoes'],
     ['Contato', '#contato'],
   ];
