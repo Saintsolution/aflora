@@ -15,10 +15,6 @@ export function Historia() {
 
       <main>
         <section className="page-intro section-cream">
-          <SectionKicker>
-            Uma história feita de matéria
-          </SectionKicker>
-
           <h1>
             O que é passageiro
             <br />
@@ -26,9 +22,8 @@ export function Historia() {
           </h1>
 
           <p>
-            A Aflora nasceu de um desejo simples:
-            guardar a delicadeza da natureza e transformá-la
-            em algo que pudesse acompanhar uma vida.
+            A Aflora nasceu de um desejo simples: guardar a delicadeza da
+            natureza e transformá-la em algo que pudesse acompanhar uma vida.
           </p>
         </section>
 
@@ -46,15 +41,13 @@ export function Historia() {
             </SectionKicker>
 
             <h2>
-              Antes da peça, existe um olhar.
+              Antes da criação, existe um olhar.
             </h2>
 
             <p>
-              O processo começa muito antes da resina.
-              Começa na atenção: ao formato de uma folha,
-              à cor que só aparece quando a luz atravessa
-              uma pétala, à pequena imperfeição que torna
-              um fragmento irrepetível.
+              O processo começa muito antes da resina. Começa na atenção ao
+              formato de uma folha, à cor que só aparece quando a luz atravessa
+              a pétala, às pequenas, e não menos belas, imperfeições.
             </p>
           </div>
         </section>
@@ -70,10 +63,9 @@ export function Historia() {
             </h2>
 
             <p>
-              Escolher, preparar, posicionar, esperar,
-              lixar, polir. Cada etapa pede presença.
-              No atelier, as mãos não tentam acelerar
-              a natureza — elas aprendem a acompanhá-la.
+              Escolher, preparar, posicionar, esperar, lixar, polir. Cada etapa
+              pede presença. No ateliê, as mãos não tentam acelerar a natureza —
+              elas aprendem a acompanhá-la.
             </p>
           </div>
 
@@ -94,7 +86,7 @@ export function Historia() {
           </div>
 
           <SectionKicker>
-            03 · Um gesto final
+            Um gesto final
           </SectionKicker>
 
           <h2>
@@ -102,10 +94,22 @@ export function Historia() {
           </h2>
 
           <p>
-            Cada embalagem é preparada como uma extensão
-            da peça: um gesto pequeno, mas cheio de intenção,
-            antes de chegar às suas mãos.
+            Cada embalagem é preparada como uma extensão da peça. Um gesto
+            pequeno, cercado de cuidado, para chegar às suas mãos.
           </p>
+
+          <div className="history-disclaimer">
+            <p>
+              “Estamos criando raízes, para que um dia, com trabalho, dedicação
+              e a Bênção de Deus, possamos florescer.”
+            </p>
+
+            <p className="history-signature">
+              Com carinho,
+              <br />
+              <span>AFLORA</span>
+            </p>
+          </div>
         </section>
       </main>
 
