@@ -52,6 +52,10 @@ const tracks = [
     src: '/assets/music/Terra Germinada.mp3',
   },
   {
+    title: 'Sereia',
+    src: '/assets/music/Sereia.mp3',
+  },
+  {
     title: 'Aflora Sol Reflete',
     src: '/assets/music/Aflora Sol Reflete.mp3',
   },

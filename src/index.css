@@ -3666,7 +3666,6 @@ section {
   object-fit: cover;
   object-position: center top;
 
-  filter: grayscale(1);
 }
 
 .caderno-opening-copy {
