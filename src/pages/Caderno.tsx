@@ -4,7 +4,7 @@ import { SectionKicker } from '../components/SectionKicker';
 
 const CRIS_IMAGE =
   '/assets/images/caderno/cris-memoria-aflora.png';
-
+  
 const FIRST_POST = {
   author: 'Cris · Ateliê Aflora',
   meta: 'Primeira página do Caderno',
