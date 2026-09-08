@@ -101,7 +101,7 @@ export function Historia() {
           <div className="history-disclaimer">
             <p>
               “Estamos criando raízes, para que um dia, com trabalho, dedicação
-              e a Bênção de Deus, possamos florescer.”
+              e a bênção de Deus, possamos florescer.”
             </p>
 
             <p className="history-signature">
