@@ -1375,19 +1375,34 @@ section {
 }
 
 .marquee {
+  width: 100%;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  cursor: grab;
+
+  /* Permite arrastar horizontalmente sem bloquear a rolagem vertical. */
+  touch-action: pan-y;
+
+  scrollbar-width: none;
+}
+
+.marquee::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.marquee-track {
   display: flex;
 
   gap: 2rem;
 
   width: max-content;
-
-  animation:
-    marquee
-    50s linear infinite;
-}
-
-.marquee:hover {
-  animation-play-state: paused;
 }
 
 .piece-item {
@@ -2963,6 +2978,10 @@ section {
   }
 
   .marquee {
+    touch-action: pan-y;
+  }
+
+  .marquee-track {
     gap: 1.2rem;
   }
 

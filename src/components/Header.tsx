@@ -19,7 +19,20 @@ export function Header() {
 
   function handleNavigate(target: string) {
     setOpen(false);
+
     navigateTo(target);
+
+    // Ao voltar para a capa, posiciona no início da Home,
+    // onde está a vinheta de abertura.
+    if (target === '/') {
+      window.setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'auto',
+        });
+      }, 50);
+    }
   }
 
   return (

@@ -1,93 +1,231 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import type {
+  MouseEvent as ReactMouseEvent,
+  PointerEvent as ReactPointerEvent,
+} from 'react';
+
 import { SectionKicker } from './SectionKicker';
 import {
   fetchProducts,
   type Product,
 } from '../lib/products';
+import { navigateTo } from '../utils/navigation';
 
 export function AvailablePieces() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [arrastando, setArrastando] = useState(false);
+
+  const faixaRef = useRef<HTMLDivElement | null>(null);
+
+  const arrasteRef = useRef({
+    ativo: false,
+    iniciouEm: 0,
+    scrollInicial: 0,
+    moveu: false,
+  });
 
   useEffect(() => {
-    let mounted = true;
+    let montado = true;
 
-    async function loadProducts() {
+    async function carregarProdutos() {
       try {
-        const data = await fetchProducts();
+        const dados = await fetchProducts();
 
-        if (mounted) {
-          setProducts(data);
+        if (montado) {
+          setProducts(dados);
           setError(false);
         }
-      } catch (err) {
+      } catch (erro) {
         console.error(
           'Erro ao carregar peças do Supabase:',
-          err
+          erro
         );
 
-        if (mounted) {
+        if (montado) {
           setError(true);
         }
       } finally {
-        if (mounted) {
+        if (montado) {
           setLoading(false);
         }
       }
     }
 
-    loadProducts();
+    void carregarProdutos();
 
     return () => {
-      mounted = false;
+      montado = false;
     };
   }, []);
 
-  const pieces = useMemo(
+  const pecas = useMemo(
     () =>
       products.filter(
         (product) =>
           product.active !== false &&
-          product.image_url
+          Boolean(product.image_url)
       ),
     [products]
   );
 
-  const loop = [...pieces, ...pieces];
+  const loop = [...pecas, ...pecas];
+
+  useEffect(() => {
+    if (!faixaRef.current || pecas.length < 2) {
+      return;
+    }
+
+    let frame = 0;
+    let ultimoTempo = performance.now();
+
+    function mover(tempo: number) {
+      const faixa = faixaRef.current;
+
+      if (!faixa) {
+        return;
+      }
+
+      const delta = tempo - ultimoTempo;
+      ultimoTempo = tempo;
+
+      if (!arrasteRef.current.ativo) {
+        faixa.scrollLeft += delta * 0.035;
+
+        const metade = faixa.scrollWidth / 2;
+
+        if (
+          metade > 0 &&
+          faixa.scrollLeft >= metade
+        ) {
+          faixa.scrollLeft -= metade;
+        }
+      }
+
+      frame = requestAnimationFrame(mover);
+    }
+
+    frame = requestAnimationFrame(mover);
+
+    return () => {
+      cancelAnimationFrame(frame);
+    };
+  }, [pecas.length]);
 
   function getPieceLink(piece: Product) {
-    /*
-      Produtos novos:
-      se já tiverem elemento, vão para a página
-      de coleções do elemento.
-
-      Produtos antigos:
-      ainda não têm elemento, então usamos
-      o link da Nuvemshop como fallback.
-    */
+    if (piece.universe && piece.collection) {
+      return `/colecoes?elemento=${encodeURIComponent(
+        piece.universe
+      )}&colecao=${encodeURIComponent(
+        piece.collection
+      )}`;
+    }
 
     if (piece.universe) {
-      return `/colecoes?elemento=${piece.universe}`;
+      return `/colecoes?elemento=${encodeURIComponent(
+        piece.universe
+      )}`;
     }
 
     return piece.product_url || '#';
   }
 
+  function iniciarArraste(
+    event: ReactPointerEvent<HTMLDivElement>
+  ) {
+    if (
+      event.pointerType === 'mouse' &&
+      event.button !== 0
+    ) {
+      return;
+    }
+
+    const faixa = faixaRef.current;
+
+    if (!faixa) {
+      return;
+    }
+
+    arrasteRef.current = {
+      ativo: true,
+      iniciouEm: event.clientX,
+      scrollInicial: faixa.scrollLeft,
+      moveu: false,
+    };
+
+    setArrastando(true);
+  }
+
+  function moverArraste(
+    event: ReactPointerEvent<HTMLDivElement>
+  ) {
+    const arraste = arrasteRef.current;
+    const faixa = faixaRef.current;
+
+    if (!arraste.ativo || !faixa) {
+      return;
+    }
+
+    const distancia =
+      event.clientX - arraste.iniciouEm;
+
+    if (Math.abs(distancia) > 6) {
+      arraste.moveu = true;
+    }
+
+    faixa.scrollLeft =
+      arraste.scrollInicial - distancia;
+
+    const metade = faixa.scrollWidth / 2;
+
+    if (metade > 0) {
+      if (faixa.scrollLeft < 0) {
+        faixa.scrollLeft += metade;
+        arraste.scrollInicial += metade;
+      } else if (faixa.scrollLeft >= metade) {
+        faixa.scrollLeft -= metade;
+        arraste.scrollInicial -= metade;
+      }
+    }
+  }
+
+  function finalizarArraste() {
+    arrasteRef.current.ativo = false;
+    setArrastando(false);
+  }
+
+  function abrirPeca(
+    event: ReactMouseEvent<HTMLAnchorElement>,
+    piece: Product
+  ) {
+    if (arrasteRef.current.moveu) {
+      event.preventDefault();
+      arrasteRef.current.moveu = false;
+      return;
+    }
+
+    const destino = getPieceLink(piece);
+
+    if (destino.startsWith('/')) {
+      event.preventDefault();
+      navigateTo(destino);
+    }
+  }
+
   if (loading) {
     return (
-      <section
-        className="pieces-strip"
-        id="pecas"
-      >
+      <section className="pieces-strip" id="pecas">
         <div className="pieces-label">
           <SectionKicker>
             Natureza em Movimento
           </SectionKicker>
-
-          <p>
-            Preparando as peças do ateliê...
-          </p>
+          <p>Preparando as peças do ateliê...</p>
         </div>
       </section>
     );
@@ -95,65 +233,67 @@ export function AvailablePieces() {
 
   if (error) {
     return (
-      <section
-        className="pieces-strip"
-        id="pecas"
-      >
+      <section className="pieces-strip" id="pecas">
         <div className="pieces-label">
           <SectionKicker>
             Natureza em Movimento
           </SectionKicker>
-
-          <p>
-            As peças estão sendo preparadas.
-          </p>
+          <p>As peças estão sendo preparadas.</p>
         </div>
       </section>
     );
   }
 
-  if (!pieces.length) {
+  if (!pecas.length) {
     return null;
   }
 
   return (
-    <section
-      className="pieces-strip"
-      id="pecas"
-    >
+    <section className="pieces-strip" id="pecas">
       <div className="pieces-label">
         <SectionKicker>
           Natureza em Movimento
         </SectionKicker>
-
-        <p>
-          Peças disponíveis por um tempo.
-        </p>
+        <p>Peças disponíveis por um tempo.</p>
       </div>
 
-      <div className="marquee">
-        {loop.map((piece, index) => (
-          <a
-            className="piece-item"
-            href={getPieceLink(piece)}
-            key={`${piece.id}-${index}`}
-          >
-            <img
-              src={piece.image_url || ''}
-              alt={piece.name}
-            />
+      <div
+        ref={faixaRef}
+        className={`marquee ${
+          arrastando ? 'is-dragging' : ''
+        }`}
+        onPointerDown={iniciarArraste}
+        onPointerMove={moverArraste}
+        onPointerUp={finalizarArraste}
+        onPointerCancel={finalizarArraste}
+        aria-label="Peças disponíveis. Arraste lateralmente para navegar."
+      >
+        <div className="marquee-track">
+          {loop.map((piece, index) => (
+            <a
+              className="piece-item"
+              href={getPieceLink(piece)}
+              key={`${piece.id}-${index}`}
+              onClick={(event) =>
+                abrirPeca(event, piece)
+              }
+              draggable={false}
+            >
+              <img
+                src={piece.image_url || ''}
+                alt={piece.name}
+                draggable={false}
+              />
 
-            <span>
-              <strong>
-                {piece.name}
-              </strong>
-
-              <small>
-                {piece.collection || 'Aflora'}
-              </small>
-            </span>
-          </a>
-        ))}
+              <span>
+                <strong>{piece.name}</strong>
+                <small>
+                  {piece.collection || 'Aflora'}
+                </small>
+              </span>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
