@@ -75,10 +75,45 @@ export function AvailablePieces() {
     [products]
   );
 
-  const loop = [...pecas, ...pecas];
+  /*
+   * Quatro cópias garantem espaço suficiente
+   * para o looping também em telas grandes.
+   */
+  const loop = [
+    ...pecas,
+    ...pecas,
+    ...pecas,
+    ...pecas,
+  ];
+
+  function normalizarLoop() {
+    const faixa = faixaRef.current;
+
+    if (!faixa) {
+      return;
+    }
+
+    /*
+     * Com quatro sequências, metade da faixa
+     * equivale a duas sequências completas.
+     */
+    const metade = faixa.scrollWidth / 2;
+
+    if (!metade) {
+      return;
+    }
+
+    while (faixa.scrollLeft >= metade) {
+      faixa.scrollLeft -= metade;
+    }
+
+    while (faixa.scrollLeft < 0) {
+      faixa.scrollLeft += metade;
+    }
+  }
 
   useEffect(() => {
-    if (!faixaRef.current || pecas.length < 2) {
+    if (!faixaRef.current || pecas.length < 1) {
       return;
     }
 
@@ -97,15 +132,7 @@ export function AvailablePieces() {
 
       if (!arrasteRef.current.ativo) {
         faixa.scrollLeft += delta * 0.035;
-
-        const metade = faixa.scrollWidth / 2;
-
-        if (
-          metade > 0 &&
-          faixa.scrollLeft >= metade
-        ) {
-          faixa.scrollLeft -= metade;
-        }
+        normalizarLoop();
       }
 
       frame = requestAnimationFrame(mover);
@@ -152,6 +179,8 @@ export function AvailablePieces() {
       return;
     }
 
+    faixa.setPointerCapture(event.pointerId);
+
     arrasteRef.current = {
       ativo: true,
       iniciouEm: event.clientX,
@@ -172,6 +201,8 @@ export function AvailablePieces() {
       return;
     }
 
+    event.preventDefault();
+
     const distancia =
       event.clientX - arraste.iniciouEm;
 
@@ -182,20 +213,22 @@ export function AvailablePieces() {
     faixa.scrollLeft =
       arraste.scrollInicial - distancia;
 
-    const metade = faixa.scrollWidth / 2;
-
-    if (metade > 0) {
-      if (faixa.scrollLeft < 0) {
-        faixa.scrollLeft += metade;
-        arraste.scrollInicial += metade;
-      } else if (faixa.scrollLeft >= metade) {
-        faixa.scrollLeft -= metade;
-        arraste.scrollInicial -= metade;
-      }
-    }
+    normalizarLoop();
   }
 
-  function finalizarArraste() {
+  function finalizarArraste(
+    event?: ReactPointerEvent<HTMLDivElement>
+  ) {
+    const faixa = faixaRef.current;
+
+    if (
+      faixa &&
+      event &&
+      faixa.hasPointerCapture(event.pointerId)
+    ) {
+      faixa.releasePointerCapture(event.pointerId);
+    }
+
     arrasteRef.current.ativo = false;
     setArrastando(false);
   }
@@ -225,6 +258,7 @@ export function AvailablePieces() {
           <SectionKicker>
             Natureza em Movimento
           </SectionKicker>
+
           <p>Preparando as peças do ateliê...</p>
         </div>
       </section>
@@ -238,6 +272,7 @@ export function AvailablePieces() {
           <SectionKicker>
             Natureza em Movimento
           </SectionKicker>
+
           <p>As peças estão sendo preparadas.</p>
         </div>
       </section>
@@ -254,6 +289,7 @@ export function AvailablePieces() {
         <SectionKicker>
           Natureza em Movimento
         </SectionKicker>
+
         <p>Peças disponíveis por um tempo.</p>
       </div>
 
@@ -287,6 +323,7 @@ export function AvailablePieces() {
 
               <span>
                 <strong>{piece.name}</strong>
+
                 <small>
                   {piece.collection || 'Aflora'}
                 </small>

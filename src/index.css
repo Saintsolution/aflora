@@ -1345,47 +1345,32 @@ section {
 ========================================================= */
 
 .pieces-strip {
-  padding:
-    4rem 0;
-
+  padding: 4rem 0;
   overflow: hidden;
-
   background: var(--off-white);
-
   color: var(--ink);
-
-  border-top:
-    1px solid rgba(185, 163, 109, 0.15);
-
-  border-bottom:
-    1px solid rgba(185, 163, 109, 0.15);
+  border-top: 1px solid rgba(185, 163, 109, 0.15);
+  border-bottom: 1px solid rgba(185, 163, 109, 0.15);
 }
 
 .pieces-label {
-  padding:
-    0
-    clamp(1.5rem, 6vw, 5rem)
-    2.2rem;
+  padding: 0 clamp(1.5rem, 6vw, 5rem) 2.2rem;
 }
 
 .pieces-label p {
   color: var(--text-soft);
-
   font-size: 0.84rem;
 }
 
 .marquee {
   width: 100%;
-
   overflow-x: auto;
   overflow-y: hidden;
-
   cursor: grab;
-
-  /* Permite arrastar horizontalmente sem bloquear a rolagem vertical. */
-  touch-action: pan-y;
-
+  touch-action: none;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .marquee::-webkit-scrollbar {
@@ -1395,60 +1380,48 @@ section {
 .marquee.is-dragging {
   cursor: grabbing;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .marquee-track {
   display: flex;
-
-  gap: 2rem;
-
   width: max-content;
+  gap: 2rem;
 }
 
 .piece-item {
   flex: 0 0 auto;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   gap: 0.7rem;
-
   color: var(--moss-deep);
-
   text-decoration: none;
-
-  transition:
-    transform 0.35s ease;
+  transition: transform 0.35s ease;
+  -webkit-user-drag: none;
 }
 
 .piece-item:hover {
-  transform:
-    translateY(-7px);
+  transform: translateY(-7px);
 }
 
 .piece-item img {
+  display: block;
   width: 190px;
   height: 230px;
-
   object-fit: contain;
-
-  filter:
-    drop-shadow(
-      0 10px 18px
-      rgba(58, 76, 49, 0.16)
-    );
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(
+    0 10px 18px rgba(58, 76, 49, 0.16)
+  );
 }
 
 .piece-item span {
   text-align: center;
-
   opacity: 0;
-
-  transition:
-    opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .piece-item:hover span {
@@ -1457,25 +1430,17 @@ section {
 
 .piece-item strong {
   display: block;
-
-  font-family:
-    'Playfair Display',
-    serif;
-
+  font-family: 'Playfair Display', serif;
   font-size: 1rem;
   font-weight: 400;
 }
 
 .piece-item small {
   color: var(--moss-soft);
-
   font-size: 0.56rem;
-
   letter-spacing: 0.15em;
   text-transform: uppercase;
 }
-
-
 /* =========================================================
    CTA FINAL
 ========================================================= */
@@ -2966,30 +2931,30 @@ section {
      CARROSSEL DE JOIAS — CELULAR
   ======================================================= */
 
-  .pieces-strip {
-    padding: 3rem 0;
-  }
+ .pieces-strip {
+  padding: 3rem 0;
+}
 
-  .pieces-label {
-    padding:
-      0
-      1.2rem
-      1.6rem;
-  }
+.pieces-label {
+  padding: 0 1.2rem 1.6rem;
+}
 
-  .marquee {
-    touch-action: pan-y;
-  }
+.marquee {
+  touch-action: none;
+}
 
-  .marquee-track {
-    gap: 1.2rem;
-  }
+.marquee-track {
+  gap: 1.2rem;
+}
 
-  .piece-item img {
-    width: 155px;
-    height: 190px;
-  }
+.piece-item img {
+  width: 155px;
+  height: 190px;
+}
 
+.piece-item span {
+  opacity: 1;
+}
   /* =======================================================
      PÁGINA COLEÇÕES — LETTERING NO CELULAR
   ======================================================= */
