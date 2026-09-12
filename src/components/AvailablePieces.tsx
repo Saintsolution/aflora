@@ -113,38 +113,25 @@ export function AvailablePieces() {
   }
 
   useEffect(() => {
-    if (!faixaRef.current || pecas.length < 1) {
+  if (!faixaRef.current || pecas.length < 1) {
+    return;
+  }
+
+  const intervalo = window.setInterval(() => {
+    const faixa = faixaRef.current;
+
+    if (!faixa || arrasteRef.current.ativo) {
       return;
     }
 
-    let frame = 0;
-    let ultimoTempo = performance.now();
+    faixa.scrollLeft += 1;
+    normalizarLoop();
+  }, 20);
 
-    function mover(tempo: number) {
-      const faixa = faixaRef.current;
-
-      if (!faixa) {
-        return;
-      }
-
-      const delta = tempo - ultimoTempo;
-      ultimoTempo = tempo;
-
-      if (!arrasteRef.current.ativo) {
-        faixa.scrollLeft += delta * 0.035;
-        normalizarLoop();
-      }
-
-      frame = requestAnimationFrame(mover);
-    }
-
-    frame = requestAnimationFrame(mover);
-
-    return () => {
-      cancelAnimationFrame(frame);
-    };
-  }, [pecas.length]);
-
+  return () => {
+    window.clearInterval(intervalo);
+  };
+}, [pecas.length]);
   function getPieceLink(piece: Product) {
     if (piece.universe && piece.collection) {
       return `/colecoes?elemento=${encodeURIComponent(
@@ -302,6 +289,7 @@ export function AvailablePieces() {
         onPointerMove={moverArraste}
         onPointerUp={finalizarArraste}
         onPointerCancel={finalizarArraste}
+        onLostPointerCapture={finalizarArraste}
         aria-label="Peças disponíveis. Arraste lateralmente para navegar."
       >
         <div className="marquee-track">
