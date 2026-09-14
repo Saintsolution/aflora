@@ -1,5 +1,15 @@
-import { useEffect, useState } from 'react';
-import type { User } from '@supabase/supabase-js';
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import type {
+  FormEvent,
+} from 'react';
+
+import type {
+  User,
+} from '@supabase/supabase-js';
 
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -47,44 +57,84 @@ type CadernoComment = {
   created_at: string;
 };
 
+const modalInputStyle = {
+  width: '100%',
+  boxSizing: 'border-box' as const,
+  padding: '13px 14px',
+  border: '1px solid rgba(38, 50, 31, 0.22)',
+  borderRadius: 0,
+  background: '#fffdf8',
+  color: '#26321f',
+  fontFamily: 'inherit',
+  fontSize: '0.95rem',
+  outline: 'none',
+};
+
+const modalButtonStyle = {
+  width: '100%',
+  padding: '14px 18px',
+  border: 0,
+  borderRadius: 0,
+  background: '#26321f',
+  color: '#fffdf8',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: '0.68rem',
+  letterSpacing: '0.16em',
+  textTransform: 'uppercase' as const,
+};
+
 export function Caderno() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] =
+    useState<User | null>(null);
 
-  const [posts, setPosts] = useState<CadernoPost[]>([]);
-  const [loadingPosts, setLoadingPosts] = useState(true);
+  const [posts, setPosts] =
+    useState<CadernoPost[]>([]);
 
-  const [likes, setLikes] = useState<Record<string, number>>({});
-  const [likedPosts, setLikedPosts] = useState<
-    Record<string, boolean>
-  >({});
+  const [loadingPosts, setLoadingPosts] =
+    useState(true);
 
-  const [comments, setComments] = useState<
-    Record<string, CadernoComment[]>
-  >({});
+  const [likes, setLikes] =
+    useState<Record<string, number>>({});
 
-  const [commentOpen, setCommentOpen] = useState<
-    Record<string, boolean>
-  >({});
+  const [likedPosts, setLikedPosts] =
+    useState<Record<string, boolean>>({});
 
-  const [commentText, setCommentText] = useState<
-    Record<string, string>
-  >({});
+  const [comments, setComments] =
+    useState<Record<string, CadernoComment[]>>({});
 
-  const [sendingComment, setSendingComment] = useState<
-    Record<string, boolean>
-  >({});
+  const [commentOpen, setCommentOpen] =
+    useState<Record<string, boolean>>({});
 
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>(
-    'signup'
-  );
+  const [commentText, setCommentText] =
+    useState<Record<string, string>>({});
 
-  const [authName, setAuthName] = useState('');
-  const [authEmail, setAuthEmail] = useState('');
-  const [authPassword, setAuthPassword] = useState('');
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authError, setAuthError] = useState('');
-  const [authMessage, setAuthMessage] = useState('');
+  const [sendingComment, setSendingComment] =
+    useState<Record<string, boolean>>({});
+
+  const [authOpen, setAuthOpen] =
+    useState(false);
+
+  const [authMode, setAuthMode] =
+    useState<'login' | 'signup'>('signup');
+
+  const [authName, setAuthName] =
+    useState('');
+
+  const [authEmail, setAuthEmail] =
+    useState('');
+
+  const [authPassword, setAuthPassword] =
+    useState('');
+
+  const [authLoading, setAuthLoading] =
+    useState(false);
+
+  const [authError, setAuthError] =
+    useState('');
+
+  const [authMessage, setAuthMessage] =
+    useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -139,9 +189,10 @@ export function Caderno() {
 
       if (error) {
         console.error(
-          'Erro ao carregar o Caderno:',
+          'Erro ao carregar publicações:',
           error
         );
+
         setLoadingPosts(false);
         return;
       }
@@ -170,52 +221,54 @@ export function Caderno() {
   async function loadInteractions(
     postIds: string[]
   ) {
-    const { data: likesData } = await supabase
-      .from('caderno_likes')
-      .select('post_id, user_id')
-      .in('post_id', postIds);
+    const { data: likesData } =
+      await supabase
+        .from('caderno_likes')
+        .select('post_id, user_id')
+        .in('post_id', postIds);
 
-    const likeTotals: Record<string, number> = {};
-    const userLikes: Record<string, boolean> = {};
+    const totals: Record<string, number> = {};
+    const mine: Record<string, boolean> = {};
 
     for (const like of likesData ?? []) {
-      likeTotals[like.post_id] =
-        (likeTotals[like.post_id] || 0) + 1;
+      totals[like.post_id] =
+        (totals[like.post_id] || 0) + 1;
 
       if (user && like.user_id === user.id) {
-        userLikes[like.post_id] = true;
+        mine[like.post_id] = true;
       }
     }
 
-    setLikes(likeTotals);
-    setLikedPosts(userLikes);
+    setLikes(totals);
+    setLikedPosts(mine);
 
-    const { data: commentsData } = await supabase
-      .from('caderno_comments')
-      .select(
-        'id, post_id, user_id, body, approved, created_at'
-      )
-      .in('post_id', postIds)
-      .order('created_at', {
-        ascending: true,
-      });
+    const { data: commentsData } =
+      await supabase
+        .from('caderno_comments')
+        .select(
+          'id, post_id, user_id, body, approved, created_at'
+        )
+        .in('post_id', postIds)
+        .order('created_at', {
+          ascending: true,
+        });
 
-    const groupedComments: Record<
+    const grouped: Record<
       string,
       CadernoComment[]
     > = {};
 
     for (const comment of commentsData ?? []) {
-      if (!groupedComments[comment.post_id]) {
-        groupedComments[comment.post_id] = [];
+      if (!grouped[comment.post_id]) {
+        grouped[comment.post_id] = [];
       }
 
-      groupedComments[comment.post_id].push(
+      grouped[comment.post_id].push(
         comment as CadernoComment
       );
     }
 
-    setComments(groupedComments);
+    setComments(grouped);
   }
 
   function openAuth(
@@ -235,7 +288,7 @@ export function Caderno() {
   }
 
   async function handleAuthSubmit(
-    event: React.FormEvent<HTMLFormElement>
+    event: FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
 
@@ -250,10 +303,11 @@ export function Caderno() {
             email: authEmail.trim(),
             password: authPassword,
             options: {
-              data: {
-                full_name: authName.trim(),
-              },
-            },
+  data: {
+    full_name: authName.trim(),
+  },
+  emailRedirectTo: `${window.location.origin}${window.location.pathname}${window.location.search}`,
+},
           });
 
         if (error) {
@@ -295,7 +349,9 @@ export function Caderno() {
     }
   }
 
-  async function handleLike(postId: string) {
+  async function handleLike(
+    postId: string
+  ) {
     if (!user) {
       openAuth('signup');
       return;
@@ -305,11 +361,12 @@ export function Caderno() {
       likedPosts[postId] === true;
 
     if (alreadyLiked) {
-      const { error } = await supabase
-        .from('caderno_likes')
-        .delete()
-        .eq('post_id', postId)
-        .eq('user_id', user.id);
+      const { error } =
+        await supabase
+          .from('caderno_likes')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', user.id);
 
       if (error) {
         console.error(error);
@@ -332,12 +389,13 @@ export function Caderno() {
       return;
     }
 
-    const { error } = await supabase
-      .from('caderno_likes')
-      .insert({
-        post_id: postId,
-        user_id: user.id,
-      });
+    const { error } =
+      await supabase
+        .from('caderno_likes')
+        .insert({
+          post_id: postId,
+          user_id: user.id,
+        });
 
     if (error) {
       console.error(error);
@@ -355,7 +413,9 @@ export function Caderno() {
     }));
   }
 
-  function toggleComments(postId: string) {
+  function toggleComments(
+    postId: string
+  ) {
     if (!user) {
       openAuth('signup');
       return;
@@ -368,7 +428,7 @@ export function Caderno() {
   }
 
   async function handleCommentSubmit(
-    event: React.FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
     postId: string
   ) {
     event.preventDefault();
@@ -390,13 +450,14 @@ export function Caderno() {
       [postId]: true,
     }));
 
-    const { error } = await supabase
-      .from('caderno_comments')
-      .insert({
-        post_id: postId,
-        user_id: user.id,
-        body,
-      });
+    const { error } =
+      await supabase
+        .from('caderno_comments')
+        .insert({
+          post_id: postId,
+          user_id: user.id,
+          body,
+        });
 
     setSendingComment((current) => ({
       ...current,
@@ -413,8 +474,8 @@ export function Caderno() {
       [postId]: '',
     }));
 
-    alert(
-      'Comentário enviado. Ele aparecerá depois da aprovação.'
+    window.alert(
+      'Comentário enviado. Ele aparecerá após aprovação.'
     );
 
     await loadInteractions(
@@ -550,154 +611,181 @@ export function Caderno() {
                 </SectionKicker>
               </div>
 
-              {posts.map((post) => (
-                <article
-                  className="caderno-post-card"
-                  key={post.id}
-                >
-                  <header className="caderno-post-header">
-                    <div>
-                      <strong>
-                        {post.author_name}
-                      </strong>
+              {posts.map((post) => {
+                const approvedComments =
+                  comments[post.id]?.filter(
+                    (comment) => comment.approved
+                  ) || [];
 
-                      <span>
-                        {post.meta}
-                      </span>
-                    </div>
-                  </header>
-
-                  {post.image_url && (
-                    <div className="caderno-post-image">
-                      <img
-                        src={post.image_url}
-                        alt={post.title}
-                      />
-                    </div>
-                  )}
-
-                  <div className="caderno-post-content">
-                    <SectionKicker>
-                      {post.kicker}
-                    </SectionKicker>
-
-                    <h3>
-                      {post.title}
-                    </h3>
-
-                    {post.body
-                      .split(/\n\s*\n/)
-                      .map(
-                        (paragraph, index) => (
-                          <p
-                            key={`${post.id}-${index}`}
-                          >
-                            {paragraph}
-                          </p>
-                        )
-                      )}
-                  </div>
-
-                  <div
-                    className="caderno-post-actions"
-                    style={{
-                      display: 'flex',
-                      gap: '1rem',
-                      padding: '1rem 1.5rem',
-                      borderTop:
-                        '1px solid rgba(38,50,31,.12)',
-                    }}
+                return (
+                  <article
+                    className="caderno-post-card"
+                    key={post.id}
                   >
-                    <button
-                      type="button"
-                      onClick={() =>
-                        void handleLike(post.id)
-                      }
-                    >
-                      {likedPosts[post.id]
-                        ? '♥ Curtido'
-                        : '♡ Curtir'}{' '}
-                      ({likes[post.id] || 0})
-                    </button>
+                    <header className="caderno-post-header">
+                      <div>
+                        <strong>
+                          {post.author_name}
+                        </strong>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        toggleComments(post.id)
-                      }
-                    >
-                      Comentar (
-                      {comments[post.id]?.filter(
-                        (comment) =>
-                          comment.approved
-                      ).length || 0}
-                      )
-                    </button>
-                  </div>
+                        <span>
+                          {post.meta}
+                        </span>
+                      </div>
+                    </header>
 
-                  {commentOpen[post.id] && (
+                    {post.image_url && (
+                      <div className="caderno-post-image">
+                        <img
+                          src={post.image_url}
+                          alt={post.title}
+                        />
+                      </div>
+                    )}
+
+                    <div className="caderno-post-content">
+                      <SectionKicker>
+                        {post.kicker}
+                      </SectionKicker>
+
+                      <h3>
+                        {post.title}
+                      </h3>
+
+                      {post.body
+                        .split(/\n\s*\n/)
+                        .map(
+                          (paragraph, index) => (
+                            <p
+                              key={`${post.id}-${index}`}
+                            >
+                              {paragraph}
+                            </p>
+                          )
+                        )}
+                    </div>
+
                     <div
-                      className="caderno-comments"
                       style={{
-                        padding: '0 1.5rem 1.5rem',
+                        display: 'flex',
+                        gap: '0.8rem',
+                        padding: '1rem 1.5rem',
+                        borderTop:
+                          '1px solid rgba(38,50,31,.12)',
                       }}
                     >
-                      <form
-                        onSubmit={(event) =>
-                          void handleCommentSubmit(
-                            event,
-                            post.id
-                          )
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void handleLike(post.id)
                         }
+                        style={{
+                          border: '1px solid rgba(38,50,31,.18)',
+                          padding: '0.55rem 0.8rem',
+                          background: 'transparent',
+                          color: '#26321f',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                        }}
                       >
-                        <textarea
-                          required
-                          rows={4}
-                          value={
-                            commentText[post.id] || ''
-                          }
-                          onChange={(event) =>
-                            setCommentText(
-                              (current) => ({
-                                ...current,
-                                [post.id]:
-                                  event.target.value,
-                              })
+                        {likedPosts[post.id]
+                          ? '♥ Curtido'
+                          : '♡ Curtir'}{' '}
+                        ({likes[post.id] || 0})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          toggleComments(post.id)
+                        }
+                        style={{
+                          border: '1px solid rgba(38,50,31,.18)',
+                          padding: '0.55rem 0.8rem',
+                          background: 'transparent',
+                          color: '#26321f',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                        }}
+                      >
+                        Comentar (
+                        {approvedComments.length}
+                        )
+                      </button>
+                    </div>
+
+                    {commentOpen[post.id] && (
+                      <div
+                        style={{
+                          padding: '0 1.5rem 1.5rem',
+                        }}
+                      >
+                        <form
+                          onSubmit={(event) =>
+                            void handleCommentSubmit(
+                              event,
+                              post.id
                             )
                           }
-                          placeholder="Escreva seu comentário..."
-                        />
-
-                        <button
-                          type="submit"
-                          disabled={
-                            sendingComment[post.id]
-                          }
                         >
-                          {sendingComment[post.id]
-                            ? 'Enviando...'
-                            : 'Enviar comentário'}
-                        </button>
-                      </form>
+                          <textarea
+                            required
+                            rows={4}
+                            value={
+                              commentText[post.id] || ''
+                            }
+                            onChange={(event) =>
+                              setCommentText(
+                                (current) => ({
+                                  ...current,
+                                  [post.id]:
+                                    event.target.value,
+                                })
+                              )
+                            }
+                            placeholder="Escreva seu comentário..."
+                            style={{
+                              ...modalInputStyle,
+                              display: 'block',
+                              marginBottom: '0.8rem',
+                              resize: 'vertical',
+                            }}
+                          />
 
-                      <div>
-                        {(
-                          comments[post.id] || []
-                        )
-                          .filter(
-                            (comment) =>
-                              comment.approved
-                          )
-                          .map((comment) => (
-                            <p key={comment.id}>
+                          <button
+                            type="submit"
+                            disabled={
+                              sendingComment[post.id]
+                            }
+                            style={{
+                              ...modalButtonStyle,
+                              width: 'auto',
+                            }}
+                          >
+                            {sendingComment[post.id]
+                              ? 'Enviando...'
+                              : 'Enviar comentário'}
+                          </button>
+                        </form>
+
+                        {approvedComments.map(
+                          (comment) => (
+                            <p
+                              key={comment.id}
+                              style={{
+                                marginTop: '1rem',
+                                color: '#66705f',
+                              }}
+                            >
                               {comment.body}
                             </p>
-                          ))}
+                          )
+                        )}
                       </div>
-                    </div>
-                  )}
-                </article>
-              ))}
+                    )}
+                  </article>
+                );
+              })}
             </div>
           )}
         </section>
@@ -709,6 +797,7 @@ export function Caderno() {
         <div
           role="dialog"
           aria-modal="true"
+          onClick={closeAuth}
           style={{
             position: 'fixed',
             inset: 0,
@@ -720,44 +809,83 @@ export function Caderno() {
           }}
         >
           <div
+            onClick={(event) =>
+              event.stopPropagation()
+            }
             style={{
               width: 'min(430px, 100%)',
-              padding: '2rem',
+              boxSizing: 'border-box',
+              padding: '2.4rem',
               background: '#f8f4ec',
               color: '#26321f',
+              border: '1px solid rgba(185,163,109,.28)',
+              boxShadow:
+                '0 25px 70px rgba(38,50,31,.18)',
             }}
           >
-            <button
-              type="button"
-              onClick={closeAuth}
+            <div
               style={{
-                float: 'right',
-                border: 0,
-                background: 'transparent',
-                fontSize: '1.4rem',
-                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'start',
+                marginBottom: '1.5rem',
               }}
             >
-              ×
-            </button>
+              <SectionKicker>
+                Caderno Aflora
+              </SectionKicker>
 
-            <SectionKicker>
-              Caderno Aflora
-            </SectionKicker>
+              <button
+                type="button"
+                onClick={closeAuth}
+                style={{
+                  border: 0,
+                  background: 'transparent',
+                  color: '#26321f',
+                  cursor: 'pointer',
+                  fontSize: '1.3rem',
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+            </div>
 
-            <h2>
+            <h2
+              style={{
+                margin: 0,
+                color: '#26321f',
+                fontFamily:
+                  '"Cormorant Garamond", serif',
+                fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+                fontWeight: 400,
+                lineHeight: 0.95,
+              }}
+            >
               {authMode === 'signup'
                 ? 'Crie seu acesso'
                 : 'Entre no Caderno'}
             </h2>
 
-            <p>
+            <p
+              style={{
+                margin: '1rem 0 1.5rem',
+                color: '#66705f',
+                lineHeight: 1.6,
+              }}
+            >
               {authMode === 'signup'
                 ? 'Cadastre-se para comentar e curtir as publicações.'
                 : 'Entre para continuar participando.'}
             </p>
 
-            <form onSubmit={handleAuthSubmit}>
+            <form
+              onSubmit={handleAuthSubmit}
+              style={{
+                display: 'grid',
+                gap: '0.8rem',
+              }}
+            >
               {authMode === 'signup' && (
                 <input
                   required
@@ -766,6 +894,7 @@ export function Caderno() {
                   onChange={(event) =>
                     setAuthName(event.target.value)
                   }
+                  style={modalInputStyle}
                 />
               )}
 
@@ -777,6 +906,7 @@ export function Caderno() {
                 onChange={(event) =>
                   setAuthEmail(event.target.value)
                 }
+                style={modalInputStyle}
               />
 
               <input
@@ -788,14 +918,41 @@ export function Caderno() {
                 onChange={(event) =>
                   setAuthPassword(event.target.value)
                 }
+                style={modalInputStyle}
               />
 
-              {authError && <p>{authError}</p>}
-              {authMessage && <p>{authMessage}</p>}
+              {authError && (
+                <p
+                  style={{
+                    margin: 0,
+                    color: '#9b3f34',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {authError}
+                </p>
+              )}
+
+              {authMessage && (
+                <p
+                  style={{
+                    margin: 0,
+                    color: '#4f6948',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {authMessage}
+                </p>
+              )}
 
               <button
                 type="submit"
                 disabled={authLoading}
+                style={{
+                  ...modalButtonStyle,
+                  marginTop: '0.4rem',
+                  opacity: authLoading ? 0.65 : 1,
+                }}
               >
                 {authLoading
                   ? 'Aguarde...'
@@ -814,6 +971,16 @@ export function Caderno() {
                     : 'signup'
                 )
               }
+              style={{
+                marginTop: '1.2rem',
+                border: 0,
+                background: 'transparent',
+                color: '#66705f',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                fontSize: '0.75rem',
+                textDecoration: 'underline',
+              }}
             >
               {authMode === 'signup'
                 ? 'Já tenho cadastro'
