@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { SectionKicker } from '../components/SectionKicker';
@@ -9,6 +11,14 @@ const HISTORY_IMAGES = {
 };
 
 export function Historia() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    });
+  }, []);
+
   return (
     <div className="inner-page">
       <Header />
