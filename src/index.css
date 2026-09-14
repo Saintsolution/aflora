@@ -2343,62 +2343,23 @@ section {
   text-align: right;
 }
 
-.collection-products-carousel {
-  width: 100%;
+.collection-products-grid {
+  display: grid;
 
-  overflow: hidden;
-
-  padding:
-    0.4rem
-    0
-    2rem;
-}
-
-.collection-products-track {
-  --collection-products-gap:
-    clamp(1rem, 2vw, 1.8rem);
-
-  display: flex;
-
-  width: max-content;
-
-  will-change: transform;
-
-  animation:
-    collection-products-marquee
-    32s linear infinite;
-}
-
-.collection-products-track:hover,
-.collection-products-track:focus-within {
-  animation-play-state: paused;
-}
-
-.collection-products-track.is-static {
-  animation: none;
-}
-
-.collection-products-group {
-  flex: none;
-
-  display: flex;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
   gap:
-    var(--collection-products-gap);
+    clamp(1rem, 2vw, 1.8rem);
 
-  padding-right:
-    var(--collection-products-gap);
+  width: 100%;
+  align-items: stretch;
 }
 
 .collection-product-card {
   min-width: 0;
 
-  flex:
-    0 0
-    clamp(220px, 20vw, 300px);
-
-  width:
-    clamp(220px, 20vw, 300px);
+  width: 100%;
 
   display: flex;
 
@@ -2551,18 +2512,6 @@ section {
   text-transform: uppercase;
 }
 
-@keyframes collection-products-marquee {
-  from {
-    transform:
-      translateX(0);
-  }
-
-  to {
-    transform:
-      translateX(-50%);
-  }
-}
-
 .empty-collection {
   padding:
     4rem 2rem;
@@ -2620,12 +2569,9 @@ section {
 ========================================================= */
 
 @media (max-width: 1150px) {
-  .collection-product-card {
-    flex-basis:
-      clamp(210px, 28vw, 280px);
-
-    width:
-      clamp(210px, 28vw, 280px);
+  .collection-products-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -2810,7 +2756,7 @@ section {
   }
 
 
-  /* Coleções — carrossel de peças */
+  /* Coleções — estante fixa de peças */
 
   .collection-products {
     margin-top: 3rem;
@@ -2833,12 +2779,11 @@ section {
   }
 
 
-  .collection-product-card {
-    flex-basis:
-      clamp(200px, 40vw, 260px);
+  .collection-products-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
-    width:
-      clamp(200px, 40vw, 260px);
+    gap: 0.75rem;
   }
 }
 
@@ -3019,8 +2964,8 @@ section {
   }
 
   /* =======================================================
-     COLEÇÕES — CARROSSEL INFINITO NO CELULAR
-     Aproximadamente duas imagens menores visíveis
+     COLEÇÕES — ESTANTE FIXA NO CELULAR
+     Duas peças por linha
   ======================================================= */
 
   .collection-products {
@@ -3040,22 +2985,11 @@ section {
     line-height: 1.6;
   }
 
-  .collection-products-carousel {
-    padding-bottom: 1.2rem;
-  }
+  .collection-products-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
-  .collection-products-track {
-    --collection-products-gap: 0.75rem;
-
-    animation-duration: 24s;
-  }
-
-  .collection-product-card {
-    flex-basis:
-      clamp(145px, 42vw, 190px);
-
-    width:
-      clamp(145px, 42vw, 190px);
+    gap: 0.75rem;
   }
 
   .collection-product-card > div:last-child {
@@ -3120,21 +3054,6 @@ section {
   }
 
 
-  .marquee {
-    animation: none;
-  }
-
-
-  .collection-products-carousel {
-    overflow-x: auto;
-  }
-
-
-  .collection-products-track {
-    animation: none;
-
-    transform: none;
-  }
 }
 /* =========================================================
    BOAS-VINDAS — PLAYLIST AFLORA

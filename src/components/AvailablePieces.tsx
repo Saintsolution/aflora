@@ -14,7 +14,6 @@ import {
   fetchProducts,
   type Product,
 } from '../lib/products';
-import { navigateTo } from '../utils/navigation';
 
 export function AvailablePieces() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -166,8 +165,6 @@ export function AvailablePieces() {
       return;
     }
 
-    faixa.setPointerCapture(event.pointerId);
-
     arrasteRef.current = {
       ativo: true,
       iniciouEm: event.clientX,
@@ -187,8 +184,6 @@ export function AvailablePieces() {
     if (!arraste.ativo || !faixa) {
       return;
     }
-
-    event.preventDefault();
 
     const distancia =
       event.clientX - arraste.iniciouEm;
@@ -220,21 +215,12 @@ export function AvailablePieces() {
     setArrastando(false);
   }
 
-  function abrirPeca(
-    event: ReactMouseEvent<HTMLAnchorElement>,
-    piece: Product
+  function impedirCliqueDepoisDoArraste(
+    event: ReactMouseEvent<HTMLAnchorElement>
   ) {
     if (arrasteRef.current.moveu) {
       event.preventDefault();
       arrasteRef.current.moveu = false;
-      return;
-    }
-
-    const destino = getPieceLink(piece);
-
-    if (destino.startsWith('/')) {
-      event.preventDefault();
-      navigateTo(destino);
     }
   }
 
@@ -298,9 +284,7 @@ export function AvailablePieces() {
               className="piece-item"
               href={getPieceLink(piece)}
               key={`${piece.id}-${index}`}
-              onClick={(event) =>
-                abrirPeca(event, piece)
-              }
+              onClick={impedirCliqueDepoisDoArraste}
               draggable={false}
             >
               <img

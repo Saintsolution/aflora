@@ -57,9 +57,7 @@ export function Colecoes() {
   const [
     selectedCollection,
     setSelectedCollection,
-  ] = useState(
-    initialCollection
-  );
+  ] = useState(initialCollection);
 
   const [products, setProducts] =
     useState<Product[]>([]);
@@ -123,7 +121,7 @@ export function Colecoes() {
       }
     }
 
-    loadProducts();
+    void loadProducts();
 
     return () => {
       mounted = false;
@@ -178,9 +176,9 @@ export function Colecoes() {
               item.nome
                 .toLowerCase()
                 .trim() ===
-                name
-                  .toLowerCase()
-                  .trim()
+              name
+                .toLowerCase()
+                .trim()
           );
 
         const coverPiece =
@@ -215,17 +213,23 @@ export function Colecoes() {
         return [];
       }
 
-      return products.filter(
-        (product) =>
-          product.active !== false &&
-          product.universe === current.id &&
-          product.collection
-            .toLowerCase()
-            .trim() ===
+      return products
+        .filter(
+          (product) =>
+            product.active !== false &&
+            product.universe === current.id &&
+            product.collection
+              .toLowerCase()
+              .trim() ===
             selectedCollection
               .toLowerCase()
               .trim()
-      );
+        )
+        .sort(
+          (first, second) =>
+            Number(first.sort_order ?? 0) -
+            Number(second.sort_order ?? 0)
+        );
     }, [
       products,
       current.id,
@@ -256,9 +260,7 @@ export function Colecoes() {
       );
 
     return () => {
-      window.cancelAnimationFrame(
-        frame
-      );
+      window.cancelAnimationFrame(frame);
     };
   }, [
     loading,
@@ -266,9 +268,7 @@ export function Colecoes() {
     currentPieces.length,
   ]);
 
-  function selectUniverse(
-    id: string
-  ) {
+  function selectUniverse(id: string) {
     shouldScrollToProductsRef.current =
       false;
 
@@ -276,9 +276,7 @@ export function Colecoes() {
     setSelectedCollection('');
 
     const url =
-      new URL(
-        window.location.href
-      );
+      new URL(window.location.href);
 
     url.searchParams.set(
       'elemento',
@@ -296,18 +294,14 @@ export function Colecoes() {
     );
   }
 
-  function selectCollection(
-    name: string
-  ) {
+  function selectCollection(name: string) {
     shouldScrollToProductsRef.current =
       true;
 
     setSelectedCollection(name);
 
     const url =
-      new URL(
-        window.location.href
-      );
+      new URL(window.location.href);
 
     url.searchParams.set(
       'elemento',
@@ -339,17 +333,12 @@ export function Colecoes() {
           <h1>
             Elementos
             <br />
-
-            <em>
-              Aflora.
-            </em>
+            <em>Aflora.</em>
           </h1>
 
           <p>
-            Escolha um caminho.
-            Cada elemento abriga
-            coleções que nascem
-            de uma mesma atmosfera.
+            Escolha um caminho. Cada elemento abriga
+            coleções que nascem de uma mesma atmosfera.
           </p>
         </section>
 
@@ -358,27 +347,22 @@ export function Colecoes() {
             className="universe-tabs"
             role="tablist"
           >
-            {universes.map(
-              (universe) => (
-                <button
-                  type="button"
-                  className={
-                    selected ===
-                    universe.id
-                      ? 'active'
-                      : ''
-                  }
-                  key={universe.id}
-                  onClick={() =>
-                    selectUniverse(
-                      universe.id
-                    )
-                  }
-                >
-                  {universe.name}
-                </button>
-              )
-            )}
+            {universes.map((universe) => (
+              <button
+                type="button"
+                className={
+                  selected === universe.id
+                    ? 'active'
+                    : ''
+                }
+                key={universe.id}
+                onClick={() =>
+                  selectUniverse(universe.id)
+                }
+              >
+                {universe.name}
+              </button>
+            ))}
           </div>
 
           <div
@@ -399,31 +383,16 @@ export function Colecoes() {
                 elemento selecionado
               </SectionKicker>
 
-              <h2>
-                {current.name}
-              </h2>
+              <h2>{current.name}</h2>
 
-              <p>
-                {current.mood}
-              </p>
+              <p>{current.mood}</p>
             </div>
 
             <span className="explorer-index">
               0
-              {
-                universes.indexOf(
-                  current
-                ) + 1
-              }
-
+              {universes.indexOf(current) + 1}
               {' / '}
-
-              {String(
-                universes.length
-              ).padStart(
-                2,
-                '0'
-              )}
+              {String(universes.length).padStart(2, '0')}
             </span>
           </div>
 
@@ -433,8 +402,8 @@ export function Colecoes() {
             </div>
           ) : error ? (
             <div className="empty-collection">
-              Não foi possível carregar
-              as coleções agora.
+              Não foi possível carregar as
+              coleções agora.
             </div>
           ) : (
             <div className="collection-list">
@@ -467,9 +436,7 @@ export function Colecoes() {
                       </div>
 
                       <div className="collection-row-copy">
-                        <small>
-                          Coleção
-                        </small>
+                        <small> Coleção </small>
 
                         <strong>
                           {collection.name}
@@ -491,8 +458,8 @@ export function Colecoes() {
                 )
               ) : (
                 <div className="empty-collection">
-                  Novas coleções deste
-                  elemento estão florescendo.
+                  Novas coleções deste elemento
+                  estão florescendo.
                 </div>
               )}
             </div>
@@ -509,105 +476,59 @@ export function Colecoes() {
                 </SectionKicker>
 
                 <p>
-                  Peças únicas deste
-                  elemento. Clique para
-                  conhecer todos os detalhes
-                  e disponibilidade na
-                  Nuvemshop.
+                  Peças únicas deste elemento. Clique
+                  para conhecer todos os detalhes e
+                  disponibilidade na Nuvemshop.
                 </p>
               </div>
 
               {currentPieces.length ? (
-                <div className="collection-products-carousel">
-                  <div
-                    className={`collection-products-track ${
-                      currentPieces.length > 1
-                        ? ''
-                        : 'is-static'
-                    }`}
-                  >
-                    {(currentPieces.length > 1
-                      ? [0, 1]
-                      : [0]
-                    ).map((copyIndex) => (
-                      <div
-                        className="collection-products-group"
-                        key={copyIndex}
-                        aria-hidden={
-                          copyIndex === 1
-                            ? true
-                            : undefined
-                        }
-                      >
-                        {currentPieces.map(
-                          (piece) => (
-                            <a
-                              className="collection-product-card"
-                              key={`${piece.id}-${copyIndex}`}
-                              href={
-                                piece.product_url ||
-                                '#'
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              tabIndex={
-                                copyIndex === 1
-                                  ? -1
-                                  : undefined
-                              }
-                            >
-                              <div className="collection-product-image">
-                                {piece.image_url && (
-                                  <img
-                                    src={
-                                      piece.image_url
-                                    }
-                                    alt={
-                                      copyIndex === 1
-                                        ? ''
-                                        : piece.name
-                                    }
-                                  />
-                                )}
-                              </div>
-
-                              <div>
-                                <small>
-                                  {piece.collection}
-                                </small>
-
-                                <h3>
-                                  {piece.name}
-                                </h3>
-
-                                {piece.description && (
-                                  <p>
-                                    {piece.description}
-                                  </p>
-                                )}
-
-                                <strong>
-                                  {formatPrice(
-                                    Number(
-                                      piece.price
-                                    )
-                                  )}
-                                </strong>
-
-                                <span>
-                                  Ver peça
-
-                                  <ExternalLink
-                                    size={13}
-                                  />
-                                </span>
-                              </div>
-                            </a>
-                          )
+                <div className="collection-products-grid">
+                  {currentPieces.map((piece) => (
+                    <a
+                      className="collection-product-card"
+                      key={piece.id}
+                      href={
+                        piece.product_url || '#'
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className="collection-product-image">
+                        {piece.image_url && (
+                          <img
+                            src={piece.image_url}
+                            alt={piece.name}
+                          />
                         )}
                       </div>
-                    ))}
-                  </div>
+
+                      <div>
+                        <small>
+                          {piece.collection}
+                        </small>
+
+                        <h3>{piece.name}</h3>
+
+                        {piece.description && (
+                          <p>
+                            {piece.description}
+                          </p>
+                        )}
+
+                        <strong>
+                          {formatPrice(
+                            Number(piece.price)
+                          )}
+                        </strong>
+
+                        <span>
+                          Ver peça
+                          <ExternalLink size={13} />
+                        </span>
+                      </div>
+                    </a>
+                  ))}
                 </div>
               ) : (
                 <div className="empty-collection">
