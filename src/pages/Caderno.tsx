@@ -4,14 +4,20 @@ import {
 } from 'react';
 
 
+
+
 import type {
  FormEvent,
 } from 'react';
 
 
+
+
 import type {
  User,
 } from '@supabase/supabase-js';
+
+
 
 
 import { Header } from '../components/Header';
@@ -20,8 +26,12 @@ import { SectionKicker } from '../components/SectionKicker';
 import { supabase } from '../integrations/supabase/client';
 
 
+
+
 const CRIS_IMAGE =
  '/assets/images/caderno/cris-memoria-aflora.png';
+
+
 
 
 const FIRST_POST = {
@@ -32,21 +42,33 @@ const FIRST_POST = {
    `Sempre fui apaixonada por histórias, por pessoas e pelos pequenos detalhes que tornam cada encontro único. Minha trajetória passou pela moda, pelo jornalismo e pelo Direito, sempre muito próxima da escuta, da beleza e de tudo o que carrega identidade.`,
 
 
+
+
    `Sou mãe de três filhos, avó de três netos que enchem meus dias de vida, amante dos animais e das memórias que nos fazem sentir em casa.`,
+
+
 
 
    `Meu pai, Renato, é uma dessas presenças que me acompanham. A lembrança dele — ao lado da minha mãe, Dona Bia — vive em gestos, sentimentos e momentos que o tempo não apaga. Foi pensando nesse tipo de afeto que comecei a imaginar o Aflora.`,
 
 
+
+
    `Porque uma flor não dura para sempre em sua forma mais visível. Ela desabrocha, encanta, se transforma. Mas sua beleza pode continuar existindo de outro modo.`,
+
+
 
 
    `No atelier, folhas, flores e pequenos elementos da natureza ganham uma nova permanência. São preservados à mão, um a um, para se tornarem peças que carregam tempo, delicadeza e memória.`,
 
 
+
+
    `Não quero congelar a natureza. Quero honrar o instante dela. Aflora é um lugar onde aquilo que poderia se perder ganha um gesto de infinitude.`,
  ],
 };
+
+
 
 
 type CadernoPost = {
@@ -60,6 +82,8 @@ type CadernoPost = {
 };
 
 
+
+
 type CadernoComment = {
  id: string;
  post_id: string;
@@ -68,6 +92,8 @@ type CadernoComment = {
  approved: boolean;
  created_at: string;
 };
+
+
 
 
 const modalInputStyle = {
@@ -84,6 +110,8 @@ const modalInputStyle = {
 };
 
 
+
+
 const modalButtonStyle = {
  width: '100%',
  padding: '14px 18px',
@@ -98,6 +126,7 @@ const modalButtonStyle = {
  textTransform: 'uppercase' as const,
 };
 
+
 const modalLabelStyle = {
  color: '#66705f',
  fontSize: '0.62rem',
@@ -107,82 +136,122 @@ const modalLabelStyle = {
 };
 
 
+
+
 export function Caderno() {
  const [user, setUser] =
    useState<User | null>(null);
+
+
 
 
  const [posts, setPosts] =
    useState<CadernoPost[]>([]);
 
 
+
+
  const [loadingPosts, setLoadingPosts] =
    useState(true);
+
+
 
 
  const [likes, setLikes] =
    useState<Record<string, number>>({});
 
 
+
+
  const [likedPosts, setLikedPosts] =
    useState<Record<string, boolean>>({});
+
+
 
 
  const [comments, setComments] =
    useState<Record<string, CadernoComment[]>>({});
 
 
+
+
  const [commentOpen, setCommentOpen] =
    useState<Record<string, boolean>>({});
+
+
 
 
  const [commentText, setCommentText] =
    useState<Record<string, string>>({});
 
 
+
+
  const [sendingComment, setSendingComment] =
    useState<Record<string, boolean>>({});
+
+
 
 
  const [authOpen, setAuthOpen] =
    useState(false);
 
 
+
+
  const [authMode, setAuthMode] =
    useState<'login' | 'signup'>('signup');
+
+
 
 
  const [authName, setAuthName] =
    useState('');
 
 
+
+
  const [authEmail, setAuthEmail] =
    useState('');
+
+
 
 
  const [authPassword, setAuthPassword] =
    useState('');
 
 
+
+
  const [authLoading, setAuthLoading] =
    useState(false);
+
+
 
 
  const [authError, setAuthError] =
    useState('');
 
 
+
+
  const [authMessage, setAuthMessage] =
    useState('');
+
+
 
 
  useEffect(() => {
    let mounted = true;
 
 
+
+
    async function loadSession() {
      const { data } =
        await supabase.auth.getSession();
+
+
 
 
      if (mounted) {
@@ -191,7 +260,11 @@ export function Caderno() {
    }
 
 
+
+
    void loadSession();
+
+
 
 
    const {
@@ -205,6 +278,8 @@ export function Caderno() {
    );
 
 
+
+
    return () => {
      mounted = false;
      subscription.unsubscribe();
@@ -212,8 +287,12 @@ export function Caderno() {
  }, []);
 
 
+
+
  useEffect(() => {
    let mounted = true;
+
+
 
 
    async function loadPosts() {
@@ -231,9 +310,13 @@ export function Caderno() {
        });
 
 
+
+
      if (!mounted) {
        return;
      }
+
+
 
 
      if (error) {
@@ -243,16 +326,24 @@ export function Caderno() {
        );
 
 
+
+
        setLoadingPosts(false);
        return;
      }
+
+
 
 
      const loadedPosts =
        (data ?? []) as CadernoPost[];
 
 
+
+
      setPosts(loadedPosts);
+
+
 
 
      if (loadedPosts.length > 0) {
@@ -262,17 +353,25 @@ export function Caderno() {
      }
 
 
+
+
      setLoadingPosts(false);
    }
 
 
+
+
    void loadPosts();
+
+
 
 
    return () => {
      mounted = false;
    };
  }, [user]);
+
+
 
 
  async function loadInteractions(
@@ -285,13 +384,19 @@ export function Caderno() {
        .in('post_id', postIds);
 
 
+
+
    const totals: Record<string, number> = {};
    const mine: Record<string, boolean> = {};
+
+
 
 
    for (const like of likesData ?? []) {
      totals[like.post_id] =
        (totals[like.post_id] || 0) + 1;
+
+
 
 
      if (user && like.user_id === user.id) {
@@ -300,8 +405,12 @@ export function Caderno() {
    }
 
 
+
+
    setLikes(totals);
    setLikedPosts(mine);
+
+
 
 
    const { data: commentsData } =
@@ -316,10 +425,14 @@ export function Caderno() {
        });
 
 
+
+
    const grouped: Record<
      string,
      CadernoComment[]
    > = {};
+
+
 
 
    for (const comment of commentsData ?? []) {
@@ -328,14 +441,20 @@ export function Caderno() {
      }
 
 
+
+
      grouped[comment.post_id].push(
        comment as CadernoComment
      );
    }
 
 
+
+
    setComments(grouped);
  }
+
+
 
 
  function openAuth(
@@ -348,6 +467,8 @@ export function Caderno() {
  }
 
 
+
+
  function closeAuth() {
    setAuthOpen(false);
    setAuthError('');
@@ -356,15 +477,21 @@ export function Caderno() {
  }
 
 
+
+
  async function handleAuthSubmit(
    event: FormEvent<HTMLFormElement>
  ) {
    event.preventDefault();
 
 
+
+
    setAuthLoading(true);
    setAuthError('');
    setAuthMessage('');
+
+
 
 
    try {
@@ -383,9 +510,13 @@ export function Caderno() {
          });
 
 
+
+
        if (error) {
          throw error;
        }
+
+
 
 
        if (data.session) {
@@ -404,9 +535,13 @@ export function Caderno() {
          });
 
 
+
+
        if (error) {
          throw error;
        }
+
+
 
 
        setUser(data.user);
@@ -414,6 +549,8 @@ export function Caderno() {
      }
    } catch (error) {
      console.error(error);
+
+
 
 
      setAuthError(
@@ -427,6 +564,8 @@ export function Caderno() {
  }
 
 
+
+
  async function handleLike(
    postId: string
  ) {
@@ -436,8 +575,12 @@ export function Caderno() {
    }
 
 
+
+
    const alreadyLiked =
      likedPosts[postId] === true;
+
+
 
 
    if (alreadyLiked) {
@@ -449,16 +592,22 @@ export function Caderno() {
          .eq('user_id', user.id);
 
 
+
+
      if (error) {
        console.error(error);
        return;
      }
 
 
+
+
      setLikedPosts((current) => ({
        ...current,
        [postId]: false,
      }));
+
+
 
 
      setLikes((current) => ({
@@ -470,8 +619,12 @@ export function Caderno() {
      }));
 
 
+
+
      return;
    }
+
+
 
 
    const { error } =
@@ -483,10 +636,14 @@ export function Caderno() {
        });
 
 
+
+
    if (error) {
      console.error(error);
      return;
    }
+
+
 
 
    setLikedPosts((current) => ({
@@ -495,11 +652,15 @@ export function Caderno() {
    }));
 
 
+
+
    setLikes((current) => ({
      ...current,
      [postId]: (current[postId] || 0) + 1,
    }));
  }
+
+
 
 
  function toggleComments(
@@ -511,11 +672,15 @@ export function Caderno() {
    }
 
 
+
+
    setCommentOpen((current) => ({
      ...current,
      [postId]: !current[postId],
    }));
  }
+
+
 
 
  async function handleCommentSubmit(
@@ -525,14 +690,20 @@ export function Caderno() {
    event.preventDefault();
 
 
+
+
    if (!user) {
      openAuth('signup');
      return;
    }
 
 
+
+
    const body =
      commentText[postId]?.trim() || '';
+
+
 
 
    if (body.length < 2) {
@@ -540,10 +711,14 @@ export function Caderno() {
    }
 
 
+
+
    setSendingComment((current) => ({
      ...current,
      [postId]: true,
    }));
+
+
 
 
    const { error } =
@@ -556,10 +731,14 @@ export function Caderno() {
        });
 
 
+
+
    setSendingComment((current) => ({
      ...current,
      [postId]: false,
    }));
+
+
 
 
    if (error) {
@@ -568,15 +747,21 @@ export function Caderno() {
    }
 
 
+
+
    setCommentText((current) => ({
      ...current,
      [postId]: '',
    }));
 
 
+
+
    window.alert(
      'Comentário enviado. Ele aparecerá após aprovação.'
    );
+
+
 
 
    await loadInteractions(
@@ -585,9 +770,13 @@ export function Caderno() {
  }
 
 
+
+
  return (
    <div className="inner-page">
      <Header />
+
+
 
 
      <main className="caderno-page">
@@ -600,10 +789,14 @@ export function Caderno() {
          </div>
 
 
+
+
          <div className="caderno-opening-copy">
            <SectionKicker>
              Caderno Aflora
            </SectionKicker>
+
+
 
 
            <blockquote className="caderno-quote">
@@ -611,6 +804,8 @@ export function Caderno() {
              <br />
              e não nos deixam mais.
            </blockquote>
+
+
 
 
            <p>
@@ -621,10 +816,14 @@ export function Caderno() {
            </p>
 
 
+
+
            <p>
              Aflora nasceu deste desejo de guardar
              o que é delicado.
            </p>
+
+
 
 
            <p>
@@ -633,6 +832,8 @@ export function Caderno() {
              experiências com quem quiser acompanhar
              o que continua florescendo por aqui.
            </p>
+
+
 
 
            <p className="caderno-signature">
@@ -644,11 +845,15 @@ export function Caderno() {
        </section>
 
 
+
+
        <section className="caderno-feed section-sand">
          <div className="caderno-feed-heading">
            <SectionKicker>
              Primeira publicação
            </SectionKicker>
+
+
 
 
            <h2>
@@ -657,6 +862,8 @@ export function Caderno() {
              começa a <em>permanecer.</em>
            </h2>
          </div>
+
+
 
 
          <article className="caderno-post-card">
@@ -669,10 +876,14 @@ export function Caderno() {
              />
 
 
+
+
              <div>
                <strong>
                  {FIRST_POST.author}
                </strong>
+
+
 
 
                <span>
@@ -682,15 +893,21 @@ export function Caderno() {
            </header>
 
 
+
+
            <div className="caderno-post-content">
              <SectionKicker>
                A origem
              </SectionKicker>
 
 
+
+
              <h3>
                {FIRST_POST.title}
              </h3>
+
+
 
 
              {FIRST_POST.paragraphs.map(
@@ -702,12 +919,16 @@ export function Caderno() {
              )}
 
 
+
+
              <p className="caderno-post-signature">
                Com carinho,
                <br />
                <strong>Cris</strong>
              </p>
            </div>
+
+
 
 
            <footer className="caderno-post-footer">
@@ -717,11 +938,15 @@ export function Caderno() {
          </article>
 
 
+
+
          {loadingPosts && (
            <p className="caderno-post-footer">
              Carregando novas páginas...
            </p>
          )}
+
+
 
 
          {!loadingPosts && posts.length > 0 && (
@@ -733,11 +958,15 @@ export function Caderno() {
              </div>
 
 
+
+
              {posts.map((post) => {
                const approvedComments =
                  comments[post.id]?.filter(
                    (comment) => comment.approved
                  ) || [];
+
+
 
 
                return (
@@ -752,11 +981,15 @@ export function Caderno() {
                        </strong>
 
 
+
+
                        <span>
                          {post.meta}
                        </span>
                      </div>
                    </header>
+
+
 
 
                    {post.image_url && (
@@ -769,15 +1002,21 @@ export function Caderno() {
                    )}
 
 
+
+
                    <div className="caderno-post-content">
                      <SectionKicker>
                        {post.kicker}
                      </SectionKicker>
 
 
+
+
                      <h3>
                        {post.title}
                      </h3>
+
+
 
 
                      {post.body
@@ -793,6 +1032,64 @@ export function Caderno() {
                        )}
                    </div>
 
+
+
+
+                   {approvedComments.length > 0 && (
+                     <section
+                       style={{
+                         padding: '1.4rem 1.5rem 1.2rem',
+                         borderTop:
+                           '1px solid rgba(38,50,31,.12)',
+                         background: 'rgba(248,244,236,.46)',
+                       }}
+                     >
+                       <p
+                         style={{
+                           margin: '0 0 1rem',
+                           color: '#8a7b58',
+                           fontSize: '0.62rem',
+                           fontWeight: 600,
+                           letterSpacing: '.15em',
+                           textTransform: 'uppercase',
+                         }}
+                       >
+                         Conversas que florescem por aqui
+                       </p>
+
+                       <div
+                         style={{
+                           display: 'grid',
+                           gap: '0.9rem',
+                         }}
+                       >
+                         {approvedComments.map(
+                           (comment) => (
+                             <article
+                               key={comment.id}
+                               style={{
+                                 borderLeft:
+                                   '1px solid rgba(185,163,109,.65)',
+                                 paddingLeft: '0.9rem',
+                               }}
+                             >
+                               <p
+                                 style={{
+                                   margin: 0,
+                                   color: '#4b5546',
+                                   fontSize: '0.9rem',
+                                   lineHeight: 1.65,
+                                   whiteSpace: 'pre-wrap',
+                                 }}
+                               >
+                                 {comment.body}
+                               </p>
+                             </article>
+                           )
+                         )}
+                       </div>
+                     </section>
+                   )}
 
                    <div
                      style={{
@@ -823,7 +1120,6 @@ export function Caderno() {
                        ({likes[post.id] || 0})
                      </button>
 
-
                      <button
                        type="button"
                        onClick={() =>
@@ -838,12 +1134,9 @@ export function Caderno() {
                          fontFamily: 'inherit',
                        }}
                      >
-                       Comentar (
-                       {approvedComments.length}
-                       )
+                       Comentar ({approvedComments.length})
                      </button>
                    </div>
-
 
                    {commentOpen[post.id] && (
                      <div
@@ -883,7 +1176,6 @@ export function Caderno() {
                            }}
                          />
 
-
                          <button
                            type="submit"
                            disabled={
@@ -899,21 +1191,6 @@ export function Caderno() {
                              : 'Enviar comentário'}
                          </button>
                        </form>
-
-
-                       {approvedComments.map(
-                         (comment) => (
-                           <p
-                             key={comment.id}
-                             style={{
-                               marginTop: '1rem',
-                               color: '#66705f',
-                             }}
-                           >
-                             {comment.body}
-                           </p>
-                         )
-                       )}
                      </div>
                    )}
                  </article>
@@ -925,7 +1202,11 @@ export function Caderno() {
      </main>
 
 
+
+
      <Footer />
+
+
 
 
      {authOpen && (
@@ -971,6 +1252,8 @@ export function Caderno() {
              </SectionKicker>
 
 
+
+
              <button
                type="button"
                onClick={closeAuth}
@@ -990,6 +1273,8 @@ export function Caderno() {
            </div>
 
 
+
+
            <h2
              style={{
                margin: 0,
@@ -1007,6 +1292,8 @@ export function Caderno() {
            </h2>
 
 
+
+
            <p
              style={{
                margin: '1rem 0 1.5rem',
@@ -1018,6 +1305,8 @@ export function Caderno() {
                ? 'Cadastre-se para comentar e curtir as publicações.'
                : 'Entre para continuar participando.'}
            </p>
+
+
 
 
            <form
@@ -1038,6 +1327,7 @@ export function Caderno() {
                    Nome
                  </span>
 
+
                  <input
                    required
                    autoComplete="name"
@@ -1052,6 +1342,8 @@ export function Caderno() {
              )}
 
 
+
+
              <label
                style={{
                  display: 'grid',
@@ -1061,6 +1353,7 @@ export function Caderno() {
                <span style={modalLabelStyle}>
                  E-mail
                </span>
+
 
                <input
                  required
@@ -1076,6 +1369,8 @@ export function Caderno() {
              </label>
 
 
+
+
              <label
                style={{
                  display: 'grid',
@@ -1085,6 +1380,7 @@ export function Caderno() {
                <span style={modalLabelStyle}>
                  Senha
                </span>
+
 
                <input
                  required
@@ -1105,6 +1401,8 @@ export function Caderno() {
              </label>
 
 
+
+
              {authError && (
                <p
                  style={{
@@ -1118,6 +1416,8 @@ export function Caderno() {
              )}
 
 
+
+
              {authMessage && (
                <p
                  style={{
@@ -1129,6 +1429,8 @@ export function Caderno() {
                  {authMessage}
                </p>
              )}
+
+
 
 
              <button
@@ -1147,6 +1449,8 @@ export function Caderno() {
                    : 'Entrar'}
              </button>
            </form>
+
+
 
 
            <button
