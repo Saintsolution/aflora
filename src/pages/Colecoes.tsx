@@ -1,23 +1,11 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-
-import {
-  ArrowRight,
-  ExternalLink,
-} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { ExternalLink } from 'lucide-react';
 
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { SectionKicker } from '../components/SectionKicker';
 
-import {
-  universes,
-  collections as staticCollections,
-} from '../data/content';
+import { universes } from '../data/content';
 
 import {
   fetchProducts,
@@ -25,69 +13,97 @@ import {
   type Product,
 } from '../lib/products';
 
-function getQueryParam(name: string) {
-  if (typeof window === 'undefined') {
-    return '';
+// Mantém a ordem dos quatro elementos definida no site.
+const collections = [
+  ...universes,
+  {
+    id: 'fe',
+    name: 'Fé',
+    image: '/assets/images/sections/fe.png',
+    mood:
+      'Símbolos, intenções e delicadeza para acompanhar aquilo em que você acredita.',
+  },
+  {
+    id: 'casa',
+    name: 'Casa',
+    image: '/assets/images/sections/casa.png',
+    mood:
+      'Objetos autorais que levam natureza, presença e delicadeza para os seus espaços.',
+  },
+];
+
+function normalize(value: string | null | undefined) {
+  return (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function isCollection(id: string) {
+  return collections.some((collection) => collection.id === id);
+}
+
+function getSelectedCollection() {
+  const params = new URLSearchParams(window.location.search);
+
+  const collection = normalize(params.get('colecao'));
+  const element = normalize(params.get('elemento'));
+
+  if (isCollection(collection)) {
+    return collection;
   }
 
-  return (
-    new URLSearchParams(
-      window.location.search
-    ).get(name) || ''
-  );
+  // Compatibilidade com os links antigos dos cards e carrossel.
+  if (isCollection(element)) {
+    return element;
+  }
+
+  return collections[0]?.id || 'terra';
+}
+
+function getProductCollection(product: Product) {
+  const collection = normalize(product.collection);
+
+  if (isCollection(collection)) {
+    return collection;
+  }
+
+  // Enquanto o Admin não estiver atualizado, também mostra
+  // as peças antigas pelo elemento, sem exibir subcoleções.
+  return normalize(product.universe);
 }
 
 export function Colecoes() {
-  const initialUniverse =
-    getQueryParam('elemento');
-
-  const initialCollection =
-    getQueryParam('colecao');
-
-  const [selected, setSelected] =
-    useState(
-      universes.some(
-        (item) =>
-          item.id === initialUniverse
-      )
-        ? initialUniverse
-        : universes[0]?.id || 'terra'
-    );
-
-  const [
-    selectedCollection,
-    setSelectedCollection,
-  ] = useState(initialCollection);
-
-  const [products, setProducts] =
-    useState<Product[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState(false);
-
-  const productsSectionRef =
-    useRef<HTMLDivElement | null>(null);
-
-  const shouldScrollToProductsRef =
-    useRef(Boolean(initialCollection));
+  const [selected, setSelected] = useState(getSelectedCollection);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const previousScrollRestoration =
       window.history.scrollRestoration;
 
-    window.history.scrollRestoration =
-      'manual';
+    window.history.scrollRestoration = 'manual';
 
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'auto',
-    });
+    function syncLocation() {
+      setSelected(getSelectedCollection());
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto',
+      });
+    }
+
+    syncLocation();
+
+    // Atualiza também quando Fé ou Casa é escolhida no menu
+    // enquanto esta página já está aberta.
+    window.addEventListener('popstate', syncLocation);
 
     return () => {
+      window.removeEventListener('popstate', syncLocation);
       window.history.scrollRestoration =
         previousScrollRestoration;
     };
@@ -98,18 +114,14 @@ export function Colecoes() {
 
     async function loadProducts() {
       try {
-        const data =
-          await fetchProducts();
+        const data = await fetchProducts();
 
         if (mounted) {
           setProducts(data);
           setError(false);
         }
       } catch (err) {
-        console.error(
-          'Erro ao carregar peças:',
-          err
-        );
+        console.error('Erro ao carregar peças:', err);
 
         if (mounted) {
           setError(true);
@@ -129,195 +141,38 @@ export function Colecoes() {
   }, []);
 
   const current =
-    universes.find(
-      (universe) =>
-        universe.id === selected
-    ) || universes[0];
+    collections.find((collection) => collection.id === selected) ||
+    collections[0];
 
-  const currentCollections =
-    useMemo(() => {
-      const names = products
+  const isElement = universes.some(
+    (element) => element.id === current.id
+  );
+
+  const currentPieces = useMemo(
+    () =>
+      products
         .filter(
           (product) =>
             product.active !== false &&
-            product.universe === current.id &&
-            product.collection
-        )
-        .map(
-          (product) =>
-            product.collection.trim()
-        );
-
-      return Array.from(
-        new Set(names)
-      ).map((name) => {
-        const collectionProducts = products
-          .filter(
-            (product) =>
-              product.active !== false &&
-              product.universe === current.id &&
-              product.collection
-                .toLowerCase()
-                .trim() ===
-                name
-                  .toLowerCase()
-                  .trim()
-          )
-          .sort(
-            (first, second) =>
-              Number(first.sort_order ?? 0) -
-              Number(second.sort_order ?? 0)
-          );
-
-        const staticCollection =
-          staticCollections.find(
-            (item) =>
-              item.elemento === current.id &&
-              item.nome
-                .toLowerCase()
-                .trim() ===
-              name
-                .toLowerCase()
-                .trim()
-          );
-
-        const coverPiece =
-          collectionProducts.find(
-            (product) => product.image_url
-          );
-
-        return {
-          name,
-
-          description:
-            staticCollection?.descricao ||
-            `Uma coleção do elemento ${current.name}.`,
-
-          image:
-            coverPiece?.image_url ||
-            staticCollection?.imagemPeca ||
-            staticCollection?.imagemFundo ||
-            current.image,
-        };
-      });
-    }, [
-      products,
-      current.id,
-      current.name,
-      current.image,
-    ]);
-
-  const currentPieces =
-    useMemo(() => {
-      if (!selectedCollection) {
-        return [];
-      }
-
-      return products
-        .filter(
-          (product) =>
-            product.active !== false &&
-            product.universe === current.id &&
-            product.collection
-              .toLowerCase()
-              .trim() ===
-            selectedCollection
-              .toLowerCase()
-              .trim()
+            getProductCollection(product) === selected
         )
         .sort(
           (first, second) =>
             Number(first.sort_order ?? 0) -
             Number(second.sort_order ?? 0)
-        );
-    }, [
-      products,
-      current.id,
-      selectedCollection,
-    ]);
+        ),
+    [products, selected]
+  );
 
-  useEffect(() => {
-    if (
-      loading ||
-      !selectedCollection ||
-      !shouldScrollToProductsRef.current
-    ) {
-      return;
-    }
-
-    const frame =
-      window.requestAnimationFrame(
-        () => {
-          shouldScrollToProductsRef.current =
-            false;
-
-          productsSectionRef.current
-            ?.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
-        }
-      );
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [
-    loading,
-    selectedCollection,
-    currentPieces.length,
-  ]);
-
-  function selectUniverse(id: string) {
-    shouldScrollToProductsRef.current =
-      false;
-
+  function selectCollection(id: string) {
     setSelected(id);
-    setSelectedCollection('');
 
-    const url =
-      new URL(window.location.href);
+    const url = new URL(window.location.href);
 
-    url.searchParams.set(
-      'elemento',
-      id
-    );
+    url.searchParams.set('colecao', id);
+    url.searchParams.delete('elemento');
 
-    url.searchParams.delete(
-      'colecao'
-    );
-
-    window.history.replaceState(
-      {},
-      '',
-      url
-    );
-  }
-
-  function selectCollection(name: string) {
-    shouldScrollToProductsRef.current =
-      true;
-
-    setSelectedCollection(name);
-
-    const url =
-      new URL(window.location.href);
-
-    url.searchParams.set(
-      'elemento',
-      current.id
-    );
-
-    url.searchParams.set(
-      'colecao',
-      name
-    );
-
-    window.history.replaceState(
-      {},
-      '',
-      url
-    );
+    window.history.replaceState({}, '', url);
   }
 
   return (
@@ -327,43 +182,44 @@ export function Colecoes() {
       <main>
         <section className="collections-intro section-cream">
           <SectionKicker>
-            Explorar por sensação
+            {isElement ? 'Explorar por sensação' : 'Criações autorais'}
           </SectionKicker>
 
           <h1>
-            Elementos
+            {isElement ? 'Elementos' : current.name}
             <br />
             <em>Aflora.</em>
           </h1>
 
           <p>
-            Escolha um caminho. Cada elemento abriga
-            coleções que nascem de uma mesma atmosfera.
+            {isElement
+              ? 'Escolha um elemento e descubra as peças que nascem dessa inspiração.'
+              : `Conheça as peças da coleção ${current.name}, feitas uma a uma no Ateliê Aflora.`}
           </p>
         </section>
 
         <section className="collection-explorer section-sand">
-          <div
-            className="universe-tabs"
-            role="tablist"
-          >
-            {universes.map((universe) => (
-              <button
-                type="button"
-                className={
-                  selected === universe.id
-                    ? 'active'
-                    : ''
-                }
-                key={universe.id}
-                onClick={() =>
-                  selectUniverse(universe.id)
-                }
-              >
-                {universe.name}
-              </button>
-            ))}
-          </div>
+          {isElement && (
+            <div
+              className="universe-tabs"
+              role="group"
+              aria-label="Escolher coleção dos elementos"
+            >
+              {universes.map((element) => (
+                <button
+                  key={element.id}
+                  type="button"
+                  className={
+                    selected === element.id ? 'active' : ''
+                  }
+                  aria-pressed={selected === element.id}
+                  onClick={() => selectCollection(element.id)}
+                >
+                  {element.name}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div
             className="explorer-feature"
@@ -374,170 +230,124 @@ export function Colecoes() {
                   rgba(33,44,26,.9),
                   rgba(33,44,26,.18)
                 ),
-                url(${current.image})
+                url("${current.image}")
               `,
             }}
           >
             <div>
               <SectionKicker>
-                elemento selecionado
+                Coleção {current.name}
               </SectionKicker>
 
               <h2>{current.name}</h2>
-
               <p>{current.mood}</p>
             </div>
 
             <span className="explorer-index">
-              0
-              {universes.indexOf(current) + 1}
+              {String(collections.indexOf(current) + 1).padStart(
+                2,
+                '0'
+              )}
               {' / '}
-              {String(universes.length).padStart(2, '0')}
+              {String(collections.length).padStart(2, '0')}
             </span>
           </div>
 
-          {loading ? (
-            <div className="empty-collection">
-              Carregando coleções...
+          <div className="collection-products">
+            <div className="collection-products-header">
+              <SectionKicker>
+                Peças · {current.name}
+              </SectionKicker>
+
+              <p>
+                Conheça nossas criações. Para comprar e consultar
+                a disponibilidade, abra o link da peça na Nuvemshop.
+              </p>
             </div>
-          ) : error ? (
-            <div className="empty-collection">
-              Não foi possível carregar as
-              coleções agora.
-            </div>
-          ) : (
-            <div className="collection-list">
-              {currentCollections.length ? (
-                currentCollections.map(
-                  (collection) => (
-                    <button
-                      type="button"
-                      className={`collection-row ${
-                        selectedCollection ===
-                        collection.name
-                          ? 'active'
-                          : ''
-                      }`}
-                      key={collection.name}
-                      onClick={() =>
-                        selectCollection(
-                          collection.name
-                        )
-                      }
-                    >
-                      <div
-                        className="collection-row-image"
-                        aria-hidden="true"
-                      >
-                        <img
-                          src={collection.image}
-                          alt=""
-                        />
-                      </div>
 
-                      <div className="collection-row-copy">
-                        <small> Coleção </small>
-
-                        <strong>
-                          {collection.name}
-                        </strong>
-
-                        <p>
-                          {collection.description}
-                        </p>
-                      </div>
-
-                      <div
-                        className="collection-row-arrow"
-                        aria-hidden="true"
-                      >
-                        <ArrowRight size={19} />
-                      </div>
-                    </button>
-                  )
-                )
-              ) : (
-                <div className="empty-collection">
-                  Novas coleções deste elemento
-                  estão florescendo.
-                </div>
-              )}
-            </div>
-          )}
-
-          {selectedCollection && (
-            <div
-              className="collection-products"
-              ref={productsSectionRef}
-            >
-              <div className="collection-products-header">
-                <SectionKicker>
-                  {selectedCollection}
-                </SectionKicker>
-
-                <p>
-                  Peças únicas deste elemento. Clique
-                  para conhecer todos os detalhes e
-                  disponibilidade na Nuvemshop.
-                </p>
+            {loading ? (
+              <div className="empty-collection" role="status">
+                Carregando peças...
               </div>
+            ) : error ? (
+              <div className="empty-collection" role="alert">
+                Não foi possível carregar as peças agora.
+                Tente atualizar a página.
+              </div>
+            ) : currentPieces.length ? (
+              <div className="collection-products-grid">
+                {currentPieces.map((piece) => {
+                  const productUrl = piece.product_url?.trim();
 
-              {currentPieces.length ? (
-                <div className="collection-products-grid">
-                  {currentPieces.map((piece) => (
-                    <a
-                      className="collection-product-card"
-                      key={piece.id}
-                      href={
-                        piece.product_url || '#'
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  const content = (
+                    <>
                       <div className="collection-product-image">
                         {piece.image_url && (
                           <img
                             src={piece.image_url}
                             alt={piece.name}
+                            loading="lazy"
                           />
                         )}
                       </div>
 
                       <div>
-                        <small>
-                          {piece.collection}
-                        </small>
+                        <small>{current.name}</small>
 
                         <h3>{piece.name}</h3>
 
                         {piece.description && (
-                          <p>
-                            {piece.description}
-                          </p>
+                          <p>{piece.description}</p>
                         )}
 
                         <strong>
-                          {formatPrice(
-                            Number(piece.price)
-                          )}
+                          {formatPrice(Number(piece.price))}
                         </strong>
 
                         <span>
-                          Ver peça
-                          <ExternalLink size={13} />
+                          {productUrl ? (
+                            <>
+                              Ver na Nuvemshop
+                              <ExternalLink
+                                size={13}
+                                aria-hidden="true"
+                              />
+                            </>
+                          ) : (
+                            'Link de compra em breve'
+                          )}
                         </span>
                       </div>
+                    </>
+                  );
+
+                  return productUrl ? (
+                    <a
+                      key={piece.id}
+                      className="collection-product-card"
+                      href={productUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {content}
                     </a>
-                  ))}
-                </div>
-              ) : (
-                <div className="empty-collection">
-                  Ainda não existem peças
-                  cadastradas nesta coleção.
-                </div>
-              )}
-            </div>
-          )}
+                  ) : (
+                    <div
+                      key={piece.id}
+                      className="collection-product-card"
+                    >
+                      {content}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="empty-collection">
+                Novas peças da coleção {current.name} estão
+                florescendo. Em breve, estarão aqui.
+              </div>
+            )}
+          </div>
         </section>
       </main>
 

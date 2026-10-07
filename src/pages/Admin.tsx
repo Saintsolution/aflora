@@ -16,10 +16,12 @@ import {
 
 
 const UNIVERSES = [
- { value: 'terra', label: 'Terra' },
- { value: 'agua', label: 'Água' },
- { value: 'ar', label: 'Ar' },
- { value: 'fogo', label: 'Fogo' },
+  { value: 'agua', label: 'Água' },
+  { value: 'ar', label: 'Ar' },
+  { value: 'terra', label: 'Terra' },
+  { value: 'fogo', label: 'Fogo' },
+  { value: 'fe', label: 'Fé' },
+  { value: 'casa', label: 'Casa' },
 ] as const;
 
 

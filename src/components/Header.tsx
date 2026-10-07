@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-  ArrowRight,
-  Menu,
-  X,
-} from 'lucide-react';
+import { ArrowRight, Menu, X } from 'lucide-react';
 
 import { navigateTo } from '../utils/navigation';
 
@@ -14,16 +10,16 @@ export function Header() {
     ['História', '/historia'],
     ['Caderno', '/caderno'],
     ['Coleções', '/colecoes'],
+    ['Fé', '/colecoes?colecao=fe'],
+    ['Casa', '/colecoes?colecao=casa'],
     ['Contato', '#contato'],
   ];
 
   function handleNavigate(target: string) {
     setOpen(false);
-
     navigateTo(target);
 
-    // Ao voltar para a capa, posiciona no início da Home,
-    // onde está a vinheta de abertura.
+    // Ao voltar para a capa, mostra a vinheta de abertura.
     if (target === '/') {
       window.setTimeout(() => {
         window.scrollTo({
@@ -73,11 +69,8 @@ export function Header() {
       <button
         className="menu-toggle"
         type="button"
-        aria-label={
-          open
-            ? 'Fechar menu'
-            : 'Abrir menu'
-        }
+        aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+        aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >
         {open ? <X /> : <Menu />}

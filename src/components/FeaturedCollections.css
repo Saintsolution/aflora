@@ -1,0 +1,170 @@
+/* Fé e Casa — banners com imagem e esfumado lateral */
+
+.featured-collections__section {
+  --section-background: var(--cream);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+
+  min-height: 253px;
+  background: var(--section-background);
+  scroll-margin-top: 6rem;
+}
+
+.featured-collections__section--casa {
+  --section-background: var(--sand-soft);
+}
+
+/* Imagem preenchendo toda a altura */
+.featured-collections__visual {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 56%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.featured-collections__visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Fé: desaparece em direção à direita */
+.featured-collections__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    to right,
+    transparent 45%,
+    var(--section-background) 100%
+  );
+}
+
+/* Casa: imagem à direita */
+.featured-collections__section--casa
+.featured-collections__visual {
+  left: auto;
+  right: 0;
+}
+
+/* Casa: desaparece em direção à esquerda */
+.featured-collections__section--casa
+.featured-collections__visual::after {
+  background: linear-gradient(
+    to left,
+    transparent 45%,
+    var(--section-background) 100%
+  );
+}
+
+/* Texto */
+.featured-collections__copy {
+  position: relative;
+  z-index: 1;
+
+  grid-column: 2;
+  grid-row: 1;
+
+  padding: 1rem clamp(1.5rem, 4vw, 4rem);
+}
+
+.featured-collections__section--casa
+.featured-collections__copy {
+  grid-column: 1;
+}
+
+.featured-collections__copy h2 {
+  margin: 0.8rem 0 1rem;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+}
+
+.featured-collections__copy p {
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.featured-collections__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.3rem;
+}
+
+.featured-collections__link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+/* Caso a fotografia não carregue */
+.featured-collections__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  height: 100%;
+  padding: 2rem;
+  background: var(--sand);
+  text-align: center;
+  color: var(--ink);
+}
+
+.featured-collections__placeholder span {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+}
+
+.featured-collections__placeholder small {
+  color: var(--text-soft);
+}
+
+/* Celular: foto acima e esfumado para baixo */
+@media (max-width: 760px) {
+  .featured-collections__section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .featured-collections__section
+  .featured-collections__visual {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 240px;
+    flex-shrink: 0;
+  }
+
+  .featured-collections__section
+  .featured-collections__visual::after {
+    background: linear-gradient(
+      to bottom,
+      transparent 45%,
+      var(--section-background) 100%
+    );
+  }
+
+  .featured-collections__copy {
+    padding: 1rem 1.5rem 2.5rem;
+  }
+}
+.featured-collections__visual img {
+  opacity: 0.7;
+}

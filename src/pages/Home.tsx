@@ -3,6 +3,7 @@ import { Hero } from '../components/Hero';
 import { StoryIntro } from '../components/StoryIntro';
 import { UniquePiece } from '../components/UniquePiece';
 import { Universes } from '../components/Universes';
+import { FeaturedCollections } from '../components/FeaturedCollections';
 import { AvailablePieces } from '../components/AvailablePieces';
 import { Process } from '../components/Process';
 import { FinalCTA } from '../components/FinalCTA';
@@ -18,6 +19,7 @@ export function Home() {
         <StoryIntro />
         <UniquePiece />
         <Universes />
+        <FeaturedCollections />
         <AvailablePieces />
         <Process />
         <FinalCTA />
