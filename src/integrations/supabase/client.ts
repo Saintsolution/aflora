@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { initializePasswordRecovery } from '../../lib/passwordRecovery';
 
 const SUPABASE_URL =
   import.meta.env.VITE_SUPABASE_URL;
@@ -19,3 +20,5 @@ export const supabase = createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+
+initializePasswordRecovery(supabase);

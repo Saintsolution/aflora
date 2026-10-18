@@ -895,6 +895,10 @@ export function Admin() {
          </p>
 
 
+         {new URLSearchParams(window.location.search).get('senha') === 'atualizada' && (
+           <p role="status">Senha atualizada. Entre com sua nova senha.</p>
+         )}
+
          <label
            style={{
              display: 'block',

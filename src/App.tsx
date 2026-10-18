@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useSyncExternalStore,
 } from 'react';
 
 import { Home } from './pages/Home';
@@ -9,9 +10,12 @@ import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
 import { PlaylistWelcome } from './components/PlaylistWelcome';
 import { Caderno } from './pages/Caderno';
+import { ResetPassword } from './pages/ResetPassword';
+import { recoverySnapshot, subscribeRecovery } from './lib/passwordRecovery';
 
 
 export default function App() {
+  const recovery = useSyncExternalStore(subscribeRecovery, recoverySnapshot);
   const [path, setPath] = useState(
     `${window.location.pathname}${window.location.search}`
   );
@@ -41,7 +45,11 @@ export default function App() {
 
     let page;
 
-  if (pathname === '/historia') {
+  const showRecovery = pathname === '/redefinir-senha' || (recovery !== 'idle');
+
+  if (showRecovery) {
+    page = <ResetPassword />;
+  } else if (pathname === '/historia') {
     page = <Historia />;
   } else if (pathname === '/caderno') {
     page = <Caderno />;
@@ -57,7 +65,7 @@ export default function App() {
     <>
       {page}
 
-      {pathname !== '/admin' && (
+      {pathname !== '/admin' && !showRecovery && (
         <PlaylistWelcome />
       )}
     </>

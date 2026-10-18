@@ -1224,6 +1224,7 @@ section {
 
 .collection-frame {
   position: relative;
+  text-decoration: none;
 
   display: flex;
 
@@ -1248,6 +1249,11 @@ section {
   transition:
     transform 0.45s ease,
     box-shadow 0.45s ease;
+}
+
+.collection-frame:focus-visible {
+  outline: 3px solid var(--champagne-soft);
+  outline-offset: 4px;
 }
 
 .collection-frame:hover {

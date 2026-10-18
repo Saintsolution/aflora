@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { navigateTo } from '../utils/navigation';
 import {
   universes,
   type Collection,
@@ -14,7 +14,23 @@ export function CollectionFrame({
   universe,
 }: CollectionFrameProps) {
   return (
-    <article
+    <a
+      href={`/colecoes?elemento=${universe.id}`}
+      onClick={(event) => {
+        if (
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
+
+        event.preventDefault();
+        navigateTo(`/colecoes?elemento=${universe.id}`);
+      }}
+      aria-label={`Ver coleções do elemento ${universe.name}`}
       className="collection-frame"
       style={{
         backgroundImage: `
@@ -38,12 +54,7 @@ export function CollectionFrame({
         <h3>{universe.name}</h3>
 
         <p>{universe.description}</p>
-
-        <a href={`/colecoes?elemento=${universe.id}`}>
-          Coleções
-          <ArrowRight size={14} />
-        </a>
       </div>
-    </article>
+    </a>
   );
 }
