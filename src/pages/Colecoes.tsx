@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer';
 import { SectionKicker } from '../components/SectionKicker';
 
 import { universes } from '../data/content';
+import { getProductCollection } from '../lib/collections';
 
 import {
   fetchProducts,
@@ -13,7 +14,7 @@ import {
   type Product,
 } from '../lib/products';
 
-// Mantém a ordem dos quatro elementos definida no site.
+// Preserva a ordem visual das coleções no site.
 const collections = [
   ...universes,
   {
@@ -60,18 +61,6 @@ function getSelectedCollection() {
   }
 
   return collections[0]?.id || 'terra';
-}
-
-function getProductCollection(product: Product) {
-  const collection = normalize(product.collection);
-
-  if (isCollection(collection)) {
-    return collection;
-  }
-
-  // Enquanto o Admin não estiver atualizado, também mostra
-  // as peças antigas pelo elemento, sem exibir subcoleções.
-  return normalize(product.universe);
 }
 
 export function Colecoes() {
@@ -144,10 +133,6 @@ export function Colecoes() {
     collections.find((collection) => collection.id === selected) ||
     collections[0];
 
-  const isElement = universes.some(
-    (element) => element.id === current.id
-  );
-
   const currentPieces = useMemo(
     () =>
       products
@@ -182,44 +167,41 @@ export function Colecoes() {
       <main>
         <section className="collections-intro section-cream">
           <SectionKicker>
-            {isElement ? 'Explorar por sensação' : 'Criações autorais'}
+            Coleções Aflora
           </SectionKicker>
 
           <h1>
-            {isElement ? 'Elementos' : current.name}
+            {current.name}
             <br />
             <em>Aflora.</em>
           </h1>
 
           <p>
-            {isElement
-              ? 'Escolha um elemento e descubra as peças que nascem dessa inspiração.'
-              : `Conheça as peças da coleção ${current.name}, feitas uma a uma no Ateliê Aflora.`}
+            {`Conheça as peças da coleção ${current.name}, feitas uma a uma no Ateliê Aflora.`}
           </p>
         </section>
 
         <section className="collection-explorer section-sand">
-          {isElement && (
-            <div
-              className="universe-tabs"
-              role="group"
-              aria-label="Escolher coleção dos elementos"
-            >
-              {universes.map((element) => (
-                <button
-                  key={element.id}
-                  type="button"
-                  className={
-                    selected === element.id ? 'active' : ''
-                  }
-                  aria-pressed={selected === element.id}
-                  onClick={() => selectCollection(element.id)}
-                >
-                  {element.name}
-                </button>
-              ))}
-            </div>
-          )}
+
+          <div
+            className="universe-tabs"
+            role="group"
+            aria-label="Escolher coleção"
+          >
+            {collections.map((element) => (
+              <button
+                key={element.id}
+                type="button"
+                className={
+                  selected === element.id ? 'active' : ''
+                }
+                aria-pressed={selected === element.id}
+                onClick={() => selectCollection(element.id)}
+              >
+                {element.name}
+              </button>
+            ))}
+          </div>
 
           <div
             className="explorer-feature"

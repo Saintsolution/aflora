@@ -7,6 +7,7 @@ import type { User } from '@supabase/supabase-js';
 
 
 import { supabase } from '../integrations/supabase/client';
+import { COLLECTION_OPTIONS, getProductCollection, getProductCollectionLabel } from '../lib/collections';
 import {
  CATEGORIES,
  fetchProducts,
@@ -15,14 +16,7 @@ import {
 } from '../lib/products';
 
 
-const UNIVERSES = [
-  { value: 'agua', label: 'Água' },
-  { value: 'ar', label: 'Ar' },
-  { value: 'terra', label: 'Terra' },
-  { value: 'fogo', label: 'Fogo' },
-  { value: 'fe', label: 'Fé' },
-  { value: 'casa', label: 'Casa' },
-] as const;
+
 
 
 type CadernoPost = {
@@ -100,7 +94,6 @@ export function Admin() {
  const [price, setPrice] = useState('');
  const [description, setDescription] = useState('');
  const [universe, setUniverse] = useState('terra');
- const [collection, setCollection] = useState('Raízes');
  const [category, setCategory] = useState<string>('colar');
  const [productUrl, setProductUrl] = useState('');
  const [active, setActive] = useState(true);
@@ -462,7 +455,6 @@ export function Admin() {
    setPrice('');
    setDescription('');
    setUniverse('terra');
-   setCollection('Raízes');
    setCategory('colar');
    setProductUrl('');
    setActive(true);
@@ -634,8 +626,7 @@ export function Admin() {
    setName(product.name ?? '');
    setPrice(String(product.price ?? ''));
    setDescription(product.description ?? '');
-   setUniverse(product.universe || 'terra');
-   setCollection(product.collection || 'Raízes');
+   setUniverse(getProductCollection(product));
    setCategory(product.category || 'colar');
    setProductUrl(product.product_url || '');
    setActive(product.active !== false);
@@ -714,6 +705,9 @@ export function Admin() {
 
 
    try {
+     if (!COLLECTION_OPTIONS.some((item) => item.value === universe)) {
+       throw new Error('Selecione uma coleção válida.');
+     }
      const newImageUrl =
        await uploadProductImage();
 
@@ -723,7 +717,7 @@ export function Admin() {
        price: Number(price),
        description: description.trim() || null,
        universe,
-       collection: collection || 'Geral',
+       collection: universe,
        category,
        product_url: productUrl.trim() || null,
        active,
@@ -1209,18 +1203,20 @@ export function Admin() {
 
            <label>
              <span style={labelStyle}>
-               Elemento
+               Coleção
              </span>
 
 
              <select
+               required
                value={universe}
                onChange={(event) =>
                  setUniverse(event.target.value)
                }
                style={inputStyle}
              >
-               {UNIVERSES.map((item) => (
+               <option value="" disabled>Selecione uma coleção</option>
+               {COLLECTION_OPTIONS.map((item) => (
                  <option
                    key={item.value}
                    value={item.value}
@@ -1229,24 +1225,6 @@ export function Admin() {
                  </option>
                ))}
              </select>
-           </label>
-
-
-           <label>
-             <span style={labelStyle}>
-               Coleção
-             </span>
-
-
-             <input
-               required
-               placeholder="Ex: Raízes, Aurora, Rio, Brasa..."
-               value={collection}
-               onChange={(event) =>
-                 setCollection(event.target.value)
-               }
-               style={inputStyle}
-             />
            </label>
 
 
@@ -1641,10 +1619,7 @@ export function Admin() {
                        letterSpacing: '.12em',
                      }}
                    >
-                     {product.universe ||
-                       'sem elemento'}
-                     {' · '}
-                     {product.collection}
+                     Coleção {getProductCollectionLabel(product)}
                    </small>
 
 

@@ -1,7 +1,5 @@
-import { SectionKicker } from './SectionKicker';
 import { CollectionFrame } from './CollectionFrame';
 import {
-  collections,
   universes,
 } from '../data/content';
 
@@ -23,7 +21,7 @@ export function Universes({
         
 
         <h2>
-          Encontre o elemento
+          Encontre a coleção
           <br />
           <em>que fala de você.</em>
         </h2>
@@ -39,9 +37,6 @@ export function Universes({
           <CollectionFrame
             key={universe.id}
             universe={universe}
-            collection={collections.find(
-              (item) => item.elemento === universe.id
-            )}
           />
         ))}
       </div>

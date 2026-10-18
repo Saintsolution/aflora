@@ -1,13 +1,11 @@
 import { navigateTo } from '../utils/navigation';
 import {
   universes,
-  type Collection,
   type Universe,
 } from '../data/content';
 
 type CollectionFrameProps = {
   universe: Universe;
-  collection?: Collection;
 };
 
 export function CollectionFrame({
@@ -30,7 +28,7 @@ export function CollectionFrame({
         event.preventDefault();
         navigateTo(`/colecoes?elemento=${universe.id}`);
       }}
-      aria-label={`Ver coleções do elemento ${universe.name}`}
+      aria-label={`Ver coleção ${universe.name}`}
       className="collection-frame"
       style={{
         backgroundImage: `
@@ -44,7 +42,7 @@ export function CollectionFrame({
       }}
     >
       <div className="frame-top">
-        <span>elemento</span>
+        <span>coleção</span>
         <span>
           0{universes.indexOf(universe) + 1}
         </span>

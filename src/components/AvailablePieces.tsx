@@ -10,6 +10,8 @@ import type {
 } from 'react';
 
 import { SectionKicker } from './SectionKicker';
+import { getProductCollection, getProductCollectionLabel } from '../lib/collections';
+import { navigateTo } from '../utils/navigation';
 import {
   fetchProducts,
   type Product,
@@ -132,18 +134,9 @@ export function AvailablePieces() {
   };
 }, [pecas.length]);
   function getPieceLink(piece: Product) {
-    if (piece.universe && piece.collection) {
-      return `/colecoes?elemento=${encodeURIComponent(
-        piece.universe
-      )}&colecao=${encodeURIComponent(
-        piece.collection
-      )}`;
-    }
-
-    if (piece.universe) {
-      return `/colecoes?elemento=${encodeURIComponent(
-        piece.universe
-      )}`;
+    const collection = getProductCollection(piece);
+    if (collection) {
+      return `/colecoes?colecao=${encodeURIComponent(collection)}`;
     }
 
     return piece.product_url || '#';
@@ -221,6 +214,13 @@ export function AvailablePieces() {
     if (arrasteRef.current.moveu) {
       event.preventDefault();
       arrasteRef.current.moveu = false;
+      return;
+    }
+    const href = event.currentTarget.getAttribute('href');
+    if (href?.startsWith('/colecoes?') && event.button === 0
+      && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+      event.preventDefault();
+      navigateTo(href);
     }
   }
 
@@ -297,7 +297,7 @@ export function AvailablePieces() {
                 <strong>{piece.name}</strong>
 
                 <small>
-                  {piece.collection || 'Aflora'}
+                  Coleção {getProductCollectionLabel(piece)}
                 </small>
               </span>
             </a>
