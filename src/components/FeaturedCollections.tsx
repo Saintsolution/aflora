@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
 import { SectionKicker } from './SectionKicker';
 import { navigateTo } from '../utils/navigation';
 import './FeaturedCollections.css';
@@ -88,7 +87,7 @@ export function FeaturedCollections() {
               <p>{collection.description}</p>
 
               <a
-                className="text-link featured-collections__link"
+                className="collection-pill featured-collections__link"
                 href={target}
                 onClick={(event) => {
                   if (
@@ -105,8 +104,7 @@ export function FeaturedCollections() {
                   navigateTo(target);
                 }}
               >
-                Ver coleção {collection.name}
-                <ArrowRight size={15} aria-hidden="true" />
+                {collection.name}
               </a>
             </div>
           </section>

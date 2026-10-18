@@ -2105,7 +2105,8 @@ section {
   margin-bottom: 3rem;
 }
 
-.universe-tabs button {
+.universe-tabs button,
+.collection-pill {
   padding:
     0.55rem
     1.3rem;
@@ -2132,12 +2133,14 @@ section {
     border-color 0.3s ease;
 }
 
-.universe-tabs button:hover {
+.universe-tabs button:hover,
+.collection-pill:hover {
   border-color:
     var(--moss);
 }
 
-.universe-tabs button.active {
+.universe-tabs button.active,
+.collection-pill {
   background:
     var(--moss);
 
@@ -2936,7 +2939,8 @@ section {
     margin-bottom: 2rem;
   }
 
-  .universe-tabs button {
+  .universe-tabs button,
+  .collection-pill {
     padding: 0.5rem 0.85rem;
     font-size: 0.58rem;
     letter-spacing: 0.1em;
