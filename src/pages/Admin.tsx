@@ -80,6 +80,8 @@ export function Admin() {
  const [password, setPassword] = useState('');
  const [loginLoading, setLoginLoading] = useState(false);
  const [loginError, setLoginError] = useState('');
+ const [recoveryLoading, setRecoveryLoading] = useState(false);
+ const [recoveryMessage, setRecoveryMessage] = useState('');
 
 
  const [products, setProducts] = useState<Product[]>([]);
@@ -384,6 +386,7 @@ export function Admin() {
 
  async function handleLogin(event: FormEvent<HTMLFormElement>) {
    event.preventDefault();
+   if (recoveryLoading || loginLoading) return;
 
 
    setLoginLoading(true);
@@ -410,6 +413,33 @@ export function Admin() {
    setUser(data.user);
    setPassword('');
    setLoginLoading(false);
+ }
+
+
+ async function handlePasswordRecovery() {
+   if (recoveryLoading || loginLoading) return;
+   setRecoveryMessage('');
+   setLoginError('');
+   const emailInput = document.getElementById('admin-email') as HTMLInputElement | null;
+   if (!emailInput?.reportValidity()) return;
+
+   setRecoveryLoading(true);
+   try {
+     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+       redirectTo: `${window.location.origin}/redefinir-senha`,
+     });
+     if (error) {
+       setLoginError(error.status === 429
+         ? 'Muitas solicitações. Aguarde alguns minutos antes de tentar novamente.'
+         : 'Não foi possível solicitar a recuperação. Tente novamente em instantes.');
+       return;
+     }
+     setRecoveryMessage('Se este e-mail estiver cadastrado, você receberá um link para redefinir sua senha. Confira também a caixa de spam.');
+   } catch {
+     setLoginError('Não foi possível solicitar a recuperação. Verifique sua conexão e tente novamente.');
+   } finally {
+     setRecoveryLoading(false);
+   }
  }
 
 
@@ -912,6 +942,7 @@ export function Admin() {
 
            <input
              required
+             id="admin-email"
              type="email"
              autoComplete="email"
              value={email}
@@ -947,8 +978,32 @@ export function Admin() {
          </label>
 
 
+         <button
+           type="button"
+           onClick={() => void handlePasswordRecovery()}
+           disabled={recoveryLoading || loginLoading}
+           style={{
+             display: 'block',
+             marginTop: 16,
+             padding: '6px 0',
+             border: 0,
+             background: 'transparent',
+             color: '#66705f',
+             textDecoration: 'underline',
+             textUnderlineOffset: 4,
+             cursor: recoveryLoading || loginLoading ? 'wait' : 'pointer',
+           }}
+         >
+           {recoveryLoading ? 'Enviando link…' : 'Esqueci minha senha'}
+         </button>
+         <p style={{ marginTop: 8, color: '#66705f', fontSize: 12 }}>
+           Para recuperar o acesso, informe seu e-mail acima. Não é necessário preencher a senha.
+         </p>
+         {recoveryMessage && <p role="status" style={{ marginTop: 16, color: '#26321f', lineHeight: 1.5 }}>{recoveryMessage}</p>}
+
          {loginError && (
            <p
+             role="alert"
              style={{
                marginTop: 18,
                color: '#9b3f34',
@@ -962,7 +1017,7 @@ export function Admin() {
 
          <button
            type="submit"
-           disabled={loginLoading}
+           disabled={loginLoading || recoveryLoading}
            style={{
              width: '100%',
              marginTop: 24,
