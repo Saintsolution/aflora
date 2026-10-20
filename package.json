@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "test:catalog": "node --test tests/*.test.mjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -12,6 +13,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
+    "cheerio": "^1.0.0",
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

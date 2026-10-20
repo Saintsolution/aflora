@@ -1,3 +1,4 @@
+import { fetchPublicProducts } from '../lib/catalog';
 import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 
@@ -9,7 +10,6 @@ import { universes } from '../data/content';
 import { getProductCollection } from '../lib/collections';
 
 import {
-  fetchProducts,
   formatPrice,
   type Product,
 } from '../lib/products';
@@ -103,7 +103,7 @@ export function Colecoes() {
 
     async function loadProducts() {
       try {
-        const data = await fetchProducts();
+        const data = await fetchPublicProducts();
 
         if (mounted) {
           setProducts(data);

@@ -1,5 +1,8 @@
+import { fetchPublicProducts } from '../lib/catalog';
 import {
+  useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -13,7 +16,6 @@ import { SectionKicker } from './SectionKicker';
 import { getProductCollection, getProductCollectionLabel } from '../lib/collections';
 import { navigateTo } from '../utils/navigation';
 import {
-  fetchProducts,
   type Product,
 } from '../lib/products';
 
@@ -24,6 +26,8 @@ export function AvailablePieces() {
   const [arrastando, setArrastando] = useState(false);
 
   const faixaRef = useRef<HTMLDivElement | null>(null);
+  const periodoRef = useRef(0);
+  const [repeticoes, setRepeticoes] = useState(2);
 
   const arrasteRef = useRef({
     ativo: false,
@@ -37,7 +41,7 @@ export function AvailablePieces() {
 
     async function carregarProdutos() {
       try {
-        const dados = await fetchProducts();
+        const dados = await fetchPublicProducts();
 
         if (montado) {
           setProducts(dados);
@@ -45,7 +49,7 @@ export function AvailablePieces() {
         }
       } catch (erro) {
         console.error(
-          'Erro ao carregar peças do Supabase:',
+          'Erro ao carregar catálogo público:',
           erro
         );
 
@@ -71,75 +75,67 @@ export function AvailablePieces() {
       products.filter(
         (product) =>
           product.active !== false &&
-          Boolean(product.image_url)
+          Boolean(product.image_url) && Boolean(getProductCollection(product))
       ),
     [products]
   );
 
-  /*
-   * Quatro cópias garantem espaço suficiente
-   * para o looping também em telas grandes.
-   */
-  const loop = [
-    ...pecas,
-    ...pecas,
-    ...pecas,
-    ...pecas,
-  ];
+  // Repete apenas os cards: cada metade precisa preencher a janela inteira.
+  const loop = Array.from({ length: repeticoes * 2 }, () => pecas).flat();
 
-  function normalizarLoop() {
+  const normalizarLoop = useCallback((position?: number) => {
     const faixa = faixaRef.current;
+    const periodo = periodoRef.current;
+    if (!faixa || !periodo) return;
+    const requested = position ?? faixa.scrollLeft;
+    faixa.scrollLeft = ((requested % periodo) + periodo) % periodo;
+  }, []);
 
-    if (!faixa) {
-      return;
+  useLayoutEffect(() => {
+    const faixa = faixaRef.current;
+    const track = faixa?.firstElementChild as HTMLDivElement | null;
+    if (!faixa || !track || !pecas.length) return;
+
+    function medir() {
+      if (!faixa || !track) return;
+      const first = track.children[0] as HTMLElement;
+      const next = track.children[pecas.length] as HTMLElement;
+      if (!first || !next) return;
+      // A distância entre sequências inclui o gap: scrollWidth / 2 não inclui
+      // corretamente a emenda e pode ficar além do limite de rolagem.
+      const sequence = next.getBoundingClientRect().left - first.getBoundingClientRect().left;
+      if (sequence <= 0) return;
+      const needed = Math.max(2, Math.ceil(faixa.clientWidth / sequence) + 1);
+      setRepeticoes(needed);
+      const secondHalf = track.children[pecas.length * repeticoes] as HTMLElement;
+      periodoRef.current = secondHalf.getBoundingClientRect().left - first.getBoundingClientRect().left;
+      normalizarLoop();
     }
 
-    /*
-     * Com quatro sequências, metade da faixa
-     * equivale a duas sequências completas.
-     */
-    const metade = faixa.scrollWidth / 2;
-
-    if (!metade) {
-      return;
-    }
-
-    while (faixa.scrollLeft >= metade) {
-      faixa.scrollLeft -= metade;
-    }
-
-    while (faixa.scrollLeft < 0) {
-      faixa.scrollLeft += metade;
-    }
-  }
+    medir();
+    const observer = new ResizeObserver(medir);
+    observer.observe(faixa);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [pecas.length, repeticoes, loading, error, normalizarLoop]);
 
   useEffect(() => {
-  if (!faixaRef.current || pecas.length < 1) {
-    return;
-  }
-
-  const intervalo = window.setInterval(() => {
-    const faixa = faixaRef.current;
-
-    if (!faixa || arrasteRef.current.ativo) {
-      return;
-    }
-
-    faixa.scrollLeft += 1;
-    normalizarLoop();
-  }, 20);
-
-  return () => {
-    window.clearInterval(intervalo);
-  };
-}, [pecas.length]);
+    if (!faixaRef.current || !pecas.length) return;
+    const intervalo = window.setInterval(() => {
+      const faixa = faixaRef.current;
+      if (!faixa || arrasteRef.current.ativo) return;
+      // Normaliza antes da atribuição para evitar que o navegador trave no fim.
+      normalizarLoop(faixa.scrollLeft + 1);
+    }, 20);
+    return () => window.clearInterval(intervalo);
+  }, [pecas.length, loading, error, normalizarLoop]);
   function getPieceLink(piece: Product) {
     const collection = getProductCollection(piece);
     if (collection) {
       return `/colecoes?colecao=${encodeURIComponent(collection)}`;
     }
 
-    return piece.product_url || '#';
+    return '/colecoes';
   }
 
   function iniciarArraste(
@@ -185,10 +181,10 @@ export function AvailablePieces() {
       arraste.moveu = true;
     }
 
-    faixa.scrollLeft =
-      arraste.scrollInicial - distancia;
-
-    normalizarLoop();
+    const requested = arraste.scrollInicial - distancia;
+    normalizarLoop(requested);
+    // Mantém o arraste contínuo também ao atravessar a emenda.
+    arraste.scrollInicial += faixa.scrollLeft - requested;
   }
 
   function finalizarArraste(
@@ -246,7 +242,7 @@ export function AvailablePieces() {
             Natureza em Movimento
           </SectionKicker>
 
-          <p>As peças estão sendo preparadas.</p>
+          <p>Catálogo temporariamente indisponível. Tente novamente em instantes.</p>
         </div>
       </section>
     );
@@ -289,6 +285,8 @@ export function AvailablePieces() {
             >
               <img
                 src={piece.image_url || ''}
+                loading="lazy"
+                decoding="async"
                 alt={piece.name}
                 draggable={false}
               />
