@@ -18,6 +18,14 @@ export function parseSitemap(xml) {
     .filter((url) => /^\/produtos\/[^/]+\/$/.test(new URL(url).pathname));
 }
 
+export function parseListing(html) {
+  const $ = load(html);
+  if (!$('main').length) throw new Error('Listagem pública inválida');
+  return [...new Set($('.js-product-table a[href], [data-component="product-list-item"] a[href]').toArray()
+    .map((el) => storeUrl($(el).attr('href')))
+    .filter((url) => /^\/produtos\/[^/]+\/$/.test(new URL(url).pathname)))];
+}
+
 export function parseProduct(html, url) {
   const $ = load(html);
   const page = $('script[type="application/ld+json"]').toArray()
@@ -62,7 +70,19 @@ async function download(url, signal) {
 
 export async function readCatalog(read = download) {
   const signal = AbortSignal.timeout(24000);
-  const urls = parseSitemap(await read(`${STORE}/sitemap.xml`, signal));
+  const discovered = new Set(parseSitemap(await read(`${STORE}/sitemap.xml`, signal)));
+  const listed = new Set();
+  // A listagem publica novos produtos antes da regeneração diária do sitemap.
+  for (let page = 1; ; page++) {
+    if (page > 201) throw new Error('Paginação do catálogo excede o limite validado');
+    const listingUrl = `${STORE}/produtos/${page === 1 ? '' : `?page=${page}`}`;
+    const pageUrls = parseListing(await read(listingUrl, signal));
+    if (!pageUrls.length) break;
+    if (pageUrls.every((url) => listed.has(url))) throw new Error('Paginação da listagem repetida');
+    for (const url of pageUrls) { listed.add(url); discovered.add(url); }
+    if (discovered.size > 200) throw new Error('Catálogo excede o limite validado de 200 produtos');
+  }
+  const urls = [...discovered];
   if (urls.length > 200) throw new Error('Catálogo excede o limite validado de 200 produtos');
   const products = new Array(urls.length);
   let cursor = 0;

@@ -5,7 +5,7 @@ Este relatório substitui as instruções anteriores de fallback: a vitrine púb
 
 ## Origem exclusiva
 
-React → `/.netlify/functions/catalog` → sitemap público → páginas públicas Nuvemshop.
+React → `/.netlify/functions/catalog` → união do sitemap com a listagem pública paginada → páginas públicas Nuvemshop.
 
 `src/lib/catalog/index.ts` não importa mais `fetchProducts()` em execução. A referência a `Product` é somente de tipo e desaparece na compilação. A Function é o único endpoint do leitor público. Em falha de rede, HTTP 503 ou produto inválido, a Promise rejeita e os componentes apresentam indisponibilidade temporária. Não há retorno ao catálogo Supabase nem cache de erro convertido em produtos antigos. Catálogo vazio válido continua sendo lista vazia, sem mensagem de falha.
 
@@ -13,7 +13,7 @@ O cache bem-sucedido do React dura 60 segundos. Pode apresentar a última respos
 
 ## Extração e apresentação
 
-`netlify/functions/catalog.mjs` usa Cheerio para obter nome, preço, todas as fotos da galeria, descrição completa do corpo da página, categoria pública e URL canônica. Imagens são servidas diretamente pelo CDN Nuvemshop, sem upload ao Storage. Identidade, disponibilidade e coleção são metadados. Produtos esgotados continuam visíveis; catálogo bem-sucedido substitui a lista anterior por completo. Remoção/despublicação depende da atualização do sitemap.
+`netlify/functions/catalog.mjs` usa Cheerio para obter nome, preço, todas as fotos da galeria, descrição completa do corpo da página, categoria pública e URL canônica. Imagens são servidas diretamente pelo CDN Nuvemshop, sem upload ao Storage. Identidade, disponibilidade e coleção são metadados. Produtos esgotados continuam visíveis; catálogo bem-sucedido substitui a lista anterior por completo. A descoberta combina o sitemap com `/produtos/` e páginas `?page=N`, sem duplicar URLs. Produtos novos podem entrar pela listagem antes da atualização diária do sitemap. URLs antigas ainda presentes no sitemap continuam sendo consultadas; remoção/despublicação pode depender de sua atualização ou causar falha se a página deixar de existir.
 
 As categorias públicas reconhecidas são Água, Ar, Terra, Fogo, Fé e Casa. Categorias desconhecidas ou ambíguas são registradas em `unknownCategories` e no console, sem atribuição arbitrária; não entram nas seis coleções. Cards mantêm a foto principal; todas as fotos permanecem no array `images`, sem galeria visual nova.
 
@@ -92,3 +92,9 @@ Nenhuma variável nova ou credencial Nuvemshop é necessária. Preservar `VITE_S
 A leitura continua dependente do HTML público e da atualização do sitemap. Mudanças de tema ou bloqueios podem causar indisponibilidade. Não há contorno de bloqueios, garantia de atualização instantânea ou implantação do cache compartilhado proposto. O cache de instância/CDN atual reduz consultas, mas uma requisição sem cache ainda pode iniciar a leitura completa. Não considerar a escala de 200 páginas reais resolvida antes da evolução proposta.
 
 A instalação anterior apontou 32 vulnerabilidades no conjunto de dependências. Não houve atualização ampla nem `npm audit fix` fora do escopo. Nenhum deploy realizado.
+
+## Atualização: descoberta pela listagem pública
+
+Implementada após constatar cinco produtos na listagem pública e apenas dois no sitemap. A Function combina ambas as fontes, percorre `?page=N` até uma página sem produtos e deduplica as URLs antes de baixar os detalhes. Listagem sem `main`, paginação inteiramente repetida, mais de 200 produtos ou mais de 201 páginas resultam em falha explícita. Permanecem os limites globais de tempo, cache e concorrência de cinco downloads de detalhes; não há garantia de leitura de 200 páginas reais.
+
+Validação real da implementação local: cinco produtos, todos em Água, sem categorias desconhecidas: Pedras do Mar V, Pedras do Mar Azul, Folha Esqueletizada V, Flores na Praia e Triângulo Capim V. Os três novos eram ausentes do sitemap; a categoria pública dos cinco já estava corrigida na Nuvemshop. Treze testes aprovados, incluindo união de fontes, paginação com sobreposição, deduplicação e rejeição de listagem inválida/paginação repetida. Nenhuma alteração na Nuvemshop e nenhum deploy. O cache de cinco minutos permanece; uma página já aberta não faz polling. Esta seção atualiza a descoberta e a contagem dos registros anteriores deste relatório.

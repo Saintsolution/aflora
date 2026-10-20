@@ -24,8 +24,8 @@ test('sitemap inválido e URLs externas falham', () => {
   assert.throws(() => parseSitemap('<urlset><url><loc>https://example.org/produtos/a/</loc></url></urlset>'));
 });
 test('descobre produtos e aceita catálogo vazio válido', async () => {
-  assert.equal((await readCatalog(async (u) => u.endsWith('xml') ? sitemap : html())).products.length, 1);
-  assert.deepEqual((await readCatalog(async () => '<urlset/>')).products, []);
+  assert.equal((await readCatalog(async (u) => u.endsWith('xml') ? sitemap : u.includes('/produtos/?') || u === `${STORE}/produtos/` ? '<main/>' : html())).products.length, 1);
+  assert.deepEqual((await readCatalog(async (u) => u.endsWith('xml') ? '<urlset/>' : '<main/>')).products, []);
 });
 test('falha parcial nunca retorna catálogo parcial', async () => {
   await assert.rejects(readCatalog(async (u) => u.endsWith('xml') ? sitemap : '<html/>'));
@@ -36,6 +36,7 @@ test('crescimento até 200 limita concorrência a cinco e não duplica produtos'
     let active = 0; let peak = 0; let requests = 0;
     const data = await readCatalog(async (requested) => {
       if (requested.endsWith('xml')) return `<urlset>${urls.map(u=>`<url><loc>${u}</loc></url>`).join('')}</urlset>`;
+      if (requested === `${STORE}/produtos/`) return '<main/>';
       requests++; peak = Math.max(peak, ++active);
       await new Promise(resolve => setTimeout(resolve, 1));
       active--;
@@ -56,4 +57,26 @@ test('cache compartilha consultas; expiração remove produtos; falha retorna 50
   const failed = createHandler(async () => {throw new Error('offline');});
   assert.equal((await failed({httpMethod:'GET'})).statusCode,503);
   assert.equal((await handler({httpMethod:'POST'})).statusCode,405);
+});
+
+test('combina sitemap antigo com listagem paginada sem duplicatas', async () => {
+  const urls = Array.from({length: 5}, (_, i) => `${STORE}/produtos/p${i}/`);
+  const listing = (items) => `<main><div class="js-product-table">${items.map(u => `<a href="${u}">Peça</a>`).join('')}</div></main>`;
+  const requests = [];
+  const data = await readCatalog(async (requested) => {
+    requests.push(requested);
+    if (requested.endsWith('xml')) return `<urlset>${urls.slice(0, 2).map(u => `<url><loc>${u}</loc></url>`).join('')}</urlset>`;
+    if (requested === `${STORE}/produtos/`) return listing(urls.slice(0, 3));
+    if (requested === `${STORE}/produtos/?page=2`) return listing(urls.slice(2));
+    if (requested === `${STORE}/produtos/?page=3`) return '<main/>';
+    return html().replaceAll(url, requested);
+  });
+  assert.equal(data.products.length, 5);
+  assert.equal(new Set(data.products.map(p => p.id)).size, 5);
+  for (const u of urls) assert.equal(requests.filter(r => r === u).length, 1);
+});
+
+test('listagem inválida e paginação repetida falham sem publicar lote parcial', async () => {
+  await assert.rejects(readCatalog(async (u) => u.endsWith('xml') ? sitemap : '<html>Erro</html>'), /Listagem pública inválida/);
+  await assert.rejects(readCatalog(async (u) => u.endsWith('xml') ? sitemap : `<main><div class="js-product-table"><a href="${url}">Peça</a></div></main>`), /Paginação da listagem repetida/);
 });
