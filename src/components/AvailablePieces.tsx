@@ -71,12 +71,33 @@ export function AvailablePieces() {
   }, []);
 
   const pecas = useMemo(
-    () =>
-      products.filter(
+    () => {
+      const disponiveis = products.filter(
         (product) =>
           product.active !== false &&
           Boolean(product.image_url) && Boolean(getProductCollection(product))
-      ),
+      );
+      // Embaralha uma vez por carga; a ordem permanece estável durante o movimento.
+      for (let i = disponiveis.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [disponiveis[i], disponiveis[j]] = [disponiveis[j], disponiveis[i]];
+      }
+      const grupos = new Map<string, Product[]>();
+      for (const product of disponiveis) {
+        const collection = getProductCollection(product);
+        const grupo = grupos.get(collection) ?? [];
+        grupo.push(product);
+        grupos.set(collection, grupo);
+      }
+      const intercaladas: Product[] = [];
+      // Coleções vazias são ignoradas; as restantes continuam até a última peça.
+      for (let rodada = 0; intercaladas.length < disponiveis.length; rodada++) {
+        for (const grupo of grupos.values()) {
+          if (grupo[rodada]) intercaladas.push(grupo[rodada]);
+        }
+      }
+      return intercaladas;
+    },
     [products]
   );
 
