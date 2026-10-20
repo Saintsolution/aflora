@@ -19,8 +19,8 @@ export function Home() {
         <StoryIntro />
         <UniquePiece />
         <Universes />
-        <FeaturedCollections />
         <AvailablePieces />
+        <FeaturedCollections />
         <Process />
         <FinalCTA />
       </main>
