@@ -5,7 +5,7 @@ export function UniquePiece() {
     <section className="unique section-light">
       <div className="unique-image">
         <img
-          src="/assets/images/joias/joias01.jpeg"
+          src="/assets/images/joias/joias01_a.png"
           alt="Joias botânicas Aflora com flores, folhas e elementos naturais preservados em resina"
         />
       </div>

@@ -406,7 +406,9 @@ section {
 
   overflow: hidden;
 
-  background: var(--sand-soft);
+  --story-blush: 249, 231, 229;
+
+  background: rgb(var(--story-blush));
 }
 
 
@@ -414,56 +416,36 @@ section {
 
 .story-cinematic-bg {
   position: absolute;
-
   top: 0;
   right: 0;
-  bottom: 0;
-
-  width: 72%;
-
-  background-image:
-    url('/assets/images/joias/joias02.jpeg');
-
-  background-size: cover;
-
-  /*
-    Puxa um pouco o enquadramento para a direita.
-    Assim preservamos joias + tronco.
-  */
-
-  background-position: 58% center;
-
+  height: 100%;
+  width: auto;
+  aspect-ratio: 2 / 1;
+  background-image: url('/assets/images/joias/joias02_c.png');
+  background-size: 100% 100%;
+  background-position: right center;
   background-repeat: no-repeat;
-
   z-index: 0;
 }
 
-
-/* DEGRADÊ ENTRE TEXTO E FOTO */
-
+/* O degradê acompanha a borda real da foto, sem recortar a arte. */
 .story-cinematic-overlay {
   position: absolute;
-
-  inset: 0;
-
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 2 / 1;
   z-index: 1;
-
   pointer-events: none;
-
-  background:
-    linear-gradient(
-      90deg,
-
-      var(--sand-soft) 0%,
-      var(--sand-soft) 27%,
-
-      rgba(240, 232, 220, 0.98) 35%,
-      rgba(240, 232, 220, 0.90) 43%,
-      rgba(240, 232, 220, 0.68) 52%,
-      rgba(240, 232, 220, 0.34) 62%,
-      rgba(240, 232, 220, 0.08) 73%,
-      rgba(240, 232, 220, 0) 82%
-    );
+  background: linear-gradient(
+    90deg,
+    rgb(var(--story-blush)) 0%,
+    rgb(var(--story-blush)) 8%,
+    rgba(var(--story-blush), 0.85) 18%,
+    rgba(var(--story-blush), 0.35) 30%,
+    rgba(var(--story-blush), 0) 40%
+  );
 }
 
 
@@ -475,6 +457,7 @@ section {
   z-index: 2;
 
   width: min(45%, 560px);
+  margin-left: clamp(1.5rem, 6vw, 7rem);
 
   padding-right:
     clamp(1rem, 3vw, 3rem);
@@ -520,9 +503,9 @@ section {
   }
 
   .story-cinematic-bg {
-    width: 78%;
+    width: auto;
 
-    background-position: 60% center;
+    background-position: right center;
   }
 
   .story-cinematic-copy {
@@ -530,19 +513,7 @@ section {
   }
 
   .story-cinematic-overlay {
-    background:
-      linear-gradient(
-        90deg,
-
-        var(--sand-soft) 0%,
-        var(--sand-soft) 25%,
-
-        rgba(240, 232, 220, 0.98) 37%,
-        rgba(240, 232, 220, 0.84) 48%,
-        rgba(240, 232, 220, 0.48) 61%,
-        rgba(240, 232, 220, 0.08) 78%,
-        rgba(240, 232, 220, 0) 90%
-      );
+    width: auto;
   }
 }
 
@@ -554,56 +525,49 @@ section {
 @media (max-width: 620px) {
 
   .story-cinematic {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 
-    min-height: 760px;
-
-    padding:
-      4.5rem
-      1.4rem
-      3rem;
+    min-height: 0;
+    padding: 0;
   }
 
 
   .story-cinematic-bg {
+    position: relative;
+    flex-shrink: 0;
+    aspect-ratio: 2 / 1;
+
     top: auto;
+    transform: none;
 
     left: 0;
     right: 0;
     bottom: 0;
 
     width: 100%;
-    height: 58%;
+    height: auto;
 
-    background-size: cover;
+    background-size: contain;
 
-    background-position: center center;
+    background-position: right center;
   }
 
 
   .story-cinematic-overlay {
-    background:
-      linear-gradient(
-        180deg,
-
-        var(--sand-soft) 0%,
-        var(--sand-soft) 34%,
-
-        rgba(240, 232, 220, 0.96) 43%,
-        rgba(240, 232, 220, 0.78) 52%,
-        rgba(240, 232, 220, 0.36) 66%,
-        rgba(240, 232, 220, 0.05) 82%,
-        rgba(240, 232, 220, 0) 100%
-      );
+    display: none;
   }
 
 
   .story-cinematic-copy {
     width: 100%;
 
-    max-width: 500px;
+    max-width: none;
+    margin-left: 0;
+    order: -1;
 
-    padding-right: 0;
+    padding: 3rem 1.4rem 2rem;
   }
 
 
@@ -1397,7 +1361,7 @@ section {
 
 .piece-item {
   flex: 0 0 auto;
-  width: 190px;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1414,7 +1378,8 @@ section {
 
 .piece-item img {
   display: block;
-  width: 190px;
+  width: auto;
+  max-width: none;
   height: 230px;
   object-fit: contain;
   pointer-events: none;
@@ -1426,6 +1391,7 @@ section {
 }
 
 .piece-item span {
+  max-width: 190px;
   text-align: center;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -2903,11 +2869,11 @@ section {
 }
 
 .piece-item {
-  width: 155px;
+  width: auto;
 }
 
 .piece-item img {
-  width: 155px;
+  width: auto;
   height: 190px;
 }
 
