@@ -34,3 +34,12 @@ test('falha de rede não consulta outro endpoint e permite nova tentativa', asyn
   await assert.rejects(mod.fetchPublicProducts(), /offline/);
   assert.deepEqual(requests, ['/.netlify/functions/catalog', '/.netlify/functions/catalog']);
 });
+
+test('snapshot antigo sinaliza aviso; nomes, preços e URLs originais são preservados', async () => {
+  const product = {name:'Colar Aurora (AF001)',price:87,images:['https://cdn.example.org/a.png'],description:'Descrição',category:'Água',collection:'agua',product_url:'https://lojadoaafloraatelier.lojavirtualnuvem.com.br/produtos/aurora/'};
+  const mod = await reader(async () => new Response(JSON.stringify({source:'nuvemshop',stale:true,products:[product]})));
+  const [received] = await mod.fetchPublicProducts();
+  assert.equal(received.name,product.name); assert.equal(received.price,product.price);
+  assert.equal(received.product_url,product.product_url);
+  assert.match(mod.getCatalogNotice(), /desatualizados/);
+});

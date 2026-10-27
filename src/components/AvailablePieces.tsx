@@ -1,4 +1,5 @@
-import { fetchPublicProducts } from '../lib/catalog';
+import { fetchPublicProducts, getCatalogNotice } from '../lib/catalog';
+import { nomeFashion } from '../lib/catalog/nomeFashion';
 import {
   useCallback,
   useEffect,
@@ -23,6 +24,7 @@ export function AvailablePieces() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [catalogNotice, setCatalogNotice] = useState<string>();
   const [arrastando, setArrastando] = useState(false);
 
   const faixaRef = useRef<HTMLDivElement | null>(null);
@@ -46,6 +48,7 @@ export function AvailablePieces() {
         if (montado) {
           setProducts(dados);
           setError(false);
+          setCatalogNotice(getCatalogNotice());
         }
       } catch (erro) {
         console.error(
@@ -281,6 +284,7 @@ export function AvailablePieces() {
         </SectionKicker>
 
         <p>Peças disponíveis por um tempo.</p>
+        {catalogNotice && <p role="status">{catalogNotice}</p>}
       </div>
 
       <div
@@ -308,12 +312,12 @@ export function AvailablePieces() {
                 src={piece.image_url || ''}
                 loading="lazy"
                 decoding="async"
-                alt={piece.name}
+                alt={nomeFashion(piece.name)}
                 draggable={false}
               />
 
               <span>
-                <strong>{piece.name}</strong>
+                <strong>{nomeFashion(piece.name)}</strong>
 
                 <small>
                   Coleção {getProductCollectionLabel(piece)}

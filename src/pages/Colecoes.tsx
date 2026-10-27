@@ -1,4 +1,5 @@
-import { fetchPublicProducts } from '../lib/catalog';
+import { fetchPublicProducts, getCatalogNotice } from '../lib/catalog';
+import { nomeFashion } from '../lib/catalog/nomeFashion';
 import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink } from 'lucide-react';
 
@@ -68,6 +69,7 @@ export function Colecoes() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [catalogNotice, setCatalogNotice] = useState<string>();
 
   useEffect(() => {
     const previousScrollRestoration =
@@ -108,6 +110,7 @@ export function Colecoes() {
         if (mounted) {
           setProducts(data);
           setError(false);
+          setCatalogNotice(getCatalogNotice());
         }
       } catch (err) {
         console.error('Erro ao carregar peças:', err);
@@ -247,6 +250,8 @@ export function Colecoes() {
               </p>
             </div>
 
+            {catalogNotice && <p role="status">{catalogNotice}</p>}
+
             {loading ? (
               <div className="empty-collection" role="status">
                 Carregando peças...
@@ -267,7 +272,7 @@ export function Colecoes() {
                         {piece.image_url && (
                           <img
                             src={piece.image_url}
-                            alt={piece.name}
+                            alt={nomeFashion(piece.name)}
                             loading="lazy"
                           />
                         )}
@@ -276,7 +281,7 @@ export function Colecoes() {
                       <div>
                         <small>{current.name}</small>
 
-                        <h3>{piece.name}</h3>
+                        <h3>{nomeFashion(piece.name)}</h3>
 
                         {piece.description && (
                           <p>{piece.description}</p>

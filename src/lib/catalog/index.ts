@@ -2,6 +2,12 @@ import type { Product } from '../products';
 
 export type PublicProduct = Product & { images: string[] };
 let cached: { expires: number; products: PublicProduct[] } | undefined;
+let notice: string | undefined;
+
+export function getCatalogNotice() {
+  return notice;
+}
+
 let pending: Promise<PublicProduct[]> | undefined;
 
 async function loadCatalog(): Promise<PublicProduct[]> {
@@ -21,6 +27,9 @@ async function loadCatalog(): Promise<PublicProduct[]> {
       product_url: p.product_url, active: true, featured: false, new_arrival: false, sort_order: index, created_at: '' };
   });
   if (data.unknownCategories?.length) console.warn('Categorias Nuvemshop para revisão:', data.unknownCategories);
+  notice = data.stale === true
+    ? 'Exibindo a última consulta disponível. Nomes, preços e disponibilidade podem estar desatualizados; confirme na Nuvemshop.'
+    : undefined;
   cached = { products, expires: Date.now() + 60000 };
   return products;
 }

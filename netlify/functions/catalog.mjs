@@ -2,6 +2,7 @@ import { load } from 'cheerio';
 
 export const STORE = 'https://lojadoaafloraatelier.lojavirtualnuvem.com.br';
 const TTL = 5 * 60 * 1000;
+const MAX_STALE_AGE = 60 * 60 * 1000;
 const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
 const collections = new Set(['agua', 'ar', 'terra', 'fogo', 'fe', 'casa']);
 
@@ -60,11 +61,22 @@ export function parseProduct(html, url) {
 }
 
 async function download(url, signal) {
-  const response = await fetch(url, {
-    signal: AbortSignal.any([signal, AbortSignal.timeout(8000)]),
-    redirect: 'error', headers: { 'User-Agent': 'AfloraPublicCatalog/1.0' },
-  });
-  if (!response.ok) throw new Error(`Nuvemshop HTTP ${response.status}`);
+  let response;
+  try {
+    response = await fetch(url, {
+      signal: AbortSignal.any([signal, AbortSignal.timeout(8000)]),
+      redirect: 'error', headers: { 'User-Agent': 'AfloraPublicCatalog/1.0' },
+    });
+  } catch (error) {
+    error.path = new URL(url).pathname;
+    throw error;
+  }
+  if (!response.ok) {
+    const error = new Error(`Nuvemshop HTTP ${response.status}`);
+    error.status = response.status;
+    error.path = new URL(url).pathname;
+    throw error;
+  }
   return response.text();
 }
 
@@ -89,25 +101,37 @@ export async function readCatalog(read = download) {
   await Promise.all(Array.from({ length: Math.min(5, urls.length) }, async () => {
     while (cursor < urls.length) {
       const index = cursor++;
-      products[index] = parseProduct(await read(urls[index], signal), urls[index]);
+      try {
+        products[index] = parseProduct(await read(urls[index], signal), urls[index]);
+      } catch (error) {
+        // O sitemap pode manter URLs removidas após a atualização da listagem.
+        if ([404, 410].includes(error.status) && !listed.has(urls[index])) {
+          console.warn('catalog_removed_sitemap_url', { status: error.status, path: new URL(urls[index]).pathname });
+          continue;
+        }
+        error.path ??= new URL(urls[index]).pathname;
+        throw error;
+      }
     }
   }));
-  const unknown = products.filter((p) => !p.collection).map((p) => ({ url: p.product_url, category: p.category }));
+  const currentProducts = products.filter(Boolean);
+  const unknown = currentProducts.filter((p) => !p.collection).map((p) => ({ url: p.product_url, category: p.category }));
   if (unknown.length) console.warn('Categorias para revisão:', JSON.stringify(unknown));
-  return { source: 'nuvemshop', fetchedAt: new Date().toISOString(), products, unknownCategories: unknown };
+  return { source: 'nuvemshop', fetchedAt: new Date().toISOString(), products: currentProducts, unknownCategories: unknown };
 }
 
 export function createHandler(read = readCatalog, now = Date.now) {
   let cached;
   let expires = 0;
+  let fetched = 0;
   let pending;
   let retryAt = 0;
   return async (event) => {
     if (event.httpMethod !== 'GET') return { statusCode: 405, headers: { Allow: 'GET' }, body: '' };
     try {
       if (!cached || now() >= expires) {
-        if (now() < retryAt) throw new Error('Aguardando nova tentativa');
-        pending ??= read().then((data) => { cached = data; expires = now() + TTL; return data; })
+        if (now() < retryAt) throw Object.assign(new Error('Aguardando nova tentativa'), { code: 'RETRY_COOLDOWN' });
+        pending ??= read().then((data) => { cached = data; fetched = now(); expires = now() + TTL; retryAt = 0; return data; })
           .catch((error) => { retryAt = now() + 30000; throw error; }).finally(() => { pending = undefined; });
         await pending;
       }
@@ -117,7 +141,18 @@ export function createHandler(read = readCatalog, now = Date.now) {
         'Netlify-CDN-Cache-Control': `public, s-maxage=${Math.max(1, Math.floor((expires - now()) / 1000))}, must-revalidate`,
       }, body: JSON.stringify(cached) };
     } catch (error) {
-      console.error('Falha na leitura do catálogo:', error.message);
+      console.error('catalog_refresh_failed', {
+        kind: error.code === 'RETRY_COOLDOWN' ? 'cooldown' : error.status ? 'origin_http' : error.name === 'TimeoutError' || error.name === 'AbortError' ? 'timeout' : error.cause?.code ? 'network' : 'validation_or_internal',
+        status: error.status, path: error.path, code: error.cause?.code,
+        reason: ['Sitemap inválido', 'Listagem pública inválida', 'Paginação da listagem repetida', 'Dados estruturados ausentes', 'Produto incompleto', 'URL externa no catálogo', 'Imagem inválida', 'Catálogo excede', 'Paginação do catálogo excede'].find((prefix) => error.message?.startsWith(prefix)),
+        cacheAgeSeconds: cached ? Math.floor((now() - fetched) / 1000) : null,
+      });
+      if (cached && now() - fetched <= MAX_STALE_AGE) {
+        return { statusCode: 200, headers: {
+          'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
+          'Netlify-CDN-Cache-Control': 'no-store',
+        }, body: JSON.stringify({ ...cached, stale: true, cacheAgeSeconds: Math.floor((now() - fetched) / 1000) }) };
+      }
       return { statusCode: 503, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
         body: JSON.stringify({ error: 'Catálogo temporariamente indisponível' }) };
     }
