@@ -5,7 +5,7 @@ import { Footer } from '../components/Footer';
 import { SectionKicker } from '../components/SectionKicker';
 
 const HISTORY_IMAGES = {
-  beginning: '/assets/images/history/hist01.png',
+  beginning: '/assets/images/history/hist06.png',
   making: '/assets/images/history/hist04.png',
   closing: '/assets/images/history/hist03.png',
 };
