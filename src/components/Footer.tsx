@@ -54,7 +54,11 @@ export function Footer() {
           WhatsApp
         </a>
 
-        <a href="#">
+        <a
+          href="https://www.instagram.com/biojoiasaflorapreservada/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Instagram size={14} />
           Instagram
         </a>

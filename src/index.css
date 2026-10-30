@@ -1972,7 +1972,7 @@ section {
 }
 
 .history-closing h2 {
-  margin: 1rem 0;
+  margin: 0.75rem 0;
 }
 
 .history-closing p {
@@ -1983,7 +1983,7 @@ section {
 
 .history-disclaimer {
   max-width: 520px;
-  margin: 3rem auto 0;
+  margin: 1.5rem auto 0;
   text-align: center;
   color: var(--text-soft);
   font-size: 0.95rem;
@@ -1992,7 +1992,7 @@ section {
 }
 
 .history-signature {
-  margin-top: 1.5rem !important;
+  margin-top: 1rem !important;
   color: var(--moss-deep) !important;
   font-family: inherit;
   font-size: 0.85rem !important;

@@ -39,22 +39,22 @@ const FIRST_POST = {
  meta: 'Primeira página do Caderno',
  title: 'A memória que floresce.',
  paragraphs: [
-   `Sempre fui apaixonada por histórias, por pessoas e pelos pequenos detalhes que tornam cada encontro único. Minha trajetória passou pela moda, pelo jornalismo e pelo Direito, sempre muito próxima da escuta, da beleza e de tudo o que carrega identidade.`,
+   `Minha trajetória de vida passou pela moda, pelo jornalismo e pelo Direito, sempre muito próxima da escuta, da beleza e de tudo o que carrega identidade.`,
 
 
 
 
-   `Sou mãe de três filhos, avó de três netos que enchem meus dias de vida, amante dos animais e das memórias que nos fazem sentir em casa.`,
+   `De algum jeito muito especial, a natureza sempre me encantou.`,
 
 
 
 
-   `Meu pai, Renato, é uma dessas presenças que me acompanham. A lembrança dele — ao lado da minha mãe, Dona Bia — vive em gestos, sentimentos e momentos que o tempo não apaga. Foi pensando nesse tipo de afeto que comecei a imaginar o Aflora.`,
+   `Toda flor tem seu próprio tempo. Desde o momento em que é plantada, desabrocha, encanta, se transforma.`,
 
 
 
 
-   `Porque uma flor não dura para sempre em sua forma mais visível. Ela desabrocha, encanta, se transforma. Mas sua beleza pode continuar existindo de outro modo.`,
+   `Mas sua beleza pode continuar existindo de outro modo.`,
 
 
 
@@ -932,7 +932,14 @@ export function Caderno() {
              <p className="caderno-post-signature">
                Com carinho,
                <br />
-               <strong>Cris</strong>
+               <strong>Ateliê Aflora</strong>
+             </p>
+
+             <p>
+               <em>In memoriam</em>
+               <br />
+               Dedico esse projeto à memória do meu pai, Renato, cujo exemplo
+               e legado continuam a guiar meu caminho.
              </p>
            </div>
 
