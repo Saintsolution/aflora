@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { STORE, parseProduct, parseSitemap, readCatalog, createHandler } from '../netlify/functions/catalog.mjs';
+import { STORE, parseProduct, parseSitemap, parseListing, readCatalog, createHandler } from '../netlify/functions/catalog.mjs';
 
 const url = `${STORE}/produtos/piloto/`;
 const sitemap = `<urlset><url><loc>${url}</loc></url></urlset>`;
@@ -95,13 +95,47 @@ test('URL removida apenas do sitemap é ignorada em 404/410; outros erros contin
   }
 });
 
-test('404 de produto presente na listagem não publica catálogo parcial', async () => {
-  await assert.rejects(readCatalog(async requested => {
+test('404/410 de produto listado preserva os demais; todos removidos não viram sucesso vazio', async () => {
+  const removed = `${STORE}/produtos/removido/`;
+  for (const status of [404, 410]) {
+    const read = async requested => {
+      if (requested.endsWith('xml')) return sitemap;
+      if (requested === `${STORE}/produtos/`) return `<main><div class="js-product-table"><a href="${removed}">Removido</a></div></main>`;
+      if (requested.includes('?page=')) return '<main/>';
+      if (requested === removed) throw Object.assign(new Error('removido'), {status});
+      return html();
+    };
+    assert.deepEqual((await readCatalog(read)).products.map(p => p.product_url), [url]);
+    await assert.rejects(readCatalog(async requested => {
+      if (requested === url) throw Object.assign(new Error('removido'), {status});
+      return read(requested);
+    }), /Nenhum produto/);
+  }
+});
+
+test('parâmetros de navegação não duplicam produto nem invalidam canonical', async () => {
+  const tracked = `${url}?entry_path=category#foto`;
+  assert.deepEqual(parseListing(`<main><div class="js-product-table"><a href="${tracked}">Peça</a><a href="${url}">Peça</a></div></main>`), [url]);
+  const requests = [];
+  const data = await readCatalog(async requested => {
+    requests.push(requested);
     if (requested.endsWith('xml')) return sitemap;
-    if (requested === `${STORE}/produtos/`) return `<main><div class="js-product-table"><a href="${url}">Peça</a></div></main>`;
+    if (requested === `${STORE}/produtos/`) return `<main><div class="js-product-table"><a href="${tracked}">Peça</a></div></main>`;
     if (requested.includes('?page=')) return '<main/>';
-    throw Object.assign(new Error('origem 404'), {status:404});
-  }), /origem 404/);
+    return html();
+  });
+  assert.equal(data.products.length, 1);
+  assert.equal(requests.filter(u => u === url).length, 1);
+  assert.equal(data.products[0].product_url, url);
+});
+
+test('descrição estruturada supre bloco ausente; descrição HTML tem prioridade', () => {
+  const withStructured = html().replace('"@type":"Product",', '"@type":"Product","description":"Descrição da origem.",');
+  assert.equal(parseProduct(withStructured, url).description, 'Descrição completa. Segundo parágrafo.');
+  const withoutBlock = withStructured.replace(/<div class="js-product-description">.*?<\/div>/, '');
+  assert.equal(parseProduct(withoutBlock, url).description, 'Descrição da origem.');
+  assert.throws(() => parseProduct(withoutBlock.replace('Descrição da origem.', ''), url), /Produto incompleto/);
+  assert.throws(() => parseProduct(withoutBlock.replace('"price":"87"', '"price":null'), url), /Produto incompleto/);
 });
 
 test('fallback limitado a uma hora preserva snapshot e data; cooldown e recuperação', async () => {

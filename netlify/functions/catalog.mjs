@@ -9,6 +9,9 @@ const collections = new Set(['agua', 'ar', 'terra', 'fogo', 'fe', 'casa']);
 function storeUrl(value) {
   const url = new URL(value, STORE);
   if (url.origin !== STORE || url.username || url.password) throw new Error('URL externa no catálogo');
+  // A listagem acrescenta parâmetros de navegação ao mesmo produto canônico.
+  url.search = '';
+  url.hash = '';
   return url.href;
 }
 
@@ -38,7 +41,8 @@ export function parseProduct(html, url) {
   const descriptionNode = $('.js-product-description').first().clone();
   descriptionNode.find('script, style').remove();
   descriptionNode.find('p, br, li, div').append(' ');
-  const description = descriptionNode.text().replace(/\s+/g, ' ').trim();
+  const description = descriptionNode.text().replace(/\s+/g, ' ').trim()
+    || (typeof product.description === 'string' ? product.description.replace(/\s+/g, ' ').trim() : '');
   const rawPrice = product.offers?.price;
   const price = Number(rawPrice);
   const categoryNames = (page.breadcrumb?.itemListElement ?? []).slice(1, -1).map((item) => item.name);
@@ -104,9 +108,9 @@ export async function readCatalog(read = download) {
       try {
         products[index] = parseProduct(await read(urls[index], signal), urls[index]);
       } catch (error) {
-        // O sitemap pode manter URLs removidas após a atualização da listagem.
-        if ([404, 410].includes(error.status) && !listed.has(urls[index])) {
-          console.warn('catalog_removed_sitemap_url', { status: error.status, path: new URL(urls[index]).pathname });
+        // Sitemap e listagem podem manter URLs de produtos removidos.
+        if ([404, 410].includes(error.status)) {
+          console.warn('catalog_removed_product_url', { status: error.status, path: new URL(urls[index]).pathname });
           continue;
         }
         error.path ??= new URL(urls[index]).pathname;
@@ -115,6 +119,7 @@ export async function readCatalog(read = download) {
     }
   }));
   const currentProducts = products.filter(Boolean);
+  if (urls.length && !currentProducts.length) throw new Error('Nenhum produto descoberto pôde ser carregado');
   const unknown = currentProducts.filter((p) => !p.collection).map((p) => ({ url: p.product_url, category: p.category }));
   if (unknown.length) console.warn('Categorias para revisão:', JSON.stringify(unknown));
   return { source: 'nuvemshop', fetchedAt: new Date().toISOString(), products: currentProducts, unknownCategories: unknown };
@@ -144,7 +149,7 @@ export function createHandler(read = readCatalog, now = Date.now) {
       console.error('catalog_refresh_failed', {
         kind: error.code === 'RETRY_COOLDOWN' ? 'cooldown' : error.status ? 'origin_http' : error.name === 'TimeoutError' || error.name === 'AbortError' ? 'timeout' : error.cause?.code ? 'network' : 'validation_or_internal',
         status: error.status, path: error.path, code: error.cause?.code,
-        reason: ['Sitemap inválido', 'Listagem pública inválida', 'Paginação da listagem repetida', 'Dados estruturados ausentes', 'Produto incompleto', 'URL externa no catálogo', 'Imagem inválida', 'Catálogo excede', 'Paginação do catálogo excede'].find((prefix) => error.message?.startsWith(prefix)),
+        reason: ['Sitemap inválido', 'Listagem pública inválida', 'Paginação da listagem repetida', 'Dados estruturados ausentes', 'Produto incompleto', 'URL externa no catálogo', 'Imagem inválida', 'Catálogo excede', 'Paginação do catálogo excede', 'Nenhum produto descoberto'].find((prefix) => error.message?.startsWith(prefix)),
         cacheAgeSeconds: cached ? Math.floor((now() - fetched) / 1000) : null,
       });
       if (cached && now() - fetched <= MAX_STALE_AGE) {
