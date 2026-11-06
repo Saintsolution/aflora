@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { STORE, parseProduct, parseSitemap, parseListing, readCatalog, createHandler } from '../netlify/functions/catalog.mjs';
+import { readCatalog as extractCatalog } from '../netlify/lib/catalog-extractor.mjs';
+import { handler as sourceHandler, createSourceHandler } from '../netlify/functions/catalog-source.mjs';
 
 const url = `${STORE}/produtos/piloto/`;
 const sitemap = `<urlset><url><loc>${url}</loc></url></urlset>`;
@@ -47,6 +49,61 @@ test('crescimento até 200 limita concorrência a cinco e não duplica produtos'
     assert.equal(new Set(data.products.map(p=>p.id)).size, count);
     assert.ok(peak <= 5);
   }
+});
+
+test('extrator compartilhado conclui lotes paginados de 56, 200, 300 e 500 produtos', async () => {
+  for (const count of [56, 200, 300, 500]) {
+    const urls = Array.from({length:count}, (_,i) => `${STORE}/produtos/lote-${count}-${i}/`);
+    const pageSize = 25;
+    const requestLog = [];
+    const data = await extractCatalog(async (requested) => {
+      requestLog.push(requested);
+      if (requested.endsWith('xml')) return '<urlset/>';
+      if (new URL(requested).pathname === '/produtos/') {
+        const page = Number(new URL(requested).searchParams.get('page') ?? 1);
+        const items = urls.slice((page - 1) * pageSize, page * pageSize);
+        return `<main>${items.map(u => `<div class="js-product-table"><a href="${u}">Peça</a></div>`).join('')}</main>`;
+      }
+      return html().replaceAll(url, requested);
+    });
+    assert.equal(data.complete, true);
+    assert.equal(data.productCount, count);
+    assert.equal(data.products.length, count);
+    assert.equal(new Set(data.products.map(p => p.product_url)).size, count);
+    assert.equal(requestLog.filter(r => new URL(r).searchParams.has('page')).length, Math.ceil(count / pageSize));
+  }
+});
+
+test('endpoint independente aceita somente GET e não possui rotina de escrita', async () => {
+  const response = await sourceHandler({httpMethod:'POST'});
+  assert.equal(response.statusCode, 405);
+  assert.equal(response.headers.Allow, 'GET');
+  assert.equal(response.body, '');
+});
+
+test('extrator protegido autentica antes de ler e preserva o contrato completo', async () => {
+  let reads = 0;
+  const catalog = {source:'nuvemshop',fetchedAt:'2026-11-06T12:00:00Z',complete:true,productCount:1,products:[{id:url,name:'Peça',price:87,images:['https://cdn.example.org/a.webp'],description:'Descrição',category:'ÁGUA',product_url:url,collection:'agua',available:false}],unknownCategories:[]};
+  const protectedHandler = createSourceHandler(async () => {reads++; return catalog;}, () => 'test-token');
+  for (const headers of [{}, {authorization:'Bearer wrong-token'}, {Authorization:'Basic test-token'}]) {
+    const response = await protectedHandler({httpMethod:'GET',headers});
+    assert.equal(response.statusCode,401);
+    assert.equal(response.headers['WWW-Authenticate'],'Bearer');
+    assert.deepEqual(JSON.parse(response.body),{error:'Não autorizado'});
+    assert.equal(reads,0);
+  }
+  const response = await protectedHandler({httpMethod:'GET',headers:{authorization:'Bearer test-token'}});
+  assert.equal(response.statusCode,200);
+  assert.equal(response.headers['Cache-Control'],'no-store');
+  assert.deepEqual(JSON.parse(response.body),catalog);
+  assert.equal(reads,1);
+});
+
+test('configuração ausente falha fechada sem iniciar extração', async () => {
+  let reads = 0;
+  const protectedHandler = createSourceHandler(async () => {reads++; return {};}, () => '');
+  assert.equal((await protectedHandler({httpMethod:'GET',headers:{authorization:'Bearer any'}})).statusCode,401);
+  assert.equal(reads,0);
 });
 test('cache compartilha consultas; expiração remove produtos; falha retorna 503', async () => {
   let time = 0; let calls = 0;
