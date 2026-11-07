@@ -17,6 +17,7 @@ export type Product = {
   featured: boolean;
   new_arrival: boolean;
   active: boolean;
+  available?: boolean;
 
   sort_order: number;
 

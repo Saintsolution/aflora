@@ -43,3 +43,19 @@ test('snapshot antigo sinaliza aviso; nomes, preços e URLs originais são prese
   assert.equal(received.product_url,product.product_url);
   assert.match(mod.getCatalogNotice(), /desatualizados/);
 });
+
+test('leitor conserva indisponibilidade e sem_colecao sem usar universe', async () => {
+  const product = {name:'Peça (REF)',price:75,images:['https://images.example/a.webp'],description:'Original',
+    category:'Outra',collection:'sem_colecao',universe:'agua',available:false,
+    product_url:'https://lojadoaafloraatelier.lojavirtualnuvem.com.br/produtos/peca/'};
+  const mod=await reader(async()=>new Response(JSON.stringify({source:'nuvemshop',storage:'supabase',complete:true,productCount:1,products:[product]})));
+  const [received]=await mod.fetchPublicProducts();
+  assert.equal(received.available,false); assert.equal(received.collection,'sem_colecao'); assert.equal(received.universe,null);
+  assert.equal(received.id,product.product_url);
+});
+test('leitor rejeita contrato explicitamente incompleto ou com contagem divergente',async()=>{
+ for(const props of [{complete:false},{productCount:1}]) {
+  const mod=await reader(async()=>new Response(JSON.stringify({source:'nuvemshop',products:[],...props})));
+  await assert.rejects(mod.fetchPublicProducts(),/incompleto/);
+ }
+});

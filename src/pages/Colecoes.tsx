@@ -64,6 +64,72 @@ function getSelectedCollection() {
   return collections[0]?.id || 'terra';
 }
 
+export function CollectionProductCard({ piece, label }: { piece: Product; label?: string }) {
+  const productUrl = piece.product_url?.trim();
+
+  const content = (
+    <>
+      <div className="collection-product-image">
+        {piece.image_url && (
+          <img
+            src={piece.image_url}
+            alt={nomeFashion(piece.name)}
+            loading="lazy"
+          />
+        )}
+      </div>
+
+      <div>
+        {label && <small>{label}</small>}
+
+        <h3>{nomeFashion(piece.name)}</h3>
+
+        {piece.description && (
+          <p>{piece.description}</p>
+        )}
+
+        <strong>
+          {formatPrice(Number(piece.price))}
+        </strong>
+
+        {piece.available === false && <small role="status">Indisponível no momento</small>}
+        <span>
+          {productUrl ? (
+            <>
+              Ver na Nuvemshop
+              <ExternalLink
+                size={13}
+                aria-hidden="true"
+              />
+            </>
+          ) : (
+            'Link de compra em breve'
+          )}
+        </span>
+      </div>
+    </>
+  );
+
+  return productUrl ? (
+    <a
+      key={piece.id}
+      className="collection-product-card"
+      href={productUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {content}
+    </a>
+  ) : (
+    <div
+      key={piece.id}
+      className="collection-product-card"
+    >
+      {content}
+    </div>
+  );
+}
+
 export function Colecoes() {
   const [selected, setSelected] = useState(getSelectedCollection);
   const [products, setProducts] = useState<Product[]>([]);
@@ -80,11 +146,10 @@ export function Colecoes() {
     function syncLocation() {
       setSelected(getSelectedCollection());
 
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'auto',
-      });
+      const unclassified = window.location.hash === '#pecas-sem-colecao'
+        ? document.getElementById('pecas-sem-colecao') : null;
+      if (unclassified) unclassified.scrollIntoView();
+      else window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
 
     syncLocation();
@@ -151,6 +216,15 @@ export function Colecoes() {
         ),
     [products, selected]
   );
+
+  const unclassifiedPieces = useMemo(() => products.filter((product) =>
+    product.active !== false && getProductCollection(product) === 'sem_colecao'), [products]);
+
+  useEffect(() => {
+    if (!loading && window.location.hash === '#pecas-sem-colecao') {
+      document.getElementById('pecas-sem-colecao')?.scrollIntoView();
+    }
+  }, [loading, selected]);
 
   function selectCollection(id: string) {
     setSelected(id);
@@ -263,70 +337,7 @@ export function Colecoes() {
               </div>
             ) : currentPieces.length ? (
               <div className="collection-products-grid">
-                {currentPieces.map((piece) => {
-                  const productUrl = piece.product_url?.trim();
-
-                  const content = (
-                    <>
-                      <div className="collection-product-image">
-                        {piece.image_url && (
-                          <img
-                            src={piece.image_url}
-                            alt={nomeFashion(piece.name)}
-                            loading="lazy"
-                          />
-                        )}
-                      </div>
-
-                      <div>
-                        <small>{current.name}</small>
-
-                        <h3>{nomeFashion(piece.name)}</h3>
-
-                        {piece.description && (
-                          <p>{piece.description}</p>
-                        )}
-
-                        <strong>
-                          {formatPrice(Number(piece.price))}
-                        </strong>
-
-                        <span>
-                          {productUrl ? (
-                            <>
-                              Ver na Nuvemshop
-                              <ExternalLink
-                                size={13}
-                                aria-hidden="true"
-                              />
-                            </>
-                          ) : (
-                            'Link de compra em breve'
-                          )}
-                        </span>
-                      </div>
-                    </>
-                  );
-
-                  return productUrl ? (
-                    <a
-                      key={piece.id}
-                      className="collection-product-card"
-                      href={productUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {content}
-                    </a>
-                  ) : (
-                    <div
-                      key={piece.id}
-                      className="collection-product-card"
-                    >
-                      {content}
-                    </div>
-                  );
-                })}
+                {currentPieces.map((piece) => <CollectionProductCard key={piece.id} piece={piece} label={current.name} />)}
               </div>
             ) : (
               <div className="empty-collection">
@@ -335,6 +346,13 @@ export function Colecoes() {
               </div>
             )}
           </div>
+          {!loading && !error && unclassifiedPieces.length > 0 && (
+            <div className="collection-products" id="pecas-sem-colecao">
+              <div className="collection-products-grid">
+                {unclassifiedPieces.map((piece) => <CollectionProductCard key={piece.id} piece={piece} />)}
+              </div>
+            </div>
+          )}
         </section>
       </main>
 

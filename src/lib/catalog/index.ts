@@ -15,6 +15,7 @@ async function loadCatalog(): Promise<PublicProduct[]> {
   if (!response.ok) throw new Error(`Catálogo HTTP ${response.status}`);
   const data = await response.json();
   if (data.source !== 'nuvemshop' || !Array.isArray(data.products)) throw new Error('Catálogo inválido');
+  if (data.complete === false || (data.productCount !== undefined && data.productCount !== data.products.length)) throw new Error('Catálogo incompleto');
   const products = data.products.map((p: Record<string, unknown>, index: number): PublicProduct => {
     if (typeof p.name !== 'string' || typeof p.price !== 'number' || !Number.isFinite(p.price)
       || !Array.isArray(p.images) || !p.images.length || !p.images.every((url) => typeof url === 'string' && url.startsWith('https://'))
@@ -23,7 +24,7 @@ async function loadCatalog(): Promise<PublicProduct[]> {
       throw new Error('Produto inválido');
     }
     return { id: p.product_url, name: p.name, price: p.price, images: p.images, image_url: p.images[0],
-      description: p.description, category: p.category, collection: p.collection, universe: null,
+      available: typeof p.available === 'boolean' ? p.available : undefined, description: p.description, category: p.category, collection: p.collection, universe: null,
       product_url: p.product_url, active: true, featured: false, new_arrival: false, sort_order: index, created_at: '' };
   });
   if (data.unknownCategories?.length) console.warn('Categorias Nuvemshop para revisão:', data.unknownCategories);

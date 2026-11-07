@@ -155,11 +155,11 @@ export function AvailablePieces() {
   }, [pecas.length, loading, error, normalizarLoop]);
   function getPieceLink(piece: Product) {
     const collection = getProductCollection(piece);
-    if (collection) {
+    if (collection !== 'sem_colecao') {
       return `/colecoes?colecao=${encodeURIComponent(collection)}`;
     }
 
-    return '/colecoes';
+    return '/colecoes#pecas-sem-colecao';
   }
 
   function iniciarArraste(
@@ -237,7 +237,7 @@ export function AvailablePieces() {
       return;
     }
     const href = event.currentTarget.getAttribute('href');
-    if (href?.startsWith('/colecoes?') && event.button === 0
+    if (href?.startsWith('/colecoes') && event.button === 0
       && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
       event.preventDefault();
       navigateTo(href);
@@ -319,9 +319,10 @@ export function AvailablePieces() {
               <span>
                 <strong>{nomeFashion(piece.name)}</strong>
 
-                <small>
+                {getProductCollectionLabel(piece) && <small>
                   Coleção {getProductCollectionLabel(piece)}
-                </small>
+                </small>}
+                {piece.available === false && <small>Indisponível no momento</small>}
               </span>
             </a>
           ))}

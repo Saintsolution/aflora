@@ -360,3 +360,37 @@ Testes de autenticação injetam leitor e configuração fictícios em memória;
 6. Rotacionar ambos os lados coordenadamente se o token for exposto. Evitar testar tokens pela URL, query string ou cliente navegador.
 
 Esta preparação requer configuração de segredo no Netlify e Supabase, mas nenhuma configuração foi feita nesta etapa. Sem commit, push ou deploy.
+
+
+---
+
+## 17. Cron ativo e migração local da vitrine — 07/11/2026
+
+Cron confirmado na etapa anterior: `aflora-catalog-sync-3x`, job ID 1, ativo, `0 1,9,17 * * *`, timezone GMT (06h/14h/22h Brasília), um único job. Credencial existente foi cadastrada pelo responsável no Vault sem revelar o valor. Nenhuma importação manual adicional foi feita. Os scripts em supabase/cron foram simplificados naquela etapa para não criar tabela/schema/função de apoio; referências históricas a dispatches são propostas anteriores substituídas. A presente fase não modificou cron/Vault/RPC/Edge e não verificou a conclusão do primeiro disparo automático.
+
+Fase 2: somente implementação local de leitura Netlify → Supabase/PostgREST com chave pública e RLS já existente, sem scraping no caminho público. O extrator protegido permanece independente. Confirmados em leitura 17 campos reais de products, SELECT anon e RLS para ativos, 56 produtos/URLs únicas: Água 5, Terra 15, Fogo 3, Ar 18, Fé 7, Casa 8. Nenhum esgotado/sem_colecao neste snapshot; esses casos foram simulados. synced_at mais recente observado: 06/11/2026 20:58:38 Brasília.
+
+Preservados contrato source:nuvemshop, nomes/preços/descrições/imagens/links, identidade por product_url, nomeFashion sem parênteses na apresentação e links internos do carrossel/externos de compra. images usa somente image_url persistida. Coleções usam apenas collection, nunca universe. Incluídos bloco provisório sem título para sem_colecao e indicação de indisponibilidade. Paginação sem teto total; revisão antes/depois, validação integral e cache com stale em falhas.
+
+54 testes aprovados, build aprovado, 56 produtos reais comparados pelo adapter e leitor frontend, 56 imagens com HEAD válido. Chrome desktop e mobile emulado 350px conferidos. Typecheck global segue com três erros preexistentes em Atelier.tsx/Objects.tsx, sem novos erros. Admin foi auditado; remoção do CRUD e botão manual foram propostos/documentados, não aplicados. Caderno/autenticação/editorial intactos.
+
+Homologação: `node scripts/catalog-preview.mjs`, http://127.0.0.1:5173. Antes de publicação futura, conferir disponibilidade de URL/chave pública no runtime Functions Netlify e revisar pendências de typecheck. Nenhuma publicação, commit, push, importação ou alteração remota nesta fase. Diagnóstico completo, lista de arquivos, auditoria Admin, testes, limitações e plano de rollback: `RELATORIO-VITRINE-SUPABASE-2026-11-07.md`.
+
+---
+
+## 18. Pré-publicação e primeiro cron comprovado — 07/11/2026
+
+Somente leitura/diagnóstico nesta revisão. Confirmado primeiro disparo automático do cron ID 1 às 14:00:00 Brasília, runid 1 succeeded; importação catalog_sync_runs 5ba8ed9d-c711-4ded-849f-04c6074e2a1f concluída às 14:00:16 com success, 56 encontrados, 0 inseridos, 56 atualizados. Nenhuma importação manual foi executada e nenhuma configuração cron/Edge/Vault/RPC foi modificada.
+
+O build configurado em Git é vite build e passou. Typecheck permanece com três erros de imagens preexistentes em Atelier/Objects, componentes sem uso na árvore atual; não bloqueiam esse comando, mas um gate separado de tsc falha. Componentes visuais intactos. Sessão Netlify não autenticada: variáveis efetivas Functions/Production, tipo/projeto da credencial remota e overrides/gates externos NÃO foram comprovados. Parecer condicional: concluir esse item antes de liberar publicação.
+
+Inventário isolado da vitrine: 15 arquivos, com HANDOFF selecionado apenas nas seções 17–18; excluir alterações de sincronização/cron/package.json/deno.lock/hist05. Cópia descartável baseada em HEAD com essa seleção passou 40 testes e build; 14 testes de sync anteriores ficam fora por escopo (workspace completo tinha 54). Ver `RELATORIO-PREPUBLICACAO-2026-11-07.md` para lista exata, evidências e restrições. Sem staging, commit, push ou deploy.
+
+
+---
+
+## 19. Pendência Netlify resolvida — 07/11/2026
+
+A conferência na conta/perfil Aflora (Work) substitui a limitação de acesso da seção 18: site Netlify atelieaflora/aflorapreservada.com.br, repo Saintsolution/aflora, produção main. VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY estão em All scopes, mesmo valor para todos os contextos, incluindo Production. Não há par SUPABASE_* sobrescrevendo-as na listagem. URL aponta para pgzxphalazwsgizfsvkz; credencial classificada publishable, não administrativa, idêntica por comparação SHA-256 em memória à chave pública da homologação real. Nenhum valor de chave foi incluído nos retornos de ferramentas ou arquivos.
+
+Confirmados no painel: npm run build, dist, netlify/functions e Node 22.x. Nenhuma alteração de configuração foi necessária. Parecer atualizado: FAVORÁVEL à publicação controlada via Git quando autorizada; permanecem documentados os três erros TypeScript preexistentes, sem bloqueio do vite build. O novo handler só poderá ser verificado no runtime produtivo após deploy autorizado. Inventário segue com 15 arquivos; seleção parcial do handoff agora inclui somente seções 17–19. Sem commit, push ou deploy. Ver RELATORIO-PREPUBLICACAO-2026-11-07.md.

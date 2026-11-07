@@ -1,10 +1,9 @@
-import { STORE, readCatalog } from '../lib/catalog-extractor.mjs';
+import { readSupabaseCatalog } from '../lib/supabase-catalog.mjs';
 
-export { STORE, parseSitemap, parseListing, parseProduct, readCatalog } from '../lib/catalog-extractor.mjs';
 const TTL = 5 * 60 * 1000;
 const MAX_STALE_AGE = 60 * 60 * 1000;
 
-export function createHandler(read = readCatalog, now = Date.now) {
+export function createHandler(read = readSupabaseCatalog, now = Date.now) {
   let cached;
   let expires = 0;
   let fetched = 0;
@@ -28,7 +27,7 @@ export function createHandler(read = readCatalog, now = Date.now) {
       console.error('catalog_refresh_failed', {
         kind: error.code === 'RETRY_COOLDOWN' ? 'cooldown' : error.status ? 'origin_http' : error.name === 'TimeoutError' || error.name === 'AbortError' ? 'timeout' : error.cause?.code ? 'network' : 'validation_or_internal',
         status: error.status, path: error.path, code: error.cause?.code,
-        reason: ['Sitemap inválido', 'Listagem pública inválida', 'Paginação da listagem repetida', 'Dados estruturados ausentes', 'Produto incompleto', 'URL externa no catálogo', 'Imagem inválida', 'Catálogo excede', 'Paginação do catálogo excede', 'Nenhum produto descoberto'].find((prefix) => error.message?.startsWith(prefix)),
+        reason: typeof error.code === 'string' && /^CATALOG_[A-Z_]+$/.test(error.code) ? error.code : undefined,
         cacheAgeSeconds: cached ? Math.floor((now() - fetched) / 1000) : null,
       });
       if (cached && now() - fetched <= MAX_STALE_AGE) {

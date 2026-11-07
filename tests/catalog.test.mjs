@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { STORE, parseProduct, parseSitemap, parseListing, readCatalog, createHandler } from '../netlify/functions/catalog.mjs';
+import { createHandler } from '../netlify/functions/catalog.mjs';
+import { STORE, parseProduct, parseSitemap, parseListing, readCatalog } from '../netlify/lib/catalog-extractor.mjs';
 import { readCatalog as extractCatalog } from '../netlify/lib/catalog-extractor.mjs';
 import { handler as sourceHandler, createSourceHandler } from '../netlify/functions/catalog-source.mjs';
 
