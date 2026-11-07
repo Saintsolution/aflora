@@ -37,9 +37,10 @@ const CRIS_IMAGE =
 const FIRST_POST = {
  author: 'Cris · Ateliê Aflora',
  meta: 'Primeira página do Caderno',
- title: 'A memória que floresce.',
+ title: 'A memória que floresce',
  paragraphs: [
-   `Minha trajetória de vida passou pela moda, pelo jornalismo e pelo Direito, sempre muito próxima da escuta, da beleza e de tudo o que carrega identidade.`,
+   `Oi, eu sou a Cris. Sou brasileira, do Rio de Janeiro.`,
+   `Sempre gostei de observar modas, estilos, momentos. E percebi algo.`,
 
 
 
@@ -904,9 +905,7 @@ export function Caderno() {
 
 
            <div className="caderno-post-content">
-             <SectionKicker>
-               A origem
-             </SectionKicker>
+
 
 
 
@@ -932,14 +931,13 @@ export function Caderno() {
              <p className="caderno-post-signature">
                Com carinho,
                <br />
-               <strong>Ateliê Aflora</strong>
+               <strong>Cris</strong>
              </p>
 
              <p>
                <em>In memoriam</em>
                <br />
-               Dedico esse projeto à memória do meu pai, Renato, cujo exemplo
-               e legado continuam a guiar meu caminho.
+               Dedico esse pequeno projeto à memória do meu pai, Renato. Pessoa doce, de olhar carinhoso e abraço que acolhe, além de toda bondade, inteligência e sabedoria. Exemplo e legado que continuarão a guiar meu caminho. Obrigada por tudo, pai. Te amo.
              </p>
            </div>
 

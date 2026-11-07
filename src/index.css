@@ -438,14 +438,21 @@ section {
   aspect-ratio: 2 / 1;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgb(var(--story-blush)) 0%,
-    rgb(var(--story-blush)) 8%,
-    rgba(var(--story-blush), 0.85) 18%,
-    rgba(var(--story-blush), 0.35) 30%,
-    rgba(var(--story-blush), 0) 40%
-  );
+  background:
+    radial-gradient(
+      ellipse at 40% 85%,
+      rgba(var(--story-blush), 0.8) 0%,
+      rgba(var(--story-blush), 0.35) 26%,
+      rgba(var(--story-blush), 0) 58%
+    ),
+    linear-gradient(
+      90deg,
+      rgb(var(--story-blush)) 0%,
+      rgb(var(--story-blush)) 12%,
+      rgba(var(--story-blush), 0.95) 24%,
+      rgba(var(--story-blush), 0.65) 36%,
+      rgba(var(--story-blush), 0) 52%
+    );
 }
 
 
@@ -758,28 +765,12 @@ section {
   line-height: 1.75;
 }
 
-.unique-copy blockquote {
-  max-width: 560px;
-
+.unique-copy .unique-invitation {
+  max-width: 28ch;
   margin-top: 2rem;
-
-  padding-left: 1.4rem;
-
-  border-left:
-    1px solid var(--champagne);
-
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--champagne);
   color: var(--moss-deep);
-
-  font-family:
-    'Playfair Display',
-    serif;
-
-  font-size:
-    clamp(1.2rem, 1.9vw, 1.65rem);
-
-  font-style: normal;
-
-  line-height: 1.45;
 }
 
 
@@ -822,11 +813,6 @@ section {
   .unique-copy h2 {
     font-size:
       clamp(2.2rem, 10vw, 3.4rem);
-  }
-
-  .unique-copy blockquote {
-    font-size:
-      1.1rem;
   }
 }
 

@@ -249,8 +249,6 @@ export function Colecoes() {
 
           <h1>
             {current.name}
-            <br />
-            <em>Aflora.</em>
           </h1>
 
           <p>
@@ -295,7 +293,7 @@ export function Colecoes() {
           >
             <div>
               <SectionKicker>
-                Coleção {current.name}
+                Coleção
               </SectionKicker>
 
               <h2>{current.name}</h2>

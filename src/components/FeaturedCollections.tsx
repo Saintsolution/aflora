@@ -11,7 +11,7 @@ const featuredCollections = [
     alt: 'Peças da coleção Fé do Ateliê Aflora',
     title: 'O que você acredita também pode florescer.',
     description:
-      'Símbolos, intenções e histórias ganham forma em peças feitas à mão. Uma coleção que acolhe diferentes religiões, caminhos espirituais e expressões do esoterismo, com delicadeza e respeito ao que é sagrado para cada pessoa.',
+      'Símbolos, intenções e histórias ganham forma em peças feitas à mão. Uma coleção que acolhe diferentes religiões, caminhos espirituais e expressões do esoterismo, com delicadeza e respeito ao que é sagrado para cada um.',
   },
   {
     id: 'casa',
@@ -20,7 +20,7 @@ const featuredCollections = [
     alt: 'Objetos decorativos da coleção Casa do Ateliê Aflora',
     title: 'A natureza encontra um lugar para ficar.',
     description:
-      'Objetos decorativos que levam a delicadeza da Aflora para perto de você. Matérias, formas e detalhes se encontram em criações feitas uma a uma, para dar presença aos espaços e acompanhar os pequenos rituais de morar.',
+      'Objetos decorativos que levam a delicadeza da flora para dentro da sua casa. Matérias, formas e texturas se encontram em criações artesanais feitas uma a uma, onde cada detalhe tem seu encanto.',
   },
 ] as const;
 

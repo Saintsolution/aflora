@@ -1,5 +1,5 @@
 const STAMP_VIDEO =
-  '/assets/images/packaging/selo01_quadrado_site.mp4';
+  '/assets/images/packaging/vinheta_fim_pagina_inicial_loop.mp4';
 
 const processSteps = [
   [

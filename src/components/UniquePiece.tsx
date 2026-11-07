@@ -29,14 +29,12 @@ export function UniquePiece() {
           Nem duas pedras.
           <br />
           Nem dois momentos.
-          <br />
+        </p>
+
+        <p className="unique-invitation">
           Escolha a peça que irá preservar o seu.
         </p>
 
-        <blockquote>
-          “Quando uma peça Aflora encontra sua pessoa, aquela
-          combinação existe somente para ela.”
-        </blockquote>
       </div>
     </section>
   );

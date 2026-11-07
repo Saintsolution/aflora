@@ -7,6 +7,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   const nav = [
+    ['HOME', '/'],
     ['História', '/historia'],
     ['Caderno', '/caderno'],
     ['Coleções', '/colecoes'],

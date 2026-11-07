@@ -32,8 +32,7 @@ export function FinalCTA() {
         </h2>
 
         <p>
-          Descubra peças criadas uma a uma e encontre
-          aquela que conversa com a sua história.
+          Conheça as coleções e visite a loja.
         </p>
 
         <div className="final-actions">

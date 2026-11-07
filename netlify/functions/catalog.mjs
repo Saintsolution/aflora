@@ -1,6 +1,7 @@
 import { readSupabaseCatalog } from '../lib/supabase-catalog.mjs';
 
-const TTL = 5 * 60 * 1000;
+// Keep manually updated pieces visible promptly, without privileged CDN purge access.
+const TTL = 60 * 1000;
 const MAX_STALE_AGE = 60 * 60 * 1000;
 
 export function createHandler(read = readSupabaseCatalog, now = Date.now) {
