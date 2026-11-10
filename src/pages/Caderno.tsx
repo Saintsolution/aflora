@@ -39,33 +39,15 @@ const FIRST_POST = {
  meta: 'Primeira página do Caderno',
  title: 'A memória que floresce',
  paragraphs: [
-   `Oi, eu sou a Cris. Sou brasileira, do Rio de Janeiro.`,
-   `Sempre gostei de observar modas, estilos, momentos. E percebi algo.`,
-
-
-
-
-   `De algum jeito muito especial, a natureza sempre me encantou.`,
-
-
-
-
-   `Toda flor tem seu próprio tempo. Desde o momento em que é plantada, desabrocha, encanta, se transforma.`,
-
-
-
-
-   `Mas sua beleza pode continuar existindo de outro modo.`,
-
-
-
-
-   `No atelier, folhas, flores e pequenos elementos da natureza ganham uma nova permanência. São preservados à mão, um a um, para se tornarem peças que carregam tempo, delicadeza e memória.`,
-
-
-
-
-   `Não quero congelar a natureza. Quero honrar o instante dela. Aflora é um lugar onde aquilo que poderia se perder ganha um gesto de infinitude.`,
+   `Olá! Fico muito feliz que esteja aqui conosco.`,
+   `De um jeito muito especial, a natureza sempre me encantou.`,
+   `Toda flor tem seu próprio tempo.`,
+   `Desde o momento em que é plantada, desabrocha e se transforma, é pura mágica. E sua beleza pode continuar existindo das mais variadas formas.`,
+   `No ateliê, flores, folhas e pequenos elementos da natureza ganham novos lugares.`,
+   `Preservados a mão, um a um, se tornam peças que carregam tempo, delicadeza e memória.`,
+   `A ideia é honrar cada instante que a natureza nos oferece.`,
+   `O Ateliê Aflora é um lugar onde o que poderia se perder, possa ser eternizado.`,
+   `É a ideia que abraçamos com muito carinho.`,
  ],
 };
 
@@ -809,47 +791,9 @@ export function Caderno() {
 
 
            <blockquote className="caderno-quote">
-             Há coisas que nos atravessam
-             <br />
-             e não nos deixam mais.
+             “A Aflora nasceu do desejo de guardar o que é delicado. Nesse caderno podemos dividir memórias, descobertas e experiências com quem quiser acompanhar o que continua florescendo por aqui.”
            </blockquote>
 
-
-
-
-           <p>
-             Uma flor que se abre por poucos dias.
-             Uma folha encontrada no caminho.
-             O perfume de uma casa querida.
-             A luz de uma tarde.
-           </p>
-
-
-
-
-           <p>
-             Aflora nasceu deste desejo de guardar
-             o que é delicado.
-           </p>
-
-
-
-
-           <p>
-             E o Caderno Aflora nasce para dividir
-             memórias, histórias, descobertas e
-             experiências com quem quiser acompanhar
-             o que continua florescendo por aqui.
-           </p>
-
-
-
-
-           <p className="caderno-signature">
-             Com carinho,
-             <br />
-             <strong>Cris</strong>
-           </p>
          </div>
        </section>
 
@@ -928,11 +872,6 @@ export function Caderno() {
 
 
 
-             <p className="caderno-post-signature">
-               Com carinho,
-               <br />
-               <strong>Cris</strong>
-             </p>
 
              <p>
                <em>In memoriam</em>

@@ -12,23 +12,25 @@ import {
 } from 'lucide-react';
 
 const tracks = [
-  { title: 'Aflora Song', src: '/assets/music/Aflora Song.mp3' },
-  { title: 'Sensibilidade Rara', src: '/assets/music/Sensibilidade Rara.mp3' },
   { title: 'Terra Sagrada', src: '/assets/music/Terra Sagrada.mp3' },
-  { title: 'Aflora Alecrim', src: '/assets/music/Aflora Alecrim.mp3' },
-  { title: 'Voa, Joaninha', src: '/assets/music/Voa, Joaninha.mp3' },
-  { title: 'Fita de Cetim', src: '/assets/music/Fita de cetim.mp3' },
-  { title: 'Perdoa, Pai', src: '/assets/music/Perdoa, Pai.mp3' },
+  { title: 'Azaléas e Alecrins', src: '/assets/music/Azaléas e Alecrins.mp3' },
+  { title: 'Fita de Cetim', src: '/assets/music/Fita de Cetim.mp3' },
+  { title: 'Sensibilidade Rara', src: '/assets/music/Sensibilidade Rara.mp3' },
+  { title: 'Perdoa, Pai.', src: '/assets/music/Perdoa, Pai..mp3' },
   { title: 'Flores do Coração', src: '/assets/music/Flores do Coração.mp3' },
-  { title: 'Aflora Obrigada, Senhor', src: '/assets/music/Aflora Obrigada Senhor.mp3' },
-  { title: 'Me Transformo em Rosa', src: '/assets/music/Me Transformo em Rosa.mp3' },
-  { title: 'Passarinhada', src: '/assets/music/Passarinhada.mp3' },
+  { title: 'Obrigada, Senhor.', src: '/assets/music/Obrigada, Senhor..mp3' },
+  { title: 'Me transformo em rosa', src: '/assets/music/Me transformo em rosa.mp3' },
+  { title: 'Flor em canção', src: '/assets/music/Flor em canção.mp3' },
   { title: 'Mandacaru', src: '/assets/music/Mandacaru.mp3' },
   { title: 'Hora de Florescer', src: '/assets/music/Hora de Florescer.mp3' },
   { title: 'Terra Germinada', src: '/assets/music/Terra Germinada.mp3' },
   { title: 'Sereia', src: '/assets/music/Sereia.mp3' },
-  { title: 'Aflora Sol Reflete', src: '/assets/music/Aflora Sol Reflete.mp3' },
-  { title: 'Chuva do Vento', src: '/assets/music/Chuva do Vento.mp3' },
+  { title: 'Sol reflete', src: '/assets/music/Sol reflete.mp3' },
+  { title: 'Girassol', src: '/assets/music/Girassol.mp3' },
+  { title: 'Voa, Joaninha', src: '/assets/music/Voa, Joaninha.mp3' },
+  { title: 'No Abraço da Terra', src: '/assets/music/No Abraço da Terra.mp3' },
+  { title: 'Embalo da Floresta', src: '/assets/music/Embalo da Floresta.mp3' },
+  { title: 'Brotaria em canção', src: '/assets/music/Brotaria em canção.mp3' },
 ];
 
 type MusicState = {

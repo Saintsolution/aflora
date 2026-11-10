@@ -3557,16 +3557,17 @@ section {
   color: var(--moss-deep);
 
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.25rem, 4.3vw, 4.25rem);
+  font-size: clamp(1.5rem, 2.2vw, 2.25rem);
   font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.025em;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
 }
 
 .caderno-opening-copy p {
   margin-top: 1.4rem;
 
   color: var(--text-soft);
+  font-weight: 500;
 }
 
 .caderno-signature,
@@ -3706,6 +3707,12 @@ section {
     max-width: 620px;
 
     margin: 0 auto;
+  }
+
+  .caderno-quote {
+    font-size: 1rem;
+    line-height: 1.7;
+    letter-spacing: normal;
   }
 
   .caderno-portrait {
