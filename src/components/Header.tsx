@@ -13,7 +13,7 @@ export function Header() {
     ['Coleções', '/colecoes'],
     ['Fé', '/colecoes?colecao=fe'],
     ['Casa', '/colecoes?colecao=casa'],
-    ['Contato', '#contato'],
+    ['Contato', '/contato'],
   ];
 
   function handleNavigate(target: string) {
@@ -57,14 +57,16 @@ export function Header() {
           </button>
         ))}
 
-        <button
+        <a
           className="nav-store"
-          type="button"
-          onClick={() => handleNavigate('#loja')}
+          href="https://lojadoaafloraatelier.lojavirtualnuvem.com.br/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => setOpen(false)}
         >
           Loja
           <ArrowRight size={14} />
-        </button>
+        </a>
       </nav>
 
       <button

@@ -10,6 +10,7 @@ import { Colecoes } from './pages/Colecoes';
 import { Admin } from './pages/Admin';
 import { PlaylistWelcome } from './components/PlaylistWelcome';
 import { Caderno } from './pages/Caderno';
+import { Contato } from './pages/Contato';
 import { ResetPassword } from './pages/ResetPassword';
 import { recoverySnapshot, subscribeRecovery } from './lib/passwordRecovery';
 
@@ -55,6 +56,8 @@ export default function App() {
     page = <Caderno />;
   } else if (pathname === '/colecoes') {
     page = <Colecoes key={path} />;
+  } else if (pathname === '/contato') {
+    page = <Contato />;
   } else if (pathname === '/admin') {
     page = <Admin />;
   } else {

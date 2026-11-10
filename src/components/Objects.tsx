@@ -2,14 +2,12 @@ import { ArrowRight } from 'lucide-react';
 import { SectionKicker } from './SectionKicker';
 import { PlaceholderVisual } from './PlaceholderVisual';
 import { navigateTo } from '../utils/navigation';
-import { imageUrls } from '../data/content';
 
 export function Objects() {
   return (
     <section className="objects section-light">
       <div className="objects-image">
         <PlaceholderVisual
-          image={imageUrls.wildflowerDetail}
           label="Objetos botânicos · fotografia em breve"
         />
       </div>

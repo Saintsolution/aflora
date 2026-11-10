@@ -2,7 +2,6 @@ import { ArrowRight } from 'lucide-react';
 import { SectionKicker } from './SectionKicker';
 import { PlaceholderVisual } from './PlaceholderVisual';
 import { navigateTo } from '../utils/navigation';
-import { imageUrls } from '../data/content';
 
 export function Atelier() {
   return (
@@ -29,7 +28,6 @@ export function Atelier() {
 
       <div className="atelier-grid">
         <PlaceholderVisual
-          image={imageUrls.calendula}
           label="Bancada · fotografia em breve"
           className="atelier-large"
         />
@@ -40,7 +38,6 @@ export function Atelier() {
         />
 
         <PlaceholderVisual
-          image={imageUrls.buttercups}
           label="Detalhes do processo · placeholder"
           className="atelier-small"
         />

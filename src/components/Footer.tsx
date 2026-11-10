@@ -46,7 +46,7 @@ export function Footer() {
           Conversar
         </span>
 
-        <a href="mailto:oi@aflora.com.br">
+        <a href="/contato" onClick={(event) => { event.preventDefault(); navigateTo('/contato'); }}>
           Contato
         </a>
 
@@ -55,7 +55,7 @@ export function Footer() {
         </a>
 
         <a
-          href="https://www.instagram.com/biojoiasaflorapreservada/"
+          href="https://www.instagram.com/aflorapreservada/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -77,7 +77,7 @@ export function Footer() {
           Termos
         </a>
 
-        <a href="#loja">
+        <a href="https://lojadoaafloraatelier.lojavirtualnuvem.com.br/" target="_blank" rel="noopener noreferrer">
           Loja online
         </a>
       </div>

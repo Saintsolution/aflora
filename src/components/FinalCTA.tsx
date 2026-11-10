@@ -45,7 +45,9 @@ export function FinalCTA() {
           </button>
 
           <a
-  href="#"
+  href="https://lojadoaafloraatelier.lojavirtualnuvem.com.br/"
+  target="_blank"
+  rel="noopener noreferrer"
   className="text-link"
   style={{ color: '#d2b8a6' }}
 >
