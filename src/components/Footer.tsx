@@ -50,7 +50,7 @@ export function Footer() {
           Contato
         </a>
 
-        <a href="#">
+        <a href="https://wa.me/5521990826026" target="_blank" rel="noopener noreferrer">
           WhatsApp
         </a>
 
